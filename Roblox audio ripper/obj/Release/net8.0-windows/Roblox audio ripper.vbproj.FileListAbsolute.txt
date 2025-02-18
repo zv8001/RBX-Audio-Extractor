@@ -1,0 +1,40 @@
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\Roblox audio ripper.exe
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\Roblox audio ripper.deps.json
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\Roblox audio ripper.runtimeconfig.json
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\Roblox audio ripper.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\Roblox audio ripper.pdb
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\Bass.Net.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\NAudio.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\NAudio.Asio.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\NAudio.Core.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\NAudio.Midi.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\NAudio.Vorbis.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\NAudio.Wasapi.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\NAudio.WinForms.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\NAudio.WinMM.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\NVorbis.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\TagLibSharp.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\TradeWright.TabControlExtra.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\Ude.NetStandard.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\Vedoo.VedooControls.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\ATL.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\Interop.WMPLib.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\AxInterop.WMPLib.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox audio ripper.vbproj.AssemblyReference.cache
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Interop.WMPLib.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\AxInterop.WMPLib.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox audio ripper.vbproj.ResolveComReference.cache
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox_audio_ripper.Form1.resources
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox_audio_ripper.Resources.resources
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox audio ripper.vbproj.GenerateResource.cache
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox audio ripper.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox audio ripper.AssemblyInfoInputs.cache
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox audio ripper.AssemblyInfo.vb
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox audio ripper.vbproj.CoreCompileInputs.cache
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox audio ripper.sourcelink.json
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox a.5AD115E0.Up2Date
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox audio ripper.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\refint\Roblox audio ripper.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox audio ripper.pdb
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\Roblox audio ripper.genruntimeconfig.cache
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\obj\Release\net8.0-windows\ref\Roblox audio ripper.dll
