@@ -1,2 +1,0 @@
-C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\publish\win-x64\Roblox audio ripper.pdb
-C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\Roblox audio ripper\bin\Release\net8.0-windows\publish\win-x64\Roblox audio ripper.exe

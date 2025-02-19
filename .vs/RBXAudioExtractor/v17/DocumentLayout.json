@@ -1,0 +1,53 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAudioExtractor\\RBXAudioExtractor.vbproj|c:\\users\\denve\\onedrive\\documents\\github\\rbx-audio-extractor\\rbxaudioextractor\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAudioExtractor\\RBXAudioExtractor.vbproj|solutionrelative:rbxaudioextractor\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAudioExtractor\\RBXAudioExtractor.vbproj|c:\\users\\denve\\onedrive\\documents\\github\\rbx-audio-extractor\\rbxaudioextractor\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAudioExtractor\\RBXAudioExtractor.vbproj|solutionrelative:rbxaudioextractor\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form1.vb",
+              "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAudioExtractor\\Form1.vb",
+              "RelativeDocumentMoniker": "RBXAudioExtractor\\Form1.vb",
+              "ToolTip": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAudioExtractor\\Form1.vb",
+              "RelativeToolTip": "RBXAudioExtractor\\Form1.vb",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2025-02-19T15:28:56.864Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form1.vb [Design]",
+              "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAudioExtractor\\Form1.vb",
+              "RelativeDocumentMoniker": "RBXAudioExtractor\\Form1.vb",
+              "ToolTip": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAudioExtractor\\Form1.vb [Design]",
+              "RelativeToolTip": "RBXAudioExtractor\\Form1.vb [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2025-02-19T15:28:44.66Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
