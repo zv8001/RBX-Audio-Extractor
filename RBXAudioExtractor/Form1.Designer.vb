@@ -70,6 +70,8 @@ Partial Class MainForm
         fadeInTimer = New Timer(components)
         fadeOutTimer = New Timer(components)
         RemoveFilesInDir = New ComponentModel.BackgroundWorker()
+        RenameAllFiles = New ComponentModel.BackgroundWorker()
+        CheckIfHTTPIsDone = New Timer(components)
         CType(AxWindowsMediaPlayer1, ComponentModel.ISupportInitialize).BeginInit()
         TabControl1.SuspendLayout()
         TabPage3.SuspendLayout()
@@ -248,7 +250,7 @@ Partial Class MainForm
         Label5.ForeColor = Color.White
         Label5.Location = New Point(23, 195)
         Label5.Name = "Label5"
-        Label5.Size = New Size(382, 91)
+        Label5.Size = New Size(382, 88)
         Label5.TabIndex = 4
         Label5.Text = resources.GetString("Label5.Text")
         Label5.TextAlign = ContentAlignment.MiddleCenter
@@ -560,6 +562,12 @@ Partial Class MainForm
         ' RemoveFilesInDir
         ' 
         ' 
+        ' RenameAllFiles
+        ' 
+        ' 
+        ' CheckIfHTTPIsDone
+        ' 
+        ' 
         ' MainForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -640,5 +648,7 @@ Partial Class MainForm
     Friend WithEvents LinkLabel2 As LinkLabel
     Friend WithEvents SaveLogBtn As Button
     Friend WithEvents RemoveFilesInDir As System.ComponentModel.BackgroundWorker
+    Friend WithEvents RenameAllFiles As System.ComponentModel.BackgroundWorker
+    Friend WithEvents CheckIfHTTPIsDone As Timer
 
 End Class

@@ -13,14 +13,16 @@ Imports System.Security.Policy
 Imports System.Text
 Imports System.ComponentModel
 Imports System.Diagnostics.CodeAnalysis
+Imports System.Net.Http
+Imports System.Reflection
 Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.0.57"
+    Dim V = "v1.0.58"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Private codecInstallerUrl As String = "https://files2.codecguide.com/K-Lite_Codec_Pack_1880_Standard.exe"
-
+    Dim Stage As Integer = 0
 
     Private codecInstallerPath As String = "C:\Temp\klcp.exe"
     Dim tempDirectory = Path.GetTempPath
@@ -29,6 +31,29 @@ Public Class MainForm
     Dim Outdated As Boolean = False
     Private isDragging As Boolean = False
     Private startPoint As Point
+    Dim HTTPDONE = True
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Panel3.BringToFront()
+        LoadHTTP0.WorkerReportsProgress = True
+        RemoveFilesInDir.WorkerReportsProgress = True
+        RenameAllFiles.WorkerReportsProgress = True
+        VText_LBR.Text = "Currently running version: " & V
+        InstallCodec()
+        Dim isInstalled As Boolean = IsKLiteInstalled()
+
+        If Not isInstalled Then
+            MsgBox("This program requires K-Lite_Codec_Pack please install it and try again.", 0 + 16, "balls")
+            Me.Close()
+            KillProcessByName(Path.GetFileNameWithoutExtension(Application.ExecutablePath))
+        End If
+        CheckForUpdates()
+        Me.Opacity = 0
+        fadeInTimer.Interval = 50
+        fadeInTimer.Start()
+
+    End Sub
 
     Function IsKLiteInstalled() As Boolean
         If My.Computer.FileSystem.DirectoryExists("C:\Program Files (x86)\K-Lite Codec Pack") Then
@@ -41,160 +66,75 @@ Public Class MainForm
         Return False
     End Function
 
-    Sub KillProcessByName(processName As String)
+    Public Sub DownloadUpdate()
+
+        Dim updateUrl As String = "https://rbxaudioextractor-update-server.netlify.app/RBXAudioExtractor/bin/Release/net8.0-windows/publish/win-x64/RBXAudioExtractor.exe"
+        Dim tempPath As String = Path.Combine(Path.GetTempPath(), "new_version.exe")
+
         Try
-            Dim processes As Process() = Process.GetProcessesByName(processName)
-            If processes.Length > 0 Then
-                For Each proc As Process In processes
-                    proc.Kill()
-                    Console.WriteLine($"Killed {processName} with PID: {proc.Id}")
-                Next
-            Else
-                Console.WriteLine($"{processName} not running.")
-            End If
-        Catch ex As Exception
-            Console.WriteLine($"Error: {ex.Message}")
-        End Try
-    End Sub
-
-    Function IsOggFile(filePath As String) As Boolean
-        Try
-
-            Using fs As New FileStream(filePath, FileMode.Open, FileAccess.Read)
-                Dim header(3) As Byte
-                fs.Read(header, 0, 4)
-
-
-
-                Dim headerStr As String = System.Text.Encoding.ASCII.GetString(header)
-                output_log.Items.Add(headerStr)
-                If headerStr = "OggS" Then
-                    Return True
-                End If
+            Using client As New WebClient()
+                client.DownloadFile(updateUrl, tempPath)
             End Using
+
+            Dim batchFile As String = Path.Combine(Path.GetTempPath(), "update.bat")
+            System.IO.File.WriteAllText(batchFile, $"
+@echo off
+timeout /t 2 /nobreak >nul
+del ""{Application.ExecutablePath}""
+move ""{tempPath}"" ""{Application.ExecutablePath}""
+del ""{tempPath}""
+start """" ""{Application.ExecutablePath}""
+del %0
+            ")
+
+
+            Process.Start(New ProcessStartInfo With {
+                .FileName = batchFile,
+                .WindowStyle = ProcessWindowStyle.Hidden
+            })
+            Application.Exit()
+
         Catch ex As Exception
-            Console.WriteLine($"Error reading file: {filePath} - {ex.Message}")
+            MessageBox.Show("Update failed: " & ex.Message)
         End Try
 
-        Return False
-    End Function
-
-    Private Sub LoadHTTP_DoWork_1(sender As Object, e As DoWorkEventArgs) Handles LoadHTTP0.DoWork
-        Dim directories As String() = CType(e.Argument, String())
-        Dim sourceDir As String = directories(0)
-        Dim targetDir As String = directories(1)
-
-
-        Dim files = Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories)
-
-        For i As Integer = 0 To files.Length - 1
-
-            If LoadHTTP0.CancellationPending Then
-                e.Cancel = True
-                Exit For
-            End If
-
-            ProcessFile(files(i), targetDir)
-
-
-            LoadHTTP0.ReportProgress(CInt((i + 1) / files.Length * 100))
-        Next
-    End Sub
-    Private Sub UpdateLog(message As String)
-        If output_log.InvokeRequired Then
-            output_log.Invoke(New Action(Of String)(AddressOf UpdateLog), message)
-        Else
-            ' Add the provided message to the ListBox
-            output_log.Items.Add(message)
-        End If
-
-
-
     End Sub
 
-    Private Sub ProcessFile(file As String, targetDir As String)
-        UpdateLog($"Begin processing on : {file}")
-
-        Try
-
-            Dim fileBytes = System.IO.File.ReadAllBytes(file)
-            Dim oggHeader = Encoding.ASCII.GetBytes("OggS")
-            Dim oggIndex As Integer = -1
-
-
-            For i As Integer = 0 To fileBytes.Length - oggHeader.Length
-                If fileBytes.Skip(i).Take(oggHeader.Length).SequenceEqual(oggHeader) Then
-                    oggIndex = i
-                    Exit For
-                End If
-            Next
-
-
-            If oggIndex >= 0 Then
-                UpdateLog($"copying file: {file} To: {targetDir}")
-                Dim fileName = Path.GetFileName(file)
-                Dim targetPath = Path.Combine(targetDir, fileName)
-                System.IO.File.Copy(file, targetPath, True)
-
-
-                Dim modifiedBytes = fileBytes.Skip(oggIndex).ToArray()
-
-                UpdateLog($"Removing default Roblox parameters")
-                System.IO.File.WriteAllBytes(targetPath, modifiedBytes)
-                UpdateLog($"done processing file: {file}")
-            Else
-                UpdateLog($"Skipping : {file} is not a valid OGG file.")
-
-            End If
-        Catch ex As Exception
-            UpdateLog($"Error processing file: {file} - {ex.Message}")
-            ' Console.WriteLine($"Error processing file: {file} - {ex.Message}")
-        End Try
-    End Sub
-
-
-    Private Sub LoadHTTP0_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles LoadHTTP0.ProgressChanged
-
-        ProgressBar1.Value = e.ProgressPercentage
-    End Sub
-
-    Private Sub CheckForUpdates()
-
+    Public Function CheckForUpdates()
         Dim content As String
         Dim url As String = "https://animated-platypus-6ba0a9.netlify.app/v.txt"
-        Dim tempFile As String = System.IO.Path.GetTempFileName() ' Temporary file path
 
-        output_log.Items.Add($"Downloading update check from server: {url}")
+        output_log.Items.Add($"Checking for updates from server: {url}")
 
         Try
-            My.Computer.Network.DownloadFile(url, tempFile, "", "", False, 10000, True)
+            Using client As New System.Net.WebClient()
+                content = client.DownloadString(url).Trim()
+            End Using
 
-            content = System.IO.File.ReadAllText(tempFile).Trim()
-            System.IO.File.Delete(tempFile)
-
-            If Not content = V Then
+            If Not String.Equals(content, V, StringComparison.OrdinalIgnoreCase) Then
                 Outdated = True
-                Dim text As String = "The program is out of date. You have version: " & V & " and the latest available version is: " & content & ". Please download the latest version now at: https://github.com/zv8001/RBX-Audio-Extractor"
+                Dim text As String = $"The program is out of date. You have version: {V} and the latest available version is: {content}. would you like to automatically download the update?"
                 output_log.Items.Add(text)
-                MsgBox(text, 0 + 48, "Update detected!")
+                ' MsgBox(text, MsgBoxStyle.OkOnly Or MsgBoxStyle.Exclamation, "Update detected!")
+
+                Dim Update As DialogResult = MessageBox.Show(text, "BRUJ", MessageBoxButtons.YesNo)
+
+                If Update = DialogResult.Yes Then
+                    DownloadUpdate()
+                End If
+
+
             Else
-                output_log.Items.Add("You are using the latest version: " & V)
+                output_log.Items.Add($"You are using the latest version: {V}")
             End If
         Catch ex As Exception
-            CallError(ex.Message)
+            output_log.Items.Add($"Error checking for updates: {ex.Message}")
         End Try
 
         If Not Outdated Then
-            output_log.Items.Add($"The program is up to date currently running version: {V}")
+            output_log.Items.Add($"The program is up to date, currently running version: {V}")
         End If
-    End Sub
-
-    Public Sub CallError(Err1)
-        output_log.Items.Add($"ERROR {Err1}")
-        MsgBox($"ERROR {Err1}", 0 + 16, "ERROR")
-    End Sub
-
-
+    End Function
 
 
     Private Sub InstallCodec()
@@ -257,14 +197,318 @@ Public Class MainForm
 
     End Sub
 
-    Private Function IsRunningAsAdministrator() As Boolean
-
-        Dim user As WindowsIdentity = WindowsIdentity.GetCurrent()
 
 
-        Dim principal As New WindowsPrincipal(user)
-        Return principal.IsInRole(WindowsBuiltInRole.Administrator)
-    End Function
+    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles LoadHttpBtn.Click
+
+        Dim result As DialogResult = MessageBox.Show("It is highly recommended you clear cache before each game considering audio files from previous sessions will remain and it may take a long time to process. Do you still want to continue?", "Do you still want to continue?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+
+        If result = DialogResult.Yes Then
+            Dim tempDirectory = Path.GetTempPath
+            If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBX_SOUND_RIPPER_HTTP") Then
+                My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
+            End If
+            Stage = 1
+            DeleteAllFiles(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
+            Try
+                ClearHTTPTEMP_BTN.Enabled = False
+                LoadHttpBtn.Enabled = False
+
+                LoadHTTP0.RunWorkerAsync(New String() {tempDirectory & "\Roblox\http", tempDirectory & "\RBX_SOUND_RIPPER_HTTP"})
+                Stage = 2
+            Catch ex As Exception
+                ClearHTTPTEMP_BTN.Enabled = True
+                LoadHttpBtn.Enabled = True
+                CallError(ex)
+            End Try
+
+        End If
+
+    End Sub
+
+
+    Private Sub LoadHTTP_DoWork_1(sender As Object, e As DoWorkEventArgs) Handles LoadHTTP0.DoWork
+        Dim directories As String() = CType(e.Argument, String())
+        Dim sourceDir As String = directories(0)
+        Dim targetDir As String = directories(1)
+
+
+        Dim files = Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories)
+
+        For i As Integer = 0 To files.Length - 1
+
+            If LoadHTTP0.CancellationPending Then
+                e.Cancel = True
+                Exit For
+            End If
+
+            ProcessFile(files(i), targetDir)
+
+
+            LoadHTTP0.ReportProgress(CInt((i + 1) / files.Length * 100))
+        Next
+    End Sub
+
+    Private Sub LoadHTTP0_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles LoadHTTP0.ProgressChanged
+        ProgressBar1.Value = e.ProgressPercentage
+    End Sub
+
+
+
+    Private Sub ProcessFile(file As String, targetDir As String)
+        UpdateLog($"Begin processing on : {file}")
+
+        Try
+
+            Dim fileBytes = System.IO.File.ReadAllBytes(file)
+            Dim oggHeader = Encoding.ASCII.GetBytes("OggS")
+            Dim oggIndex As Integer = -1
+
+
+            For i As Integer = 0 To fileBytes.Length - oggHeader.Length
+                If fileBytes.Skip(i).Take(oggHeader.Length).SequenceEqual(oggHeader) Then
+                    oggIndex = i
+                    Exit For
+                End If
+            Next
+
+
+            If oggIndex >= 0 Then
+                UpdateLog($"copying file: {file} To: {targetDir}")
+                Dim fileName = Path.GetFileName(file)
+                Dim targetPath = Path.Combine(targetDir, fileName)
+                System.IO.File.Copy(file, targetPath, True)
+
+
+                Dim modifiedBytes = fileBytes.Skip(oggIndex).ToArray()
+
+                UpdateLog($"Removing default Roblox parameters")
+                System.IO.File.WriteAllBytes(targetPath, modifiedBytes)
+                UpdateLog($"done processing file: {file}")
+            Else
+                UpdateLog($"Skipping : {file} is not a valid OGG file.")
+
+            End If
+        Catch ex As Exception
+            UpdateLog($"Error processing file: {file} - {ex.Message}")
+
+        End Try
+    End Sub
+
+    Private Sub LoadHTTP0_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles LoadHTTP0.RunWorkerCompleted
+
+
+        Stage = 3
+        RenameFileExtensions(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", ".ogg")
+        ProgressBar1.Value = 0
+        CheckIfHTTPIsDone.Start()
+
+    End Sub
+
+    Private Sub CheckIfHTTPIsDone_Tick(sender As Object, e As EventArgs) Handles CheckIfHTTPIsDone.Tick
+        If ProgressBar1.Value = 100 Then
+            CheckIfHTTPIsDone.Stop()
+            HTTPLISTBOX.Items.Clear()
+
+            Dim musicFiles = Directory.GetFiles(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", "*.ogg")
+
+            For Each file In musicFiles
+                Dim InfoLoaded = True
+
+                Dim track As New Track(file)
+
+                Dim title = track.Title
+                Dim Album = track.Album
+                Dim Artist = track.Artist
+
+                If String.IsNullOrEmpty(Album) Then
+                    InfoLoaded = False
+                End If
+
+                Try
+
+                    If InfoLoaded Then
+                        HTTPLISTBOX.Items.Insert(0, New With {.DisplayText = $"" & title & " | Artists: " & Artist & " | Album: " & Album & "", .FilePath = file})
+                    Else
+                        HTTPLISTBOX.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
+                    End If
+                Catch ex As Exception
+                    CallError($"Error reading file: {file} - {ex.Message}")
+                End Try
+            Next
+
+            Stage = 0
+            HTTPLISTBOX.DisplayMember = "DisplayText"
+            HTTPLISTBOX.ValueMember = "FilePath"
+            LoadHttpBtn.Enabled = True
+            ClearHTTPTEMP_BTN.Enabled = True
+        End If
+
+
+
+    End Sub
+
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles LoadParButton.Click
+        Dim tempDirectory = Path.GetTempPath
+        If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBX_SOUND_RIPPER") Then
+            My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBX_SOUND_RIPPER")
+        End If
+
+        DeleteAllFiles(tempDirectory & "\RBX_SOUND_RIPPER")
+
+
+        CloneDirectory(tempDirectory & "\Roblox\sounds", tempDirectory & "\RBX_SOUND_RIPPER")
+        RenameFileExtensions(tempDirectory & "\RBX_SOUND_RIPPER", ".ogg")
+
+        Sounds_Listbox.Items.Clear()
+
+
+        Dim musicFiles = Directory.GetFiles(tempDirectory & "\RBX_SOUND_RIPPER", "*.ogg")
+
+        For Each file In musicFiles
+            Dim InfoLoaded = True
+
+            Dim track As New Track(file)
+
+            Dim title = track.Title
+            Dim Album = track.Album
+            Dim Artist = track.Artist
+
+            If String.IsNullOrEmpty(Album) Then
+                InfoLoaded = False
+            End If
+
+            Try
+
+                If InfoLoaded Then
+                    Sounds_Listbox.Items.Insert(0, New With {.DisplayText = $"" & title & " | Artists: " & Artist & " | Album: " & Album & "", .FilePath = file})
+                Else
+                    Sounds_Listbox.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
+                End If
+            Catch ex As Exception
+                CallError($"Error reading file: {file} - {ex.Message}")
+
+            End Try
+        Next
+
+
+        Sounds_Listbox.DisplayMember = "DisplayText"
+        Sounds_Listbox.ValueMember = "FilePath"
+
+    End Sub
+
+
+    Private Sub UpdateLog(message As String) 'used to update the log in a bacvkgound worker
+        If output_log.InvokeRequired Then
+            output_log.Invoke(New Action(Of String)(AddressOf UpdateLog), message)
+        Else
+            output_log.Items.Add(message)
+        End If
+    End Sub
+
+
+
+    Sub KillProcessByName(processName As String)
+        Try
+            Dim processes As Process() = Process.GetProcessesByName(processName)
+            If processes.Length > 0 Then
+                For Each proc As Process In processes
+                    proc.Kill()
+                    Console.WriteLine($"Killed {processName} with PID: {proc.Id}")
+                Next
+            Else
+                Console.WriteLine($"{processName} not running.")
+            End If
+        Catch ex As Exception
+            Console.WriteLine($"Error: {ex.Message}")
+        End Try
+    End Sub
+
+    Public Sub CallError(Err1)
+        output_log.Items.Add($"ERROR {Err1}")
+        MsgBox($"ERROR {Err1}", 0 + 16, "ERROR")
+    End Sub
+
+
+
+
+    Private Sub RenameAllFiles_DoWork(sender As Object, e As DoWorkEventArgs) Handles RenameAllFiles.DoWork
+
+        Dim Prams As String() = CType(e.Argument, String())
+        Dim files = Directory.GetFiles(Prams(0), "*.*", SearchOption.AllDirectories)
+
+        Dim directoryPath As String = Prams(0)
+        Dim newExtension As String = Prams(1)
+
+        If Not Directory.Exists(directoryPath) Then
+            UpdateLog($"ERROR: Directory does not exist: {directoryPath}")
+        End If
+
+        For i As Integer = 0 To files.Length - 1
+            Dim fileNameWithoutExt As String = Path.GetFileNameWithoutExtension(files(i))
+            Dim newFileName As String = Path.Combine(directoryPath, fileNameWithoutExt & newExtension)
+
+            UpdateLog($"Renaming file extension: {files(i)} To {newFileName} ")
+
+            Try
+                System.IO.File.Move(files(i), newFileName, True)
+            Catch ex As Exception
+
+            End Try
+            RenameAllFiles.ReportProgress(CInt((i + 1) / files.Length * 100))
+        Next
+
+
+
+    End Sub
+
+    Private Sub RenameAllFiles_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles RenameAllFiles.ProgressChanged
+        ProgressBar1.Value = e.ProgressPercentage
+    End Sub
+
+    Sub RenameFileExtensions(directoryPath As String, newExtension As String)
+        RenameAllFiles.RunWorkerAsync(New String() {directoryPath, newExtension})
+    End Sub
+
+
+
+    Private Sub RemoveFilesInDir_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles RemoveFilesInDir.RunWorkerCompleted
+        ClearHTTPTEMP_BTN.Enabled = True
+        ClearTMP_BTN.Enabled = True
+        LoadParButton.Enabled = True
+        LoadHttpBtn.Enabled = True
+    End Sub
+
+    Private Sub RemoveFilesInDir_DoWork(sender As Object, e As DoWorkEventArgs) Handles RemoveFilesInDir.DoWork
+
+        Dim directoryPath As String() = CType(e.Argument, String())
+        Dim files = Directory.GetFiles(directoryPath(0), "*.*", SearchOption.AllDirectories)
+        If Not Directory.Exists(directoryPath(0)) Then
+            UpdateLog($"ERROR: Directory does not exist: {directoryPath(0)}")
+        Else
+
+            For i As Integer = 0 To files.Length - 1
+
+                If LoadHTTP0.CancellationPending Then
+                    e.Cancel = True
+                    Exit For
+                End If
+
+                Try
+                    UpdateLog($"Deleting file: {files(i)}")
+                    System.IO.File.Delete(files(i))
+                Catch ex As Exception
+                    UpdateLog($"Failed to Delete file with error: {ex}")
+                End Try
+
+                RemoveFilesInDir.ReportProgress(CInt((i + 1) / files.Length * 100))
+            Next
+        End If
+
+    End Sub
+
+
 
     Sub CloneDirectory(sourceDir As String, targetDir As String)
 
@@ -306,135 +550,6 @@ Public Class MainForm
         Next
     End Sub
 
-    Sub RenameFileExtensions(directoryPath As String, newExtension As String)
-
-        If Not Directory.Exists(directoryPath) Then
-            '  output_log.Items.Add($"ERROR: Directory does not exist: {directoryPath}")
-            CallError($"ERROR: Directory does not exist: {directoryPath}")
-            'Throw New DirectoryNotFoundException($"Directory does not exist: {directoryPath}")
-        End If
-
-
-        For Each file As String In Directory.GetFiles(directoryPath)
-
-            Dim fileNameWithoutExt As String = Path.GetFileNameWithoutExtension(file)
-
-
-
-
-            Dim newFileName As String = Path.Combine(directoryPath, fileNameWithoutExt & newExtension)
-
-
-            output_log.Items.Add($"Renaming file extension: {file} To {newFileName} ")
-
-            Try
-                System.IO.File.Move(file, newFileName, True)
-            Catch ex As Exception
-
-            End Try
-
-        Next
-    End Sub
-
-
-
-
-    Private Sub RemoveFilesInDir_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles RemoveFilesInDir.RunWorkerCompleted
-        ClearHTTPTEMP_BTN.Enabled = True
-        ClearTMP_BTN.Enabled = True
-        LoadParButton.Enabled = True
-        LoadHttpBtn.Enabled = True
-    End Sub
-
-    Private Sub RemoveFilesInDir_DoWork(sender As Object, e As DoWorkEventArgs) Handles RemoveFilesInDir.DoWork
-
-        Dim directoryPath As String() = CType(e.Argument, String())
-        Dim files = Directory.GetFiles(directoryPath(0), "*.*", SearchOption.AllDirectories)
-        If Not Directory.Exists(directoryPath(0)) Then
-
-            'CallError($"ERROR: Directory does not exist: {directoryPath(0)}")
-            UpdateLog($"ERROR: Directory does not exist: {directoryPath(0)}")
-        Else
-
-            For i As Integer = 0 To files.Length - 1
-
-                If LoadHTTP0.CancellationPending Then
-                    e.Cancel = True
-                    Exit For
-                End If
-
-                Try
-                    UpdateLog($"Deleting file: {files(i)}")
-                    ' output_log.Items.Add($"Deleting file: {file}")
-                    System.IO.File.Delete(files(i))
-                Catch ex As Exception
-                    UpdateLog($"Failed to Delete file with error: {ex}")
-                    'output_log.Items.Add($"Failed to Delete file with error: {ex}")
-                End Try
-
-                RemoveFilesInDir.ReportProgress(CInt((i + 1) / files.Length * 100))
-            Next
-        End If
-
-
-
-
-    End Sub
-
-
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles LoadParButton.Click
-        Dim tempDirectory = Path.GetTempPath
-        If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBX_SOUND_RIPPER") Then
-            My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBX_SOUND_RIPPER")
-        End If
-
-        DeleteAllFiles(tempDirectory & "\RBX_SOUND_RIPPER")
-        ' CopyOggFiles("C:\Users\denve\AppData\Local\Temp\Roblox\http", tempDirectory & "\RBX_SOUND_RIPPER")
-
-        CloneDirectory(tempDirectory & "\Roblox\sounds", tempDirectory & "\RBX_SOUND_RIPPER")
-        RenameFileExtensions(tempDirectory & "\RBX_SOUND_RIPPER", ".ogg")
-
-        Sounds_Listbox.Items.Clear()
-
-
-        Dim musicFiles = Directory.GetFiles(tempDirectory & "\RBX_SOUND_RIPPER", "*.ogg")
-
-        For Each file In musicFiles
-            Dim InfoLoaded = True
-
-            Dim track As New Track(file)
-
-            Dim title = track.Title
-            Dim Album = track.Album
-            Dim Artist = track.Artist
-
-            If String.IsNullOrEmpty(Album) Then
-                InfoLoaded = False
-            End If
-
-            Try
-
-                If InfoLoaded Then
-                    Sounds_Listbox.Items.Insert(0, New With {.DisplayText = $"" & title & " | Artists: " & Artist & " | Album: " & Album & "", .FilePath = file})
-                Else
-                    Sounds_Listbox.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
-                End If
-            Catch ex As Exception
-                CallError($"Error reading file: {file} - {ex.Message}")
-                ' output_log.Items.Add($"Error reading file: {file} - {ex.Message}")
-            End Try
-        Next
-
-
-        Sounds_Listbox.DisplayMember = "DisplayText"
-        Sounds_Listbox.ValueMember = "FilePath"
-
-    End Sub
-
-    Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles output_log.SelectedIndexChanged
-
-    End Sub
-
     Public Sub SaveFile()
         Dim saveFileDialog As New SaveFileDialog
 
@@ -470,37 +585,6 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Panel3.BringToFront()
-        ' TabControl1.Appearance = TabAppearance.FlatButtons
-        LoadHTTP0.WorkerReportsProgress = True
-        RemoveFilesInDir.WorkerReportsProgress = True
-        '  TabControl1.SizeMode = TabSizeMode.Fixed
-
-
-
-
-
-        VText_LBR.Text = "Currently running version: " & V
-
-        InstallCodec()
-        Dim isInstalled As Boolean = IsKLiteInstalled()
-
-        If Not isInstalled Then
-            MsgBox("This program requires K-Lite_Codec_Pack please install it and try again.", 0 + 16, "balls")
-            Me.Close()
-            KillProcessByName(Path.GetFileNameWithoutExtension(Application.ExecutablePath))
-        End If
-        CheckForUpdates()
-
-        Me.Opacity = 0
-
-
-        fadeInTimer.Interval = 50
-        fadeInTimer.Start()
-
-
-    End Sub
 
     Public Sub SaveAll()
         Using folderDialog As New FolderBrowserDialog()
@@ -574,73 +658,9 @@ Public Class MainForm
         End Try
     End Sub
 
-    Private Sub LoadHTTP0_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles LoadHTTP0.RunWorkerCompleted
-
-        'CopyAndModifyOggFiles("C:\Users\denve\AppData\Local\Temp\Roblox\http", tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
-
-        RenameFileExtensions(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", ".ogg")
-
-        HTTPLISTBOX.Items.Clear()
-
-        Dim musicFiles = Directory.GetFiles(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", "*.ogg")
-
-        For Each file In musicFiles
-            Dim InfoLoaded = True
-
-            Dim track As New Track(file)
-
-            Dim title = track.Title
-            Dim Album = track.Album
-            Dim Artist = track.Artist
-
-            If String.IsNullOrEmpty(Album) Then
-                InfoLoaded = False
-            End If
-
-            Try
-
-                If InfoLoaded Then
-                    HTTPLISTBOX.Items.Insert(0, New With {.DisplayText = $"" & title & " | Artists: " & Artist & " | Album: " & Album & "", .FilePath = file})
-                Else
-                    HTTPLISTBOX.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
-                End If
-            Catch ex As Exception
-                CallError($"Error reading file: {file} - {ex.Message}")
-            End Try
-        Next
 
 
-        HTTPLISTBOX.DisplayMember = "DisplayText"
-        HTTPLISTBOX.ValueMember = "FilePath"
-        LoadHttpBtn.Enabled = True
-        ClearHTTPTEMP_BTN.Enabled = True
-    End Sub
 
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles LoadHttpBtn.Click
-
-        Dim result As DialogResult = MessageBox.Show("It is highly recommended you clear cache before each game considering audio files from previous sessions will remain and it may take a long time to process. Do you still want to continue?", "Do you still want to continue?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-
-        If result = DialogResult.Yes Then
-            Dim tempDirectory = Path.GetTempPath
-            If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBX_SOUND_RIPPER_HTTP") Then
-                My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
-            End If
-
-            DeleteAllFiles(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
-            Try
-                ClearHTTPTEMP_BTN.Enabled = False
-                LoadHttpBtn.Enabled = False
-                LoadHTTP0.RunWorkerAsync(New String() {tempDirectory & "\Roblox\http", tempDirectory & "\RBX_SOUND_RIPPER_HTTP"})
-            Catch ex As Exception
-                ClearHTTPTEMP_BTN.Enabled = True
-                LoadHttpBtn.Enabled = True
-                CallError(ex)
-            End Try
-
-        End If
-
-
-    End Sub
 
     Private Sub ListBox1_SelectedIndexChanged_1(sender As Object, e As EventArgs) Handles HTTPLISTBOX.SelectedIndexChanged
         If HTTPLISTBOX.SelectedItem IsNot Nothing Then
@@ -673,7 +693,6 @@ Public Class MainForm
         If result = DialogResult.Yes Then
             ClearHTTPTEMP_BTN.Enabled = False
             ClearTMP_BTN.Enabled = False
-            'RemoveFilesInDir.RunWorkerAsync(New String() {tempDirectory & "\Roblox\http"})
             DeleteAllFiles(tempDirectory & "\Roblox\http")
         End If
     End Sub
@@ -686,6 +705,7 @@ Public Class MainForm
             End Try
 
         End If
+
 
         StatusLBR.Text = $"{ProgressBar1.Value}%"
     End Sub
