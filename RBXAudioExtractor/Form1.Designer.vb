@@ -510,6 +510,7 @@ Partial Class MainForm
         ' 
         ' PictureBox1
         ' 
+        PictureBox1.Image = My.Resources.Resources.volume_icon_1946251
         PictureBox1.Location = New Point(3, 3)
         PictureBox1.Name = "PictureBox1"
         PictureBox1.Size = New Size(33, 31)

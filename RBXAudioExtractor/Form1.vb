@@ -19,7 +19,7 @@ Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.0.58"
+    Dim V = "v1.0.59"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Private codecInstallerUrl As String = "https://files2.codecguide.com/K-Lite_Codec_Pack_1880_Standard.exe"
     Dim Stage As Integer = 0
@@ -95,7 +95,7 @@ del %0
             Application.Exit()
 
         Catch ex As Exception
-            MessageBox.Show("Update failed: " & ex.Message)
+            CallError($"Update failed: {ex.Message}")
         End Try
 
     End Sub

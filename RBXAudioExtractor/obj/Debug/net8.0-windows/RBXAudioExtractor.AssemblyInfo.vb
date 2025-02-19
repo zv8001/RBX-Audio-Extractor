@@ -16,7 +16,7 @@ Imports System.Reflection
 <Assembly: System.Reflection.AssemblyCompanyAttribute("RBXAudioExtractor"),  _
  Assembly: System.Reflection.AssemblyConfigurationAttribute("Debug"),  _
  Assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0"),  _
- Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a9e7b52f7c9fe6a137aa5dc617ba30ebaa4d9238"),  _
+ Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9e40421a29e104492179d806184e411c8357df00"),  _
  Assembly: System.Reflection.AssemblyProductAttribute("RBXAudioExtractor"),  _
  Assembly: System.Reflection.AssemblyTitleAttribute("RBXAudioExtractor"),  _
  Assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0"),  _
