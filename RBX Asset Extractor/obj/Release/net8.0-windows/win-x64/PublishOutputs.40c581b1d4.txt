@@ -1,3 +1,0 @@
-C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\publish\win-x64\RBX Asset Extractor.pdb
-C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\publish\win-x64\RBX Asset Extractor.dll.config
-C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\publish\win-x64\RBX Asset Extractor.exe
