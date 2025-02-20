@@ -21,7 +21,7 @@ Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.1.0"
+    Dim V = "v1.1.1"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Private codecInstallerUrl As String = "https://files2.codecguide.com/K-Lite_Codec_Pack_1880_Standard.exe"
     Dim Stage As Integer = 0
@@ -87,7 +87,7 @@ Public Class MainForm
 
     Public Sub DownloadUpdate()
 
-        Dim updateUrl As String = "https://rbxaudioextractor-update-server.netlify.app/RBXAudioExtractor/bin/Release/net8.0-windows/publish/win-x64/RBXAudioExtractor.exe"
+        Dim updateUrl As String = "https://rbxaudioextractor-update-server.netlify.app/RBX%20Asset%20Extractor/bin/Release/net8.0-windows/publish/win-x64/RBX%20Asset%20Extractor.exe"
         Dim tempPath As String = Path.Combine(Path.GetTempPath(), "new_version.exe")
 
         Try

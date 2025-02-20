@@ -39,7 +39,7 @@
       "RelativeMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBX Asset Extractor\\RBX Asset Extractor.vbproj|solutionrelative:rbx asset extractor\\rbx asset extractor.vbproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBX Asset Extractor\\RBX Asset Extractor.vbproj|c:\\users\\denve\\onedrive\\documents\\github\\rbx-audio-extractor\\rbx asset extractor\\my project\\settings.settings||{6D2695F9-5365-4A78-89ED-F205C045BFE6}",
+      "AbsoluteMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBX Asset Extractor\\RBX Asset Extractor.vbproj|C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\rbx asset extractor\\my project\\settings.settings||{6D2695F9-5365-4A78-89ED-F205C045BFE6}",
       "RelativeMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBX Asset Extractor\\RBX Asset Extractor.vbproj|solutionrelative:rbx asset extractor\\my project\\settings.settings||{6D2695F9-5365-4A78-89ED-F205C045BFE6}"
     },
     {
@@ -58,8 +58,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 7,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -71,10 +75,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
               "WhenOpened": "2025-02-20T02:40:30.198Z",
               "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
             },
             {
               "$type": "Document",
@@ -99,21 +99,19 @@
               "RelativeToolTip": "RBX Asset Extractor\\My Project\\Resources.resx",
               "ViewState": "AgIAAHgAAAAAAAAAAAAAAIsAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2025-02-20T02:33:39.511Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-20T02:33:39.511Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "RBX Asset Extractor",
+              "Title": "RBX Asset Extractor.vbproj",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX Asset Extractor\\RBX Asset Extractor.vbproj",
               "RelativeDocumentMoniker": "RBX Asset Extractor\\RBX Asset Extractor.vbproj",
               "ToolTip": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX Asset Extractor\\RBX Asset Extractor.vbproj",
               "RelativeToolTip": "RBX Asset Extractor\\RBX Asset Extractor.vbproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003380|",
-              "WhenOpened": "2025-02-20T02:08:59.179Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-20T02:08:59.179Z"
             },
             {
               "$type": "Document",
@@ -128,18 +126,6 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Settings.settings",
-              "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX Asset Extractor\\My Project\\Settings.settings",
-              "RelativeDocumentMoniker": "RBX Asset Extractor\\My Project\\Settings.settings",
-              "ToolTip": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX Asset Extractor\\My Project\\Settings.settings",
-              "RelativeToolTip": "RBX Asset Extractor\\My Project\\Settings.settings",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002767|",
-              "WhenOpened": "2025-02-20T02:07:45.196Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 5,
               "Title": "RBX Asset Extractor",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX Asset Extractor\\RBX Asset Extractor.vbproj",
@@ -147,8 +133,7 @@
               "ToolTip": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX Asset Extractor\\RBX Asset Extractor.vbproj",
               "RelativeToolTip": "RBX Asset Extractor\\RBX Asset Extractor.vbproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003380|",
-              "WhenOpened": "2025-02-20T00:02:08.646Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-20T00:02:08.646Z"
             },
             {
               "$type": "Document",
@@ -158,7 +143,7 @@
               "RelativeDocumentMoniker": "RBX Asset Extractor\\Form1.vb",
               "ToolTip": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX Asset Extractor\\Form1.vb",
               "RelativeToolTip": "RBX Asset Extractor\\Form1.vb",
-              "ViewState": "AgIAACAAAAAAAAAAAAAAwCYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAkwFAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
               "WhenOpened": "2025-02-19T23:57:00.212Z",
               "EditorCaption": ""
@@ -206,6 +191,17 @@
               "RelativeToolTip": "RBXAudioExtractor\\Form1.Designer.vb",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
               "WhenOpened": "2025-02-19T20:12:38.324Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Settings.settings",
+              "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX Asset Extractor\\My Project\\Settings.settings",
+              "RelativeDocumentMoniker": "RBX Asset Extractor\\My Project\\Settings.settings",
+              "ToolTip": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX Asset Extractor\\My Project\\Settings.settings",
+              "RelativeToolTip": "RBX Asset Extractor\\My Project\\Settings.settings",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002767|",
+              "WhenOpened": "2025-02-20T02:07:45.196Z"
             }
           ]
         }

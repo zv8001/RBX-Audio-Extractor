@@ -1,4 +1,5 @@
 REM
 
 del "RBXAudioExtractor.exe"
-ren "RBX Asset Extractor.exe" "RBXAudioExtractor.exe"
+copy "RBX Asset Extractor.exe" "RBXAudioExtractor.exe"
+pause
