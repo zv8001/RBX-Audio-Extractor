@@ -1,0 +1,41 @@
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\RBX Asset Extractor.exe
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\RBX Asset Extractor.dll.config
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\RBX Asset Extractor.deps.json
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\RBX Asset Extractor.runtimeconfig.json
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\RBX Asset Extractor.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\RBX Asset Extractor.pdb
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\Bass.Net.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\NAudio.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\NAudio.Asio.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\NAudio.Core.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\NAudio.Midi.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\NAudio.Vorbis.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\NAudio.Wasapi.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\NAudio.WinForms.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\NAudio.WinMM.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\NVorbis.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\TagLibSharp.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\TradeWright.TabControlExtra.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\Ude.NetStandard.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\Vedoo.VedooControls.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\ATL.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\Interop.WMPLib.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\bin\Release\net8.0-windows\AxInterop.WMPLib.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX Asset Extractor.vbproj.AssemblyReference.cache
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\Interop.WMPLib.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\AxInterop.WMPLib.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX Asset Extractor.vbproj.ResolveComReference.cache
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX_Asset_Extractor.MainForm.resources
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX_Asset_Extractor.Resources.resources
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX Asset Extractor.vbproj.GenerateResource.cache
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX Asset Extractor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX Asset Extractor.AssemblyInfoInputs.cache
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX Asset Extractor.AssemblyInfo.vb
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX Asset Extractor.vbproj.CoreCompileInputs.cache
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX Asset Extractor.sourcelink.json
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX Asse.4042C37E.Up2Date
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX Asset Extractor.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\refint\RBX Asset Extractor.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX Asset Extractor.pdb
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\RBX Asset Extractor.genruntimeconfig.cache
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBX Asset Extractor\obj\Release\net8.0-windows\ref\RBX Asset Extractor.dll
