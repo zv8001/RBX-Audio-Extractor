@@ -17,11 +17,12 @@ Imports System.Net.Http
 Imports System.Reflection
 Imports System.Reflection.Metadata
 Imports System.Drawing
+Imports TagLib
 Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.1.1"
+    Dim V = "v1.1.2"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Private codecInstallerUrl As String = "https://files2.codecguide.com/K-Lite_Codec_Pack_1880_Standard.exe"
     Dim Stage As Integer = 0
@@ -215,12 +216,27 @@ del %0
 
 
     End Sub
-
+    Dim DisableTimer019 = False
+    Private Sub WaitForRemoveFilesHTTP_Tick(sender As Object, e As EventArgs) Handles WaitForRemoveFilesHTTP.Tick
+        If ProgressBar1.Value = 100 And Not DisableTimer019 Then
+            DisableTimer019 = True
+            WaitForRemoveFilesHTTP.Stop()
+            Try
+                KeepButtonsOff.Start()
+                LoadHTTP0.RunWorkerAsync(New String() {tempDirectory & "\Roblox\http", tempDirectory & "\RBX_SOUND_RIPPER_HTTP"})
+                Stage = 2
+            Catch ex As Exception
+                KeepButtonsOff.Stop()
+                CallError(ex)
+            End Try
+        End If
+    End Sub
     Private Sub LoadFullGame()
 
         Dim result = MessageBox.Show("It is highly recommended you clear cache before each game considering audio files from previous sessions will remain and it may take a long time to process. Do you still want to continue?", "Do you still want to continue?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
 
         If result = DialogResult.Yes Then
+            MsgBox("check1")
 
             Dim tempDirectory = Path.GetTempPath
 
@@ -233,26 +249,17 @@ del %0
             End If
 
             Stage = 1
+            MsgBox("check2")
             DeleteAllFiles(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
             DeleteAllFiles2(tempDirectory & "\RBXAudioExtractorIMG")
 
-            Try
-                EnableButtons(False)
-                KeepButtonsOff.Start()
-
-                LoadHTTP0.RunWorkerAsync(New String() {tempDirectory & "\Roblox\http", tempDirectory & "\RBX_SOUND_RIPPER_HTTP"})
-                Stage = 2
-            Catch ex As Exception
-                KeepButtonsOff.Stop()
-                EnableButtons(True)
-                CallError(ex)
-            End Try
-
+            WaitForRemoveFilesHTTP.Start()
         End If
 
     End Sub
 
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles LoadHttpBtn.Click
+    Private Sub LoadHttpBtn_Click(sender As Object, e As EventArgs) Handles LoadHttpBtn.Click
+        MsgBox("LoadFullGameCalled")
         LoadFullGame()
     End Sub
 
@@ -371,7 +378,7 @@ del %0
     Private Sub CheckIfHTTPIsDone_Tick(sender As Object, e As EventArgs) Handles CheckIfHTTPIsDone.Tick
         If ProgressBar1.Value = 100 Then
             KeepButtonsOff.Stop()
-            EnableButtons(True)
+            '   EnableButtons(True)
 
             CheckIfHTTPIsDone.Stop()
             HTTPLISTBOX.Items.Clear()
@@ -584,12 +591,18 @@ del %0
 
 
     Private Sub RemoveFilesInDir_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles RemoveFilesInDir.RunWorkerCompleted
-        EnableButtons(True)
+        '  EnableButtons(True)
     End Sub
 
+    Sub UpdatePrgressBar()
+
+    End Sub
 
     Sub RemoveAllFileInDir1(directoryPath As String())
+
         Dim files = Directory.GetFiles(directoryPath(0), "*.*", SearchOption.AllDirectories)
+
+
         If Not Directory.Exists(directoryPath(0)) Then
             UpdateLog($"ERROR: Directory does not exist: {directoryPath(0)}")
         Else
@@ -600,18 +613,24 @@ del %0
                     UpdateLog($"Deleting file: {files(i)}")
                     System.IO.File.Delete(files(i))
                 Catch ex As Exception
-                    UpdateLog($"Failed to Delete file with error: {ex}")
+                    UpdateLog($"Failed to Delete file with error: {ex.Message}")
                 End Try
                 Try
                     RemoveFilesInDir.ReportProgress(CInt((i + 1) / files.Length * 100))
                 Catch ex As Exception
-                    CallError(ex)
+                    UpdateLog(ex.Message)
                 End Try
 
             Next
+
+            Me.Invoke(Sub()
+                          ProgressBar1.Value = 100
+                      End Sub)
+
         End If
     End Sub
     Private Sub RemoveFilesInDir_DoWork(sender As Object, e As DoWorkEventArgs) Handles RemoveFilesInDir.DoWork
+
         RemoveAllFileInDir1(CType(e.Argument, String()))
 
     End Sub
@@ -785,10 +804,13 @@ del %0
     End Sub
 
     Public Sub DeleteAllFiles(Dir)
+        MsgBox("check3")
         Try
             RemoveFilesInDir.RunWorkerAsync(New String() {Dir})
-            EnableButtons(False)
+            '   EnableButtons(False)
+
         Catch ex As Exception
+            MsgBox(ex)
             CallError(ex)
         End Try
 
@@ -798,9 +820,9 @@ del %0
     Public Sub DeleteAllFiles2(Dir)
         Try
             RemoveAllFiles2.RunWorkerAsync(New String() {Dir})
-            EnableButtons(False)
+            ' EnableButtons(False)
         Catch ex As Exception
-            EnableButtons(True)
+            ' EnableButtons(True)
             CallError(ex)
         End Try
 
@@ -809,7 +831,7 @@ del %0
         Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios / images your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
         Dim tempDirectory = Path.GetTempPath
         If result = DialogResult.Yes Then
-            EnableButtons(False)
+            'EnableButtons(False)
             DeleteAllFiles(tempDirectory & "\Roblox\http")
         End If
     End Sub
@@ -1026,16 +1048,6 @@ del %0
         End If
     End Sub
 
-    Private Sub ChkProgressBarDisable_Tick(sender As Object, e As EventArgs) Handles ChkProgressBarDisable.Tick
-        If ProgressBar1.Value = 100 Then
-            ProgressBar1.Value = 0
-        End If
-        If ProgressBar1.Value = 0 Then
-            ProgressBar1.Visible = False
-        Else
-            ProgressBar1.Visible = True
-        End If
-    End Sub
 
     Private Sub PreVeiwImgBox_Click(sender As Object, e As EventArgs) Handles PreVeiwImgBox.Click
 
@@ -1045,7 +1057,7 @@ del %0
         Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios / images your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
         Dim tempDirectory = Path.GetTempPath
         If result = DialogResult.Yes Then
-            EnableButtons(False)
+            ' EnableButtons(False)
             DeleteAllFiles(tempDirectory & "\Roblox\http")
         End If
     End Sub
@@ -1055,10 +1067,10 @@ del %0
     End Sub
 
     Private Sub KeepButtonsOff_Tick(sender As Object, e As EventArgs) Handles KeepButtonsOff.Tick
-        EnableButtons(False)
+        'EnableButtons(False)
     End Sub
 
-    Private Sub CheckForImgButtonsEnable_Tick(sender As Object, e As EventArgs) Handles CheckForImgButtonsEnable.Tick
+    Private Sub MainLoop_Tick(sender As Object, e As EventArgs) Handles MainLoop.Tick
         If LoadImgListBox.Items.Count > 0 Then
             DownloadImgBtn.Enabled = True
             SaveAllBtn.Enabled = True
@@ -1068,6 +1080,16 @@ del %0
             SaveAllBtn.Enabled = False
         End If
 
+        If ProgressBar1.Value = 100 Then
+            ProgressBar1.Value = 0
+        End If
+        If ProgressBar1.Value = 0 Then
+            EnableButtons(True)
+            ProgressBar1.Visible = False
+        Else
+            EnableButtons(False)
+            ProgressBar1.Visible = True
+        End If
     End Sub
 
 

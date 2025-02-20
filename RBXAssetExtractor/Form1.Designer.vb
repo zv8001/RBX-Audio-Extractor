@@ -26,7 +26,6 @@ Partial Class MainForm
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         LoadHTTP0 = New ComponentModel.BackgroundWorker()
         output_log = New ListBox()
-        Timer1 = New Timer(components)
         SaveFileDialog1 = New SaveFileDialog()
         LoadParButton = New Button()
         Download_BTN = New Button()
@@ -80,14 +79,13 @@ Partial Class MainForm
         RemoveFilesInDir = New ComponentModel.BackgroundWorker()
         RenameAllFiles = New ComponentModel.BackgroundWorker()
         CheckIfHTTPIsDone = New Timer(components)
-        Timer2 = New Timer(components)
         Timer3 = New Timer(components)
         RemoveAllFiles2 = New ComponentModel.BackgroundWorker()
         RenameAllFiles2 = New ComponentModel.BackgroundWorker()
         AlwaysOnTopCHK = New CheckBox()
-        ChkProgressBarDisable = New Timer(components)
         KeepButtonsOff = New Timer(components)
-        CheckForImgButtonsEnable = New Timer(components)
+        MainLoop = New Timer(components)
+        WaitForRemoveFilesHTTP = New Timer(components)
         CType(AxWindowsMediaPlayer1, ComponentModel.ISupportInitialize).BeginInit()
         TabControl1.SuspendLayout()
         TabPage3.SuspendLayout()
@@ -116,11 +114,6 @@ Partial Class MainForm
         output_log.Name = "output_log"
         output_log.Size = New Size(431, 316)
         output_log.TabIndex = 1
-        ' 
-        ' Timer1
-        ' 
-        Timer1.Enabled = True
-        Timer1.Interval = 1000
         ' 
         ' LoadParButton
         ' 
@@ -731,16 +724,16 @@ Partial Class MainForm
         AlwaysOnTopCHK.Text = "Always On Top"
         AlwaysOnTopCHK.UseVisualStyleBackColor = True
         ' 
-        ' ChkProgressBarDisable
-        ' 
-        ChkProgressBarDisable.Enabled = True
-        ' 
         ' KeepButtonsOff
         ' 
         ' 
-        ' CheckForImgButtonsEnable
+        ' MainLoop
         ' 
-        CheckForImgButtonsEnable.Enabled = True
+        MainLoop.Enabled = True
+        MainLoop.Interval = 300
+        ' 
+        ' WaitForRemoveFilesHTTP
+        ' 
         ' 
         ' MainForm
         ' 
@@ -782,7 +775,6 @@ Partial Class MainForm
         PerformLayout()
     End Sub
     Friend WithEvents output_log As ListBox
-    Friend WithEvents Timer1 As Timer
     Friend WithEvents SaveFileDialog1 As SaveFileDialog
     Friend WithEvents LoadParButton As Button
     Friend WithEvents Download_BTN As Button
@@ -827,7 +819,6 @@ Partial Class MainForm
     Friend WithEvents RemoveFilesInDir As System.ComponentModel.BackgroundWorker
     Friend WithEvents RenameAllFiles As System.ComponentModel.BackgroundWorker
     Friend WithEvents CheckIfHTTPIsDone As Timer
-    Friend WithEvents Timer2 As Timer
     Friend WithEvents Label4 As Label
     Friend WithEvents TabPage5 As TabPage
     Friend WithEvents LoadImgListBox As ListBox
@@ -839,12 +830,12 @@ Partial Class MainForm
     Friend WithEvents RemoveAllFiles2 As System.ComponentModel.BackgroundWorker
     Friend WithEvents RenameAllFiles2 As System.ComponentModel.BackgroundWorker
     Friend WithEvents AlwaysOnTopCHK As CheckBox
-    Friend WithEvents ChkProgressBarDisable As Timer
     Friend WithEvents Label8 As Label
     Friend WithEvents ImgStats As Label
     Friend WithEvents ImgClearTmp As Button
     Friend WithEvents KeepButtonsOff As Timer
-    Friend WithEvents CheckForImgButtonsEnable As Timer
     Friend WithEvents Label7 As Label
+    Friend WithEvents MainLoop As Timer
+    Friend WithEvents WaitForRemoveFilesHTTP As Timer
 
 End Class
