@@ -76,16 +76,12 @@ Partial Class MainForm
         CloseBTN = New Button()
         fadeInTimer = New Timer(components)
         fadeOutTimer = New Timer(components)
-        RemoveFilesInDir = New ComponentModel.BackgroundWorker()
-        RenameAllFiles = New ComponentModel.BackgroundWorker()
-        CheckIfHTTPIsDone = New Timer(components)
         Timer3 = New Timer(components)
-        RemoveAllFiles2 = New ComponentModel.BackgroundWorker()
-        RenameAllFiles2 = New ComponentModel.BackgroundWorker()
         AlwaysOnTopCHK = New CheckBox()
         KeepButtonsOff = New Timer(components)
         MainLoop = New Timer(components)
-        WaitForRemoveFilesHTTP = New Timer(components)
+        LoadPartialBackgoundWorker = New ComponentModel.BackgroundWorker()
+        ClearCache = New ComponentModel.BackgroundWorker()
         CType(AxWindowsMediaPlayer1, ComponentModel.ISupportInitialize).BeginInit()
         TabControl1.SuspendLayout()
         TabPage3.SuspendLayout()
@@ -121,7 +117,7 @@ Partial Class MainForm
         LoadParButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         LoadParButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         LoadParButton.FlatStyle = FlatStyle.Flat
-        LoadParButton.Font = New Font("Segoe UI", 12F)
+        LoadParButton.Font = New Font("Segoe UI", 12.0F)
         LoadParButton.ForeColor = Color.White
         LoadParButton.Location = New Point(6, 311)
         LoadParButton.Name = "LoadParButton"
@@ -137,7 +133,7 @@ Partial Class MainForm
         Download_BTN.Enabled = False
         Download_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         Download_BTN.FlatStyle = FlatStyle.Flat
-        Download_BTN.Font = New Font("Segoe UI", 12F)
+        Download_BTN.Font = New Font("Segoe UI", 12.0F)
         Download_BTN.ForeColor = Color.White
         Download_BTN.Location = New Point(87, 311)
         Download_BTN.Name = "Download_BTN"
@@ -152,7 +148,7 @@ Partial Class MainForm
         ClearTMP_BTN.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         ClearTMP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         ClearTMP_BTN.FlatStyle = FlatStyle.Flat
-        ClearTMP_BTN.Font = New Font("Segoe UI", 12F)
+        ClearTMP_BTN.Font = New Font("Segoe UI", 12.0F)
         ClearTMP_BTN.ForeColor = Color.White
         ClearTMP_BTN.Location = New Point(318, 311)
         ClearTMP_BTN.Name = "ClearTMP_BTN"
@@ -177,7 +173,7 @@ Partial Class MainForm
         DownloadALL_BTN.Enabled = False
         DownloadALL_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DownloadALL_BTN.FlatStyle = FlatStyle.Flat
-        DownloadALL_BTN.Font = New Font("Segoe UI", 12F)
+        DownloadALL_BTN.Font = New Font("Segoe UI", 12.0F)
         DownloadALL_BTN.ForeColor = Color.White
         DownloadALL_BTN.Location = New Point(198, 311)
         DownloadALL_BTN.Name = "DownloadALL_BTN"
@@ -230,7 +226,7 @@ Partial Class MainForm
         ' 
         ' Label4
         ' 
-        Label4.Font = New Font("MS UI Gothic", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label4.Font = New Font("MS UI Gothic", 12.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label4.ForeColor = Color.White
         Label4.Location = New Point(23, 260)
         Label4.Name = "Label4"
@@ -366,7 +362,7 @@ Partial Class MainForm
         LoadHttpBtn.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         LoadHttpBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         LoadHttpBtn.FlatStyle = FlatStyle.Flat
-        LoadHttpBtn.Font = New Font("Segoe UI", 12F)
+        LoadHttpBtn.Font = New Font("Segoe UI", 12.0F)
         LoadHttpBtn.ForeColor = Color.White
         LoadHttpBtn.Location = New Point(6, 311)
         LoadHttpBtn.Name = "LoadHttpBtn"
@@ -381,7 +377,7 @@ Partial Class MainForm
         ClearHTTPTEMP_BTN.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         ClearHTTPTEMP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         ClearHTTPTEMP_BTN.FlatStyle = FlatStyle.Flat
-        ClearHTTPTEMP_BTN.Font = New Font("Segoe UI", 12F)
+        ClearHTTPTEMP_BTN.Font = New Font("Segoe UI", 12.0F)
         ClearHTTPTEMP_BTN.ForeColor = Color.White
         ClearHTTPTEMP_BTN.Location = New Point(318, 311)
         ClearHTTPTEMP_BTN.MaximumSize = New Size(107, 35)
@@ -398,7 +394,7 @@ Partial Class MainForm
         DownloadAllHTTP_BTN.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         DownloadAllHTTP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DownloadAllHTTP_BTN.FlatStyle = FlatStyle.Flat
-        DownloadAllHTTP_BTN.Font = New Font("Segoe UI", 12F)
+        DownloadAllHTTP_BTN.Font = New Font("Segoe UI", 12.0F)
         DownloadAllHTTP_BTN.ForeColor = Color.White
         DownloadAllHTTP_BTN.Location = New Point(198, 311)
         DownloadAllHTTP_BTN.Name = "DownloadAllHTTP_BTN"
@@ -413,7 +409,7 @@ Partial Class MainForm
         DOWNLOADHTTP_BTN.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         DOWNLOADHTTP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DOWNLOADHTTP_BTN.FlatStyle = FlatStyle.Flat
-        DOWNLOADHTTP_BTN.Font = New Font("Segoe UI", 12F)
+        DOWNLOADHTTP_BTN.Font = New Font("Segoe UI", 12.0F)
         DOWNLOADHTTP_BTN.ForeColor = Color.White
         DOWNLOADHTTP_BTN.Location = New Point(87, 311)
         DOWNLOADHTTP_BTN.Name = "DOWNLOADHTTP_BTN"
@@ -457,7 +453,7 @@ Partial Class MainForm
         ImgClearTmp.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         ImgClearTmp.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         ImgClearTmp.FlatStyle = FlatStyle.Flat
-        ImgClearTmp.Font = New Font("Segoe UI", 12F)
+        ImgClearTmp.Font = New Font("Segoe UI", 12.0F)
         ImgClearTmp.ForeColor = Color.White
         ImgClearTmp.Location = New Point(194, 219)
         ImgClearTmp.Name = "ImgClearTmp"
@@ -482,7 +478,7 @@ Partial Class MainForm
         SaveAllBtn.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         SaveAllBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         SaveAllBtn.FlatStyle = FlatStyle.Flat
-        SaveAllBtn.Font = New Font("Segoe UI", 12F)
+        SaveAllBtn.Font = New Font("Segoe UI", 12.0F)
         SaveAllBtn.ForeColor = Color.White
         SaveAllBtn.Location = New Point(194, 302)
         SaveAllBtn.Name = "SaveAllBtn"
@@ -497,7 +493,7 @@ Partial Class MainForm
         DownloadImgBtn.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         DownloadImgBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DownloadImgBtn.FlatStyle = FlatStyle.Flat
-        DownloadImgBtn.Font = New Font("Segoe UI", 12F)
+        DownloadImgBtn.Font = New Font("Segoe UI", 12.0F)
         DownloadImgBtn.ForeColor = Color.White
         DownloadImgBtn.Location = New Point(275, 261)
         DownloadImgBtn.Name = "DownloadImgBtn"
@@ -512,7 +508,7 @@ Partial Class MainForm
         LoadImgBtn.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         LoadImgBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         LoadImgBtn.FlatStyle = FlatStyle.Flat
-        LoadImgBtn.Font = New Font("Segoe UI", 12F)
+        LoadImgBtn.Font = New Font("Segoe UI", 12.0F)
         LoadImgBtn.ForeColor = Color.White
         LoadImgBtn.Location = New Point(194, 261)
         LoadImgBtn.Name = "LoadImgBtn"
@@ -563,7 +559,7 @@ Partial Class MainForm
         SaveLogBtn.FlatAppearance.BorderColor = Color.Silver
         SaveLogBtn.FlatAppearance.BorderSize = 2
         SaveLogBtn.FlatStyle = FlatStyle.Popup
-        SaveLogBtn.Font = New Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        SaveLogBtn.Font = New Font("Segoe UI", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         SaveLogBtn.ForeColor = Color.White
         SaveLogBtn.Location = New Point(350, 322)
         SaveLogBtn.Name = "SaveLogBtn"
@@ -618,7 +614,7 @@ Partial Class MainForm
         StatusLBR.Anchor = AnchorStyles.Right
         StatusLBR.AutoSize = True
         StatusLBR.BackColor = Color.Transparent
-        StatusLBR.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        StatusLBR.Font = New Font("Segoe UI", 12.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         StatusLBR.ForeColor = Color.White
         StatusLBR.Location = New Point(12, 505)
         StatusLBR.Name = "StatusLBR"
@@ -667,7 +663,7 @@ Partial Class MainForm
         Button2.FlatAppearance.BorderSize = 0
         Button2.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         Button2.FlatStyle = FlatStyle.Flat
-        Button2.Font = New Font("Franklin Gothic Medium", 18F, FontStyle.Bold)
+        Button2.Font = New Font("Franklin Gothic Medium", 18.0F, FontStyle.Bold)
         Button2.ForeColor = Color.White
         Button2.Location = New Point(391, 0)
         Button2.Name = "Button2"
@@ -682,7 +678,7 @@ Partial Class MainForm
         CloseBTN.FlatAppearance.BorderSize = 0
         CloseBTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(208), CByte(1), CByte(27))
         CloseBTN.FlatStyle = FlatStyle.Flat
-        CloseBTN.Font = New Font("Franklin Gothic Medium", 18F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        CloseBTN.Font = New Font("Franklin Gothic Medium", 18.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         CloseBTN.ForeColor = Color.White
         CloseBTN.Location = New Point(429, 0)
         CloseBTN.Name = "CloseBTN"
@@ -696,21 +692,6 @@ Partial Class MainForm
         ' 
         ' 
         ' fadeOutTimer
-        ' 
-        ' 
-        ' RemoveFilesInDir
-        ' 
-        ' 
-        ' RenameAllFiles
-        ' 
-        ' 
-        ' CheckIfHTTPIsDone
-        ' 
-        ' 
-        ' RemoveAllFiles2
-        ' 
-        ' 
-        ' RenameAllFiles2
         ' 
         ' 
         ' AlwaysOnTopCHK
@@ -730,14 +711,17 @@ Partial Class MainForm
         ' MainLoop
         ' 
         MainLoop.Enabled = True
-        MainLoop.Interval = 300
+        MainLoop.Interval = 1000
         ' 
-        ' WaitForRemoveFilesHTTP
+        ' LoadPartialBackgoundWorker
+        ' 
+        ' 
+        ' ClearCache
         ' 
         ' 
         ' MainForm
         ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         BackgroundImageLayout = ImageLayout.Stretch
@@ -816,9 +800,6 @@ Partial Class MainForm
     Friend WithEvents fadeOutTimer As Timer
     Friend WithEvents LinkLabel2 As LinkLabel
     Friend WithEvents SaveLogBtn As Button
-    Friend WithEvents RemoveFilesInDir As System.ComponentModel.BackgroundWorker
-    Friend WithEvents RenameAllFiles As System.ComponentModel.BackgroundWorker
-    Friend WithEvents CheckIfHTTPIsDone As Timer
     Friend WithEvents Label4 As Label
     Friend WithEvents TabPage5 As TabPage
     Friend WithEvents LoadImgListBox As ListBox
@@ -827,8 +808,6 @@ Partial Class MainForm
     Friend WithEvents DownloadImgBtn As Button
     Friend WithEvents LoadImgBtn As Button
     Friend WithEvents Timer3 As Timer
-    Friend WithEvents RemoveAllFiles2 As System.ComponentModel.BackgroundWorker
-    Friend WithEvents RenameAllFiles2 As System.ComponentModel.BackgroundWorker
     Friend WithEvents AlwaysOnTopCHK As CheckBox
     Friend WithEvents Label8 As Label
     Friend WithEvents ImgStats As Label
@@ -836,6 +815,7 @@ Partial Class MainForm
     Friend WithEvents KeepButtonsOff As Timer
     Friend WithEvents Label7 As Label
     Friend WithEvents MainLoop As Timer
-    Friend WithEvents WaitForRemoveFilesHTTP As Timer
+    Friend WithEvents LoadPartialBackgoundWorker As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ClearCache As System.ComponentModel.BackgroundWorker
 
 End Class

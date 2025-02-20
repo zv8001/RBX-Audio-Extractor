@@ -36,11 +36,11 @@ Public Class MainForm
     Private startPoint As Point
     Dim HTTPDONE = True
 
+
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         LoadHTTP0.WorkerReportsProgress = True
-        RemoveFilesInDir.WorkerReportsProgress = True
-        RenameAllFiles.WorkerReportsProgress = True
         VText_LBR.Text = "Currently running version: " & V
         InstallCodec()
 
@@ -217,57 +217,69 @@ del %0
 
     End Sub
     Dim DisableTimer019 = False
-    Private Sub WaitForRemoveFilesHTTP_Tick(sender As Object, e As EventArgs) Handles WaitForRemoveFilesHTTP.Tick
-        If ProgressBar1.Value = 100 And Not DisableTimer019 Then
-            DisableTimer019 = True
-            WaitForRemoveFilesHTTP.Stop()
-            Try
-                KeepButtonsOff.Start()
-                LoadHTTP0.RunWorkerAsync(New String() {tempDirectory & "\Roblox\http", tempDirectory & "\RBX_SOUND_RIPPER_HTTP"})
-                Stage = 2
-            Catch ex As Exception
-                KeepButtonsOff.Stop()
-                CallError(ex)
-            End Try
-        End If
-    End Sub
+
     Private Sub LoadFullGame()
+        If ProgressBar1.Value = 0 Then
+            Dim result = MessageBox.Show("It is highly recommended you clear cache before each game considering audio files from previous sessions will remain and it may take a long time to process. Do you still want to continue?", "Do you still want to continue?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
 
-        Dim result = MessageBox.Show("It is highly recommended you clear cache before each game considering audio files from previous sessions will remain and it may take a long time to process. Do you still want to continue?", "Do you still want to continue?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+            If result = DialogResult.Yes Then
 
-        If result = DialogResult.Yes Then
-            MsgBox("check1")
+                Try
+                    LoadHTTP0.RunWorkerAsync()
+                Catch ex As Exception
+                    CallError("Two processes cannot run at the same time please wait for the original process to stop.")
+                End Try
 
-            Dim tempDirectory = Path.GetTempPath
-
-            If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBXAudioExtractorIMG") Then
-                My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBXAudioExtractorIMG")
             End If
-
-            If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBX_SOUND_RIPPER_HTTP") Then
-                My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
-            End If
-
-            Stage = 1
-            MsgBox("check2")
-            DeleteAllFiles(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
-            DeleteAllFiles2(tempDirectory & "\RBXAudioExtractorIMG")
-
-            WaitForRemoveFilesHTTP.Start()
+        Else
+            CallError("Cannot start two processes at the same time.")
         End If
+
+
 
     End Sub
 
     Private Sub LoadHttpBtn_Click(sender As Object, e As EventArgs) Handles LoadHttpBtn.Click
-        MsgBox("LoadFullGameCalled")
         LoadFullGame()
     End Sub
 
 
     Private Sub LoadHTTP_DoWork_1(sender As Object, e As DoWorkEventArgs) Handles LoadHTTP0.DoWork
+
+        'The old code was a complete disaster it utilized like a bunch of background workers and then progress bars to check to see if the background workers are done
+        'just created a buggy mess of code that was bound to failure
+        'so I basically just moved all of the bullshit all into one background worker
+        'that was the only proper fix to this disaster I don't know why my dumbass coded it like that but it's fixed now in v1.1.2
+
+        Me.Invoke(Sub()
+                      HTTPLISTBOX.DisplayMember = "DisplayText"
+                      HTTPLISTBOX.ValueMember = "FilePath"
+
+                      LoadImgListBox.DisplayMember = "DisplayText"
+                      LoadImgListBox.ValueMember = "FilePath"
+                  End Sub)
+
+
+        Dim tempDirectory = Path.GetTempPath
+
+        If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBXAudioExtractorIMG") Then
+            My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBXAudioExtractorIMG")
+        End If
+
+        If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBX_SOUND_RIPPER_HTTP") Then
+            My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
+        End If
+
+        Stage = 1
+
+
+        RemoveAllFileInDir1(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
+        RemoveAllFileInDir1(tempDirectory & "\RBXAudioExtractorIMG")
+
+
         Dim directories As String() = CType(e.Argument, String())
-        Dim sourceDir As String = directories(0)
-        Dim targetDir As String = directories(1)
+        Dim sourceDir As String = $"{tempDirectory}\Roblox\http"
+        Dim targetDir As String = $"{tempDirectory}\RBX_SOUND_RIPPER_HTTP"
 
 
         Dim files = Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories)
@@ -284,6 +296,73 @@ del %0
 
             LoadHTTP0.ReportProgress(CInt((i + 1) / files.Length * 100))
         Next
+
+
+        Stage = 3
+        RenameFileExtensions(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", ".ogg")
+        RenameFileExtensions(tempDirectory & "\RBXAudioExtractorIMG", ".png")
+
+        Me.Invoke(Sub()
+                      ProgressBar1.Value = 99
+                  End Sub)
+
+        '   ProgressBar1.Value = 0
+
+        Me.Invoke(Sub()
+                      HTTPLISTBOX.Items.Clear()
+                      LoadImgListBox.Items.Clear()
+                  End Sub)
+
+
+        Dim musicFiles = Directory.GetFiles(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", "*.ogg")
+
+        For Each file In musicFiles
+            Dim InfoLoaded = True
+
+            Dim track As New Track(file)
+
+            Dim title = track.Title
+            Dim Album = track.Album
+            Dim Artist = track.Artist
+
+            If String.IsNullOrEmpty(Album) Then
+                InfoLoaded = False
+            End If
+
+            Try
+                Me.Invoke(Sub()
+
+                              If InfoLoaded Then
+                                  HTTPLISTBOX.Items.Insert(0, New With {.DisplayText = $"" & title & " | Artists: " & Artist & " | Album: " & Album & "", .FilePath = file})
+                              Else
+                                  HTTPLISTBOX.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
+                              End If
+                          End Sub)
+
+            Catch ex As Exception
+                Me.Invoke(Sub()
+                              CallError($"Error reading file: {file} - {ex.Message}")
+                          End Sub)
+
+            End Try
+        Next
+
+
+        Dim PngFiles = Directory.GetFiles(tempDirectory & "\RBXAudioExtractorIMG", "*.png")
+
+        For Each file In PngFiles
+            Me.Invoke(Sub()
+                          LoadImgListBox.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
+                      End Sub)
+
+        Next
+
+        Stage = 0
+        Me.Invoke(Sub()
+                      ProgressBar1.Value = 0
+                  End Sub)
+
+
     End Sub
 
     Private Sub LoadHTTP0_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles LoadHTTP0.ProgressChanged
@@ -366,71 +445,9 @@ del %0
 
     Private Sub LoadHTTP0_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles LoadHTTP0.RunWorkerCompleted
 
-
-        Stage = 3
-        RenameFileExtensions(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", ".ogg")
-        RenameFileExtensions2(tempDirectory & "\RBXAudioExtractorIMG", ".png")
-        ProgressBar1.Value = 0
-        CheckIfHTTPIsDone.Start()
-
     End Sub
 
-    Private Sub CheckIfHTTPIsDone_Tick(sender As Object, e As EventArgs) Handles CheckIfHTTPIsDone.Tick
-        If ProgressBar1.Value = 100 Then
-            KeepButtonsOff.Stop()
-            '   EnableButtons(True)
 
-            CheckIfHTTPIsDone.Stop()
-            HTTPLISTBOX.Items.Clear()
-            LoadImgListBox.Items.Clear()
-
-            Dim musicFiles = Directory.GetFiles(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", "*.ogg")
-
-            For Each file In musicFiles
-                Dim InfoLoaded = True
-
-                Dim track As New Track(file)
-
-                Dim title = track.Title
-                Dim Album = track.Album
-                Dim Artist = track.Artist
-
-                If String.IsNullOrEmpty(Album) Then
-                    InfoLoaded = False
-                End If
-
-                Try
-
-                    If InfoLoaded Then
-                        HTTPLISTBOX.Items.Insert(0, New With {.DisplayText = $"" & title & " | Artists: " & Artist & " | Album: " & Album & "", .FilePath = file})
-                    Else
-                        HTTPLISTBOX.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
-                    End If
-                Catch ex As Exception
-                    CallError($"Error reading file: {file} - {ex.Message}")
-                End Try
-            Next
-
-
-            Dim PngFiles = Directory.GetFiles(tempDirectory & "\RBXAudioExtractorIMG", "*.png")
-
-            For Each file In PngFiles
-                LoadImgListBox.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
-            Next
-
-            Stage = 0
-            HTTPLISTBOX.DisplayMember = "DisplayText"
-            HTTPLISTBOX.ValueMember = "FilePath"
-
-            LoadImgListBox.DisplayMember = "DisplayText"
-            LoadImgListBox.ValueMember = "FilePath"
-
-
-        End If
-
-
-
-    End Sub
 
     Sub EnableButtons(Enabled)
         ClearHTTPTEMP_BTN.Enabled = Enabled
@@ -441,19 +458,23 @@ del %0
         LoadImgBtn.Enabled = Enabled
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles LoadParButton.Click
+
+    Private Sub LoadPartialBackgoundWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles LoadPartialBackgoundWorker.DoWork
         Dim tempDirectory = Path.GetTempPath
         If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBX_SOUND_RIPPER") Then
             My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBX_SOUND_RIPPER")
         End If
 
-        DeleteAllFiles(tempDirectory & "\RBX_SOUND_RIPPER")
+        RemoveAllFileInDir1(tempDirectory & "\RBX_SOUND_RIPPER")
 
 
         CloneDirectory(tempDirectory & "\Roblox\sounds", tempDirectory & "\RBX_SOUND_RIPPER")
         RenameFileExtensions(tempDirectory & "\RBX_SOUND_RIPPER", ".ogg")
 
-        Sounds_Listbox.Items.Clear()
+        Me.Invoke(Sub()
+                      Sounds_Listbox.Items.Clear()
+                  End Sub)
+
 
 
         Dim musicFiles = Directory.GetFiles(tempDirectory & "\RBX_SOUND_RIPPER", "*.ogg")
@@ -472,21 +493,37 @@ del %0
             End If
 
             Try
+                Me.Invoke(Sub()
+                              If InfoLoaded Then
+                                  Sounds_Listbox.Items.Insert(0, New With {.DisplayText = $"" & title & " | Artists: " & Artist & " | Album: " & Album & "", .FilePath = file})
+                              Else
+                                  Sounds_Listbox.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
+                              End If
+                          End Sub)
 
-                If InfoLoaded Then
-                    Sounds_Listbox.Items.Insert(0, New With {.DisplayText = $"" & title & " | Artists: " & Artist & " | Album: " & Album & "", .FilePath = file})
-                Else
-                    Sounds_Listbox.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
-                End If
             Catch ex As Exception
-                CallError($"Error reading file: {file} - {ex.Message}")
+                Me.Invoke(Sub()
+                              CallError($"Error reading file: {file} - {ex.Message}")
+                          End Sub)
+
 
             End Try
         Next
 
+        Me.Invoke(Sub()
+                      Sounds_Listbox.DisplayMember = "DisplayText"
+                      Sounds_Listbox.ValueMember = "FilePath"
+                  End Sub)
 
-        Sounds_Listbox.DisplayMember = "DisplayText"
-        Sounds_Listbox.ValueMember = "FilePath"
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles LoadParButton.Click
+        Try
+            LoadPartialBackgoundWorker.RunWorkerAsync()
+        Catch ex As Exception
+            CallError("Two processes cannot run at the same time please wait for the original process to stop.")
+        End Try
+
 
     End Sub
 
@@ -528,83 +565,52 @@ del %0
 
     End Sub
 
-    Sub RenameAllFiles1(Prams As String())
-        Dim files = Directory.GetFiles(Prams(0), "*.*", SearchOption.AllDirectories)
 
-        Dim directoryPath As String = Prams(0)
-        Dim newExtension As String = Prams(1)
 
+
+    Sub RenameFileExtensions(directoryPath As String, newExtension As String)
+        Dim files = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories)
         If Not Directory.Exists(directoryPath) Then
-            UpdateLog($"ERROR: Directory does not exist: {directoryPath}")
+
+            Me.Invoke(Sub()
+                          UpdateLog($"ERROR: Directory does not exist: {directoryPath}")
+                      End Sub)
+
+
         End If
 
 
         For i As Integer = 0 To files.Length - 1
             Dim fileNameWithoutExt As String = Path.GetFileNameWithoutExtension(files(i))
             Dim newFileName As String = Path.Combine(directoryPath, fileNameWithoutExt & newExtension)
-            UpdateLog($"Renaming file extension: {files(i)} To {newFileName} ")
+            Me.Invoke(Sub()
+                          UpdateLog($"Renaming file extension: {files(i)} To {newFileName} ")
+                      End Sub)
+
             Try
                 System.IO.File.Move(files(i), newFileName, True)
             Catch ex As Exception
 
             End Try
-            Try
-                RenameAllFiles.ReportProgress(CInt((i + 1) / files.Length * 100))
-            Catch ex As Exception
-                CallError(ex)
-            End Try
 
+            Dim progress As Integer = CInt(((i + 1) / files.Length) * 100)
+            Me.Invoke(Sub()
+                          ProgressBar1.Value = progress
+                      End Sub)
         Next
     End Sub
 
 
-    Private Sub RenameAllFiles_DoWork(sender As Object, e As DoWorkEventArgs) Handles RenameAllFiles.DoWork
-        RenameAllFiles1(CType(e.Argument, String()))
-
-    End Sub
-
-    Private Sub RenameAllFiles2_DoWork(sender As Object, e As DoWorkEventArgs) Handles RenameAllFiles2.DoWork
-        RenameAllFiles1(CType(e.Argument, String()))
-    End Sub
-
-    Private Sub RenameAllFiles_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles RenameAllFiles.ProgressChanged
-        ProgressBar1.Value = e.ProgressPercentage
-    End Sub
-
-    Sub RenameFileExtensions(directoryPath As String, newExtension As String)
-
-        Try
-            RenameAllFiles.RunWorkerAsync(New String() {directoryPath, newExtension})
-        Catch ex As Exception
-            CallError(ex)
-        End Try
-    End Sub
-    Sub RenameFileExtensions2(directoryPath As String, newExtension As String)
-
-        Try
-            RenameAllFiles2.RunWorkerAsync(New String() {directoryPath, newExtension})
-        Catch ex As Exception
-            CallError(ex)
-        End Try
-    End Sub
 
 
+    Sub RemoveAllFileInDir1(directoryPath)
 
-    Private Sub RemoveFilesInDir_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles RemoveFilesInDir.RunWorkerCompleted
-        '  EnableButtons(True)
-    End Sub
-
-    Sub UpdatePrgressBar()
-
-    End Sub
-
-    Sub RemoveAllFileInDir1(directoryPath As String())
-
-        Dim files = Directory.GetFiles(directoryPath(0), "*.*", SearchOption.AllDirectories)
+        Dim files = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories)
 
 
-        If Not Directory.Exists(directoryPath(0)) Then
-            UpdateLog($"ERROR: Directory does not exist: {directoryPath(0)}")
+        If Not Directory.Exists(directoryPath) Then
+
+            UpdateLog($"ERROR: Directory does not exist: {directoryPath}")
         Else
 
             For i As Integer = 0 To files.Length - 1
@@ -615,12 +621,11 @@ del %0
                 Catch ex As Exception
                     UpdateLog($"Failed to Delete file with error: {ex.Message}")
                 End Try
-                Try
-                    RemoveFilesInDir.ReportProgress(CInt((i + 1) / files.Length * 100))
-                Catch ex As Exception
-                    UpdateLog(ex.Message)
-                End Try
 
+                Dim progress As Integer = CInt(((i + 1) / files.Length) * 100)
+                Me.Invoke(Sub()
+                              ProgressBar1.Value = progress
+                          End Sub)
             Next
 
             Me.Invoke(Sub()
@@ -629,20 +634,16 @@ del %0
 
         End If
     End Sub
-    Private Sub RemoveFilesInDir_DoWork(sender As Object, e As DoWorkEventArgs) Handles RemoveFilesInDir.DoWork
 
-        RemoveAllFileInDir1(CType(e.Argument, String()))
-
-    End Sub
-    Private Sub RemoveAllFiles2_DoWork(sender As Object, e As DoWorkEventArgs) Handles RemoveAllFiles2.DoWork
-        RemoveAllFileInDir1(CType(e.Argument, String()))
-    End Sub
 
 
     Sub CloneDirectory(sourceDir As String, targetDir As String)
 
         If Not Directory.Exists(sourceDir) Then
-            output_log.Items.Add($"Source directory does not exist: {sourceDir}")
+            Me.Invoke(Sub()
+                          output_log.Items.Add($"Source directory does not exist: {sourceDir}")
+                      End Sub)
+
         End If
 
 
@@ -655,13 +656,19 @@ del %0
             Try
                 Dim fileName As String = Path.GetFileName(file)
                 Dim destFile As String = Path.Combine(targetDir, fileName)
+                Me.Invoke(Sub()
+                              output_log.Items.Add($"Cloning: {fileName} Into: {destFile}")
+                          End Sub)
 
-                output_log.Items.Add($"Cloning: {fileName} Into: {destFile}")
 
 
                 System.IO.File.Copy(file, destFile, True)
             Catch ex As Exception
-                CallError(ex.ToString)
+                Me.Invoke(Sub()
+                              output_log.Items.Add(ex.Message)
+                          End Sub)
+
+
             End Try
 
         Next
@@ -671,17 +678,21 @@ del %0
             Try
                 Dim subDirName As String = Path.GetFileName(subDir)
                 Dim destSubDir As String = Path.Combine(targetDir, subDirName)
-                output_log.Items.Add($"Cloning (subdirectory): {subDirName} Into: {destSubDir}")
+                Me.Invoke(Sub()
+                              output_log.Items.Add($"Cloning (subdirectory): {subDirName} Into: {destSubDir}")
+                          End Sub)
+
                 CloneDirectory(subDir, destSubDir)
             Catch ex As Exception
-                CallError(ex.ToString)
+                Me.Invoke(Sub()
+                              output_log.Items.Add(ex.Message)
+                          End Sub)
             End Try
         Next
     End Sub
 
     Public Sub SaveFile()
         Dim saveFileDialog As New SaveFileDialog
-
 
         saveFileDialog.Filter = "OGG Files (*.ogg)|*.ogg"
 
@@ -693,7 +704,6 @@ del %0
                 My.Computer.FileSystem.CopyFile(SelFile, filePath)
             Catch ex As Exception
                 CallError(ex.Message)
-                'MsgBox(ex.Message, 0 + 16, "Woops")
             End Try
 
         End If
@@ -710,7 +720,7 @@ del %0
         Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
         Dim tempDirectory = Path.GetTempPath
         If result = DialogResult.Yes Then
-            DeleteAllFiles(tempDirectory & "\Roblox\sounds")
+            RemoveAllFileInDir1(tempDirectory & "\Roblox\sounds")
         End If
     End Sub
 
@@ -799,40 +809,23 @@ del %0
         End If
     End Sub
 
-    Private Sub DOWNLOADHTTP_BTN_Click(sender As Object, e As EventArgs) Handles DOWNLOADHTTP_BTN.Click, DOWNLOADHTTP_BTN.Click
+    Private Sub DOWNLOADHTTP_BTN_Click(sender As Object, e As EventArgs) Handles DOWNLOADHTTP_BTN.Click
         SaveFile()
     End Sub
 
-    Public Sub DeleteAllFiles(Dir)
-        MsgBox("check3")
-        Try
-            RemoveFilesInDir.RunWorkerAsync(New String() {Dir})
-            '   EnableButtons(False)
-
-        Catch ex As Exception
-            MsgBox(ex)
-            CallError(ex)
-        End Try
-
-    End Sub
 
 
-    Public Sub DeleteAllFiles2(Dir)
-        Try
-            RemoveAllFiles2.RunWorkerAsync(New String() {Dir})
-            ' EnableButtons(False)
-        Catch ex As Exception
-            ' EnableButtons(True)
-            CallError(ex)
-        End Try
 
-    End Sub
-    Private Sub ClearHTTPTEMP_BTN_Click(sender As Object, e As EventArgs) Handles ClearHTTPTEMP_BTN.Click, ClearHTTPTEMP_BTN.Click
+    Private Sub ClearHTTPTEMP_BTN_Click(sender As Object, e As EventArgs) Handles ClearHTTPTEMP_BTN.Click
         Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios / images your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
         Dim tempDirectory = Path.GetTempPath
         If result = DialogResult.Yes Then
             'EnableButtons(False)
-            DeleteAllFiles(tempDirectory & "\Roblox\http")
+            Try
+                ClearCache.RunWorkerAsync()
+            Catch ex As Exception
+                CallError("cannot run two processes at the same time")
+            End Try
         End If
     End Sub
 
@@ -973,7 +966,7 @@ del %0
         End If
     End Sub
 
-    Private Sub RemoveFilesInDir_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles RemoveFilesInDir.ProgressChanged
+    Private Sub RemoveFilesInDir_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
         ProgressBar1.Value = e.ProgressPercentage
     End Sub
     Private Sub DownloadImgBtn_Click(sender As Object, e As EventArgs) Handles DownloadImgBtn.Click
@@ -1057,8 +1050,12 @@ del %0
         Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios / images your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
         Dim tempDirectory = Path.GetTempPath
         If result = DialogResult.Yes Then
-            ' EnableButtons(False)
-            DeleteAllFiles(tempDirectory & "\Roblox\http")
+            'EnableButtons(False)
+            Try
+                ClearCache.RunWorkerAsync()
+            Catch ex As Exception
+                CallError("cannot run two processes at the same time")
+            End Try
         End If
     End Sub
 
@@ -1092,5 +1089,27 @@ del %0
         End If
     End Sub
 
+    Private Sub ClearCache_DoWork(sender As Object, e As DoWorkEventArgs) Handles ClearCache.DoWork
+        Dim files = Directory.GetFiles($"{tempDirectory}\Roblox\http", "*.*", SearchOption.AllDirectories)
+        If Not Directory.Exists($"{tempDirectory}\Roblox\http") Then
+            UpdateLog($"ERROR: Directory does not exist: {tempDirectory}\Roblox\http")
+        Else
+            For i As Integer = 0 To files.Length - 1
+                Try
+                    UpdateLog($"Deleting file: {files(i)}")
+                    System.IO.File.Delete(files(i))
+                Catch ex As Exception
+                    UpdateLog($"Failed to Delete file with error: {ex.Message}")
+                End Try
 
+                Dim progress As Integer = CInt(((i + 1) / files.Length) * 100)
+                Me.Invoke(Sub()
+                              ProgressBar1.Value = progress
+                          End Sub)
+            Next
+            Me.Invoke(Sub()
+                          ProgressBar1.Value = 100
+                      End Sub)
+        End If
+    End Sub
 End Class
