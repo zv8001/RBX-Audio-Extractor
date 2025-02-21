@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Success.wav" />
+    <EmbeddedResource Include="Resources\Success.wav" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +50,8 @@
 
   <ItemGroup>
     <PackageReference Include="Bass.Net" Version="1.0.0" />
+    <PackageReference Include="Modernizr" Version="2.8.3" />
+    <PackageReference Include="ModernUI" Version="2.0.0" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />

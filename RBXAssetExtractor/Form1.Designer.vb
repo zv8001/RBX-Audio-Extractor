@@ -63,6 +63,9 @@ Partial Class MainForm
         TabPage1 = New TabPage()
         SaveLogBtn = New Button()
         AutoScrollCHK = New CheckBox()
+        TabPage7 = New TabPage()
+        CheckBox1 = New CheckBox()
+        Label9 = New Label()
         VText_LBR = New Label()
         ProgressBar1 = New ProgressBar()
         CheckFOrButtons = New Timer(components)
@@ -82,6 +85,14 @@ Partial Class MainForm
         MainLoop = New Timer(components)
         LoadPartialBackgoundWorker = New ComponentModel.BackgroundWorker()
         ClearCache = New ComponentModel.BackgroundWorker()
+        MSGPopup = New ComponentModel.BackgroundWorker()
+        MetroTabControl1 = New MetroFramework.Controls.MetroTabControl()
+        TabPage6 = New TabPage()
+        TabPage8 = New TabPage()
+        TabPage9 = New TabPage()
+        TabPage10 = New TabPage()
+        TabPage11 = New TabPage()
+        MetroProgressBar1 = New MetroFramework.Controls.MetroProgressBar()
         CType(AxWindowsMediaPlayer1, ComponentModel.ISupportInitialize).BeginInit()
         TabControl1.SuspendLayout()
         TabPage3.SuspendLayout()
@@ -90,8 +101,10 @@ Partial Class MainForm
         TabPage5.SuspendLayout()
         CType(PreVeiwImgBox, ComponentModel.ISupportInitialize).BeginInit()
         TabPage1.SuspendLayout()
+        TabPage7.SuspendLayout()
         Panel2.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
+        MetroTabControl1.SuspendLayout()
         SuspendLayout()
         ' 
         ' LoadHTTP0
@@ -116,6 +129,7 @@ Partial Class MainForm
         LoadParButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         LoadParButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         LoadParButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        LoadParButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         LoadParButton.FlatStyle = FlatStyle.Flat
         LoadParButton.Font = New Font("Segoe UI", 12.0F)
         LoadParButton.ForeColor = Color.White
@@ -132,6 +146,7 @@ Partial Class MainForm
         Download_BTN.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         Download_BTN.Enabled = False
         Download_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        Download_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         Download_BTN.FlatStyle = FlatStyle.Flat
         Download_BTN.Font = New Font("Segoe UI", 12.0F)
         Download_BTN.ForeColor = Color.White
@@ -147,6 +162,7 @@ Partial Class MainForm
         ClearTMP_BTN.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         ClearTMP_BTN.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         ClearTMP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        ClearTMP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         ClearTMP_BTN.FlatStyle = FlatStyle.Flat
         ClearTMP_BTN.Font = New Font("Segoe UI", 12.0F)
         ClearTMP_BTN.ForeColor = Color.White
@@ -172,6 +188,7 @@ Partial Class MainForm
         DownloadALL_BTN.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         DownloadALL_BTN.Enabled = False
         DownloadALL_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        DownloadALL_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DownloadALL_BTN.FlatStyle = FlatStyle.Flat
         DownloadALL_BTN.Font = New Font("Segoe UI", 12.0F)
         DownloadALL_BTN.ForeColor = Color.White
@@ -189,6 +206,7 @@ Partial Class MainForm
         TabControl1.Controls.Add(TabPage4)
         TabControl1.Controls.Add(TabPage5)
         TabControl1.Controls.Add(TabPage1)
+        TabControl1.Controls.Add(TabPage7)
         TabControl1.Location = New Point(12, 45)
         TabControl1.Name = "TabControl1"
         TabControl1.SelectedIndex = 0
@@ -217,7 +235,7 @@ Partial Class MainForm
         ' 
         Label7.Font = New Font("MS UI Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label7.ForeColor = Color.White
-        Label7.Location = New Point(23, 237)
+        Label7.Location = New Point(23, 224)
         Label7.Name = "Label7"
         Label7.Size = New Size(386, 23)
         Label7.TabIndex = 10
@@ -228,7 +246,7 @@ Partial Class MainForm
         ' 
         Label4.Font = New Font("MS UI Gothic", 12.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label4.ForeColor = Color.White
-        Label4.Location = New Point(23, 260)
+        Label4.Location = New Point(23, 247)
         Label4.Name = "Label4"
         Label4.Size = New Size(386, 37)
         Label4.TabIndex = 9
@@ -261,7 +279,7 @@ Partial Class MainForm
         ' 
         Label5.Font = New Font("MS UI Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label5.ForeColor = Color.White
-        Label5.Location = New Point(23, 164)
+        Label5.Location = New Point(23, 154)
         Label5.Name = "Label5"
         Label5.Size = New Size(386, 58)
         Label5.TabIndex = 4
@@ -272,11 +290,11 @@ Partial Class MainForm
         ' 
         Label3.Font = New Font("MS UI Gothic", 15.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label3.ForeColor = Color.White
-        Label3.Location = New Point(23, 73)
+        Label3.Location = New Point(23, 63)
         Label3.Name = "Label3"
         Label3.Size = New Size(386, 91)
         Label3.TabIndex = 2
-        Label3.Text = "This program was created by zv800. The original idea was suggested by fusion after he told me a way you could extract audios from the Roblox client."
+        Label3.Text = "The original idea was suggested by fusion after he told me a way you could extract audios from the Roblox client."
         Label3.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' Label2
@@ -285,11 +303,11 @@ Partial Class MainForm
         Label2.AutoSize = True
         Label2.Font = New Font("MS UI Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label2.ForeColor = Color.White
-        Label2.Location = New Point(172, 50)
+        Label2.Location = New Point(140, 50)
         Label2.Name = "Label2"
-        Label2.Size = New Size(89, 13)
+        Label2.Size = New Size(153, 13)
         Label2.TabIndex = 1
-        Label2.Text = "Made by zv800"
+        Label2.Text = "Made by zv800 and Fusion"
         Label2.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' Label1
@@ -361,6 +379,7 @@ Partial Class MainForm
         LoadHttpBtn.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         LoadHttpBtn.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         LoadHttpBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        LoadHttpBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         LoadHttpBtn.FlatStyle = FlatStyle.Flat
         LoadHttpBtn.Font = New Font("Segoe UI", 12.0F)
         LoadHttpBtn.ForeColor = Color.White
@@ -376,6 +395,7 @@ Partial Class MainForm
         ClearHTTPTEMP_BTN.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         ClearHTTPTEMP_BTN.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         ClearHTTPTEMP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        ClearHTTPTEMP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         ClearHTTPTEMP_BTN.FlatStyle = FlatStyle.Flat
         ClearHTTPTEMP_BTN.Font = New Font("Segoe UI", 12.0F)
         ClearHTTPTEMP_BTN.ForeColor = Color.White
@@ -393,6 +413,7 @@ Partial Class MainForm
         DownloadAllHTTP_BTN.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         DownloadAllHTTP_BTN.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         DownloadAllHTTP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        DownloadAllHTTP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DownloadAllHTTP_BTN.FlatStyle = FlatStyle.Flat
         DownloadAllHTTP_BTN.Font = New Font("Segoe UI", 12.0F)
         DownloadAllHTTP_BTN.ForeColor = Color.White
@@ -408,6 +429,7 @@ Partial Class MainForm
         DOWNLOADHTTP_BTN.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         DOWNLOADHTTP_BTN.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         DOWNLOADHTTP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        DOWNLOADHTTP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DOWNLOADHTTP_BTN.FlatStyle = FlatStyle.Flat
         DOWNLOADHTTP_BTN.Font = New Font("Segoe UI", 12.0F)
         DOWNLOADHTTP_BTN.ForeColor = Color.White
@@ -452,6 +474,7 @@ Partial Class MainForm
         ImgClearTmp.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         ImgClearTmp.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         ImgClearTmp.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        ImgClearTmp.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         ImgClearTmp.FlatStyle = FlatStyle.Flat
         ImgClearTmp.Font = New Font("Segoe UI", 12.0F)
         ImgClearTmp.ForeColor = Color.White
@@ -477,6 +500,7 @@ Partial Class MainForm
         SaveAllBtn.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         SaveAllBtn.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         SaveAllBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        SaveAllBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         SaveAllBtn.FlatStyle = FlatStyle.Flat
         SaveAllBtn.Font = New Font("Segoe UI", 12.0F)
         SaveAllBtn.ForeColor = Color.White
@@ -484,7 +508,7 @@ Partial Class MainForm
         SaveAllBtn.Name = "SaveAllBtn"
         SaveAllBtn.Size = New Size(234, 35)
         SaveAllBtn.TabIndex = 10
-        SaveAllBtn.Text = "SaveAll"
+        SaveAllBtn.Text = "Save All"
         SaveAllBtn.UseVisualStyleBackColor = False
         ' 
         ' DownloadImgBtn
@@ -492,6 +516,7 @@ Partial Class MainForm
         DownloadImgBtn.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         DownloadImgBtn.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         DownloadImgBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        DownloadImgBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DownloadImgBtn.FlatStyle = FlatStyle.Flat
         DownloadImgBtn.Font = New Font("Segoe UI", 12.0F)
         DownloadImgBtn.ForeColor = Color.White
@@ -507,6 +532,7 @@ Partial Class MainForm
         LoadImgBtn.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         LoadImgBtn.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         LoadImgBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        LoadImgBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         LoadImgBtn.FlatStyle = FlatStyle.Flat
         LoadImgBtn.Font = New Font("Segoe UI", 12.0F)
         LoadImgBtn.ForeColor = Color.White
@@ -535,7 +561,7 @@ Partial Class MainForm
         PreVeiwImgBox.Location = New Point(194, 3)
         PreVeiwImgBox.Name = "PreVeiwImgBox"
         PreVeiwImgBox.Size = New Size(234, 178)
-        PreVeiwImgBox.SizeMode = PictureBoxSizeMode.StretchImage
+        PreVeiwImgBox.SizeMode = PictureBoxSizeMode.Zoom
         PreVeiwImgBox.TabIndex = 0
         PreVeiwImgBox.TabStop = False
         ' 
@@ -582,14 +608,49 @@ Partial Class MainForm
         AutoScrollCHK.Text = "auto scroll"
         AutoScrollCHK.UseVisualStyleBackColor = True
         ' 
+        ' TabPage7
+        ' 
+        TabPage7.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        TabPage7.Controls.Add(MetroProgressBar1)
+        TabPage7.Controls.Add(MetroTabControl1)
+        TabPage7.Controls.Add(CheckBox1)
+        TabPage7.Controls.Add(Label9)
+        TabPage7.Location = New Point(4, 24)
+        TabPage7.Name = "TabPage7"
+        TabPage7.Size = New Size(431, 352)
+        TabPage7.TabIndex = 6
+        TabPage7.Text = "Options"
+        ' 
+        ' CheckBox1
+        ' 
+        CheckBox1.AutoSize = True
+        CheckBox1.Location = New Point(15, 91)
+        CheckBox1.Name = "CheckBox1"
+        CheckBox1.Size = New Size(85, 19)
+        CheckBox1.TabIndex = 1
+        CheckBox1.Text = "CheckBox1"
+        CheckBox1.UseVisualStyleBackColor = True
+        ' 
+        ' Label9
+        ' 
+        Label9.AutoSize = True
+        Label9.BackColor = Color.Transparent
+        Label9.Font = New Font("Segoe UI", 26.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label9.ForeColor = Color.White
+        Label9.Location = New Point(183, 10)
+        Label9.Name = "Label9"
+        Label9.Size = New Size(74, 47)
+        Label9.TabIndex = 0
+        Label9.Text = "wip"
+        ' 
         ' VText_LBR
         ' 
         VText_LBR.BackColor = Color.Transparent
-        VText_LBR.Font = New Font("MS UI Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        VText_LBR.Font = New Font("MS UI Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         VText_LBR.ForeColor = Color.White
-        VText_LBR.Location = New Point(210, 432)
+        VText_LBR.Location = New Point(44, 20)
         VText_LBR.Name = "VText_LBR"
-        VText_LBR.Size = New Size(241, 18)
+        VText_LBR.Size = New Size(241, 14)
         VText_LBR.TabIndex = 5
         VText_LBR.Text = "Currently running version:" & vbCrLf
         ' 
@@ -630,6 +691,7 @@ Partial Class MainForm
         Panel2.Controls.Add(Label6)
         Panel2.Controls.Add(Button2)
         Panel2.Controls.Add(CloseBTN)
+        Panel2.Controls.Add(VText_LBR)
         Panel2.Location = New Point(-3, -1)
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(476, 40)
@@ -650,7 +712,7 @@ Partial Class MainForm
         Label6.AutoSize = True
         Label6.Font = New Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label6.ForeColor = Color.White
-        Label6.Location = New Point(42, 9)
+        Label6.Location = New Point(42, 3)
         Label6.Name = "Label6"
         Label6.Size = New Size(234, 17)
         Label6.TabIndex = 2
@@ -719,6 +781,87 @@ Partial Class MainForm
         ' ClearCache
         ' 
         ' 
+        ' MSGPopup
+        ' 
+        ' 
+        ' MetroTabControl1
+        ' 
+        MetroTabControl1.Controls.Add(TabPage6)
+        MetroTabControl1.Controls.Add(TabPage8)
+        MetroTabControl1.Controls.Add(TabPage9)
+        MetroTabControl1.Controls.Add(TabPage10)
+        MetroTabControl1.Controls.Add(TabPage11)
+        MetroTabControl1.CustomBackground = False
+        MetroTabControl1.FontSize = MetroFramework.MetroTabControlSize.Medium
+        MetroTabControl1.FontWeight = MetroFramework.MetroTabControlWeight.Light
+        MetroTabControl1.Location = New Point(35, 139)
+        MetroTabControl1.Name = "MetroTabControl1"
+        MetroTabControl1.Padding = New Point(6, 8)
+        MetroTabControl1.SelectedIndex = 0
+        MetroTabControl1.Size = New Size(349, 160)
+        MetroTabControl1.Style = MetroFramework.MetroColorStyle.Blue
+        MetroTabControl1.StyleManager = Nothing
+        MetroTabControl1.TabIndex = 2
+        MetroTabControl1.TextAlign = ContentAlignment.MiddleLeft
+        MetroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light
+        MetroTabControl1.UseStyleColors = False
+        ' 
+        ' TabPage6
+        ' 
+        TabPage6.Location = New Point(4, 35)
+        TabPage6.Name = "TabPage6"
+        TabPage6.Size = New Size(341, 121)
+        TabPage6.TabIndex = 0
+        TabPage6.Text = "TabPage6"
+        ' 
+        ' TabPage8
+        ' 
+        TabPage8.Location = New Point(4, 35)
+        TabPage8.Name = "TabPage8"
+        TabPage8.Size = New Size(242, 121)
+        TabPage8.TabIndex = 1
+        TabPage8.Text = "TabPage8"
+        ' 
+        ' TabPage9
+        ' 
+        TabPage9.Location = New Point(4, 35)
+        TabPage9.Name = "TabPage9"
+        TabPage9.Size = New Size(242, 121)
+        TabPage9.TabIndex = 2
+        TabPage9.Text = "TabPage9"
+        ' 
+        ' TabPage10
+        ' 
+        TabPage10.Location = New Point(4, 35)
+        TabPage10.Name = "TabPage10"
+        TabPage10.Size = New Size(242, 121)
+        TabPage10.TabIndex = 3
+        TabPage10.Text = "TabPage10"
+        ' 
+        ' TabPage11
+        ' 
+        TabPage11.Location = New Point(4, 35)
+        TabPage11.Name = "TabPage11"
+        TabPage11.Size = New Size(242, 121)
+        TabPage11.TabIndex = 4
+        TabPage11.Text = "TabPage11"
+        ' 
+        ' MetroProgressBar1
+        ' 
+        MetroProgressBar1.FontSize = MetroFramework.MetroProgressBarSize.Medium
+        MetroProgressBar1.FontWeight = MetroFramework.MetroProgressBarWeight.Light
+        MetroProgressBar1.HideProgressText = True
+        MetroProgressBar1.Location = New Point(53, 317)
+        MetroProgressBar1.Name = "MetroProgressBar1"
+        MetroProgressBar1.ProgressBarStyle = ProgressBarStyle.Continuous
+        MetroProgressBar1.Size = New Size(305, 23)
+        MetroProgressBar1.Style = MetroFramework.MetroColorStyle.Green
+        MetroProgressBar1.StyleManager = Nothing
+        MetroProgressBar1.TabIndex = 3
+        MetroProgressBar1.TextAlign = ContentAlignment.MiddleRight
+        MetroProgressBar1.Theme = MetroFramework.MetroThemeStyle.Dark
+        MetroProgressBar1.Value = 55
+        ' 
         ' MainForm
         ' 
         AutoScaleDimensions = New SizeF(7.0F, 15.0F)
@@ -730,7 +873,6 @@ Partial Class MainForm
         Controls.Add(Panel2)
         Controls.Add(StatusLBR)
         Controls.Add(AxWindowsMediaPlayer1)
-        Controls.Add(VText_LBR)
         Controls.Add(TabControl1)
         Controls.Add(ProgressBar1)
         DoubleBuffered = True
@@ -752,9 +894,12 @@ Partial Class MainForm
         CType(PreVeiwImgBox, ComponentModel.ISupportInitialize).EndInit()
         TabPage1.ResumeLayout(False)
         TabPage1.PerformLayout()
+        TabPage7.ResumeLayout(False)
+        TabPage7.PerformLayout()
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
+        MetroTabControl1.ResumeLayout(False)
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -817,5 +962,16 @@ Partial Class MainForm
     Friend WithEvents MainLoop As Timer
     Friend WithEvents LoadPartialBackgoundWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents ClearCache As System.ComponentModel.BackgroundWorker
+    Friend WithEvents MSGPopup As System.ComponentModel.BackgroundWorker
+    Friend WithEvents TabPage7 As TabPage
+    Friend WithEvents Label9 As Label
+    Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents MetroProgressBar1 As MetroFramework.Controls.MetroProgressBar
+    Friend WithEvents MetroTabControl1 As MetroFramework.Controls.MetroTabControl
+    Friend WithEvents TabPage6 As TabPage
+    Friend WithEvents TabPage8 As TabPage
+    Friend WithEvents TabPage9 As TabPage
+    Friend WithEvents TabPage10 As TabPage
+    Friend WithEvents TabPage11 As TabPage
 
 End Class

@@ -41,7 +41,7 @@ Public Class MainForm
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         LoadHTTP0.WorkerReportsProgress = True
-        VText_LBR.Text = "Currently running version: " & V
+        VText_LBR.Text = V
         InstallCodec()
 
         Dim isInstalled As Boolean = IsKLiteInstalled()
@@ -56,22 +56,7 @@ Public Class MainForm
         fadeInTimer.Interval = 50
         fadeInTimer.Start()
 
-        Try
-            Dim url = "https://animated-platypus-6ba0a9.netlify.app/message.txt"
-            output_log.Items.Add($"Attempting to check for a message from server: {url}")
-            Dim content As String
-            Using client As New System.Net.WebClient()
-                content = client.DownloadString(url).Trim()
-            End Using
-            If Not content = "" Then
-                output_log.Items.Add($"received message: {content}")
-                MsgBox($"Message from the Creator: {content}", 0 + 64, "Message from the Creator")
-            End If
-
-        Catch ex As Exception
-            output_log.Items.Add($"ERROR FAILED TO RECEIVE MESSAGE WITH ERROR CODE: {ex}")
-        End Try
-
+        MSGPopup.RunWorkerAsync()
 
     End Sub
 
@@ -1111,5 +1096,30 @@ del %0
                           ProgressBar1.Value = 100
                       End Sub)
         End If
+    End Sub
+
+    Private Sub MSGPopup_DoWork(sender As Object, e As DoWorkEventArgs) Handles MSGPopup.DoWork
+        Try
+            Dim url = "https://animated-platypus-6ba0a9.netlify.app/message.txt"
+
+            Dim content As String
+            Using client As New System.Net.WebClient()
+                content = client.DownloadString(url).Trim()
+            End Using
+            If Not content = "" Then
+
+                Me.Invoke(Sub()
+                              output_log.Items.Add($"received message: {content}")
+                          End Sub)
+                Me.Invoke(Sub()
+                              MsgBox($"Message from the Creator: {content}", 0 + 64, "Message from the Creator")
+                          End Sub)
+            End If
+
+        Catch ex As Exception
+            Me.Invoke(Sub()
+                          output_log.Items.Add($"ERROR FAILED TO RECEIVE MESSAGE WITH ERROR CODE: {ex}")
+                      End Sub)
+        End Try
     End Sub
 End Class
