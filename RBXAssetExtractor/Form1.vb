@@ -1122,4 +1122,8 @@ del %0
                       End Sub)
         End Try
     End Sub
+
+    Private Sub MetroTabControl1_SelectedIndexChanged(sender As Object, e As EventArgs)
+
+    End Sub
 End Class

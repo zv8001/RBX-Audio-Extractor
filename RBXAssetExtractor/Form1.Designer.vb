@@ -37,12 +37,12 @@ Partial Class MainForm
         TabPage3 = New TabPage()
         Label7 = New Label()
         Label4 = New Label()
+        Label5 = New Label()
+        Label1 = New Label()
+        Label3 = New Label()
         LinkLabel2 = New LinkLabel()
         LinkLabel1 = New LinkLabel()
-        Label5 = New Label()
-        Label3 = New Label()
         Label2 = New Label()
-        Label1 = New Label()
         TabPage2 = New TabPage()
         Panel1 = New Panel()
         Sounds_Listbox = New ListBox()
@@ -67,7 +67,6 @@ Partial Class MainForm
         CheckBox1 = New CheckBox()
         Label9 = New Label()
         VText_LBR = New Label()
-        ProgressBar1 = New ProgressBar()
         CheckFOrButtons = New Timer(components)
         ClearTmp = New ComponentModel.BackgroundWorker()
         ListboxAutoScrool = New Timer(components)
@@ -86,13 +85,7 @@ Partial Class MainForm
         LoadPartialBackgoundWorker = New ComponentModel.BackgroundWorker()
         ClearCache = New ComponentModel.BackgroundWorker()
         MSGPopup = New ComponentModel.BackgroundWorker()
-        MetroTabControl1 = New MetroFramework.Controls.MetroTabControl()
-        TabPage6 = New TabPage()
-        TabPage8 = New TabPage()
-        TabPage9 = New TabPage()
-        TabPage10 = New TabPage()
-        TabPage11 = New TabPage()
-        MetroProgressBar1 = New MetroFramework.Controls.MetroProgressBar()
+        ProgressBar1 = New MetroFramework.Controls.MetroProgressBar()
         CType(AxWindowsMediaPlayer1, ComponentModel.ISupportInitialize).BeginInit()
         TabControl1.SuspendLayout()
         TabPage3.SuspendLayout()
@@ -104,7 +97,6 @@ Partial Class MainForm
         TabPage7.SuspendLayout()
         Panel2.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
-        MetroTabControl1.SuspendLayout()
         SuspendLayout()
         ' 
         ' LoadHTTP0
@@ -219,12 +211,12 @@ Partial Class MainForm
         TabPage3.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         TabPage3.Controls.Add(Label7)
         TabPage3.Controls.Add(Label4)
+        TabPage3.Controls.Add(Label5)
+        TabPage3.Controls.Add(Label1)
+        TabPage3.Controls.Add(Label3)
         TabPage3.Controls.Add(LinkLabel2)
         TabPage3.Controls.Add(LinkLabel1)
-        TabPage3.Controls.Add(Label5)
-        TabPage3.Controls.Add(Label3)
         TabPage3.Controls.Add(Label2)
-        TabPage3.Controls.Add(Label1)
         TabPage3.Location = New Point(4, 24)
         TabPage3.Name = "TabPage3"
         TabPage3.Size = New Size(431, 352)
@@ -235,7 +227,7 @@ Partial Class MainForm
         ' 
         Label7.Font = New Font("MS UI Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label7.ForeColor = Color.White
-        Label7.Location = New Point(23, 224)
+        Label7.Location = New Point(25, 224)
         Label7.Name = "Label7"
         Label7.Size = New Size(386, 23)
         Label7.TabIndex = 10
@@ -246,18 +238,52 @@ Partial Class MainForm
         ' 
         Label4.Font = New Font("MS UI Gothic", 12.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label4.ForeColor = Color.White
-        Label4.Location = New Point(23, 247)
+        Label4.Location = New Point(25, 247)
         Label4.Name = "Label4"
         Label4.Size = New Size(386, 37)
         Label4.TabIndex = 9
         Label4.Text = "THIS PROGRAM IS FOR EDUCATIONAL PURPOSES"
         Label4.TextAlign = ContentAlignment.MiddleCenter
         ' 
+        ' Label5
+        ' 
+        Label5.Font = New Font("MS UI Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label5.ForeColor = Color.White
+        Label5.Location = New Point(25, 154)
+        Label5.Name = "Label5"
+        Label5.Size = New Size(386, 58)
+        Label5.TabIndex = 4
+        Label5.Text = resources.GetString("Label5.Text")
+        Label5.TextAlign = ContentAlignment.MiddleCenter
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Font = New Font("MS UI Gothic", 26.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label1.ForeColor = Color.White
+        Label1.Location = New Point(55, 15)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(323, 35)
+        Label1.TabIndex = 0
+        Label1.Text = "RBX Asset Extractor"
+        Label1.TextAlign = ContentAlignment.MiddleCenter
+        ' 
+        ' Label3
+        ' 
+        Label3.Font = New Font("MS UI Gothic", 15.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label3.ForeColor = Color.White
+        Label3.Location = New Point(25, 63)
+        Label3.Name = "Label3"
+        Label3.Size = New Size(386, 91)
+        Label3.TabIndex = 2
+        Label3.Text = "The original idea was suggested by fusion after he told me a way you could extract audios from the Roblox client."
+        Label3.TextAlign = ContentAlignment.MiddleCenter
+        ' 
         ' LinkLabel2
         ' 
         LinkLabel2.AutoSize = True
         LinkLabel2.LinkColor = Color.White
-        LinkLabel2.Location = New Point(3, 327)
+        LinkLabel2.Location = New Point(5, 327)
         LinkLabel2.Name = "LinkLabel2"
         LinkLabel2.Size = New Size(264, 15)
         LinkLabel2.TabIndex = 8
@@ -268,34 +294,12 @@ Partial Class MainForm
         ' 
         LinkLabel1.AutoSize = True
         LinkLabel1.LinkColor = Color.White
-        LinkLabel1.Location = New Point(3, 311)
+        LinkLabel1.Location = New Point(5, 311)
         LinkLabel1.Name = "LinkLabel1"
         LinkLabel1.Size = New Size(103, 15)
         LinkLabel1.TabIndex = 6
         LinkLabel1.TabStop = True
         LinkLabel1.Text = "http://zv800.com/"
-        ' 
-        ' Label5
-        ' 
-        Label5.Font = New Font("MS UI Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label5.ForeColor = Color.White
-        Label5.Location = New Point(23, 154)
-        Label5.Name = "Label5"
-        Label5.Size = New Size(386, 58)
-        Label5.TabIndex = 4
-        Label5.Text = resources.GetString("Label5.Text")
-        Label5.TextAlign = ContentAlignment.MiddleCenter
-        ' 
-        ' Label3
-        ' 
-        Label3.Font = New Font("MS UI Gothic", 15.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label3.ForeColor = Color.White
-        Label3.Location = New Point(23, 63)
-        Label3.Name = "Label3"
-        Label3.Size = New Size(386, 91)
-        Label3.TabIndex = 2
-        Label3.Text = "The original idea was suggested by fusion after he told me a way you could extract audios from the Roblox client."
-        Label3.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' Label2
         ' 
@@ -303,24 +307,12 @@ Partial Class MainForm
         Label2.AutoSize = True
         Label2.Font = New Font("MS UI Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label2.ForeColor = Color.White
-        Label2.Location = New Point(140, 50)
+        Label2.Location = New Point(241, 50)
         Label2.Name = "Label2"
         Label2.Size = New Size(153, 13)
         Label2.TabIndex = 1
         Label2.Text = "Made by zv800 and Fusion"
         Label2.TextAlign = ContentAlignment.MiddleCenter
-        ' 
-        ' Label1
-        ' 
-        Label1.AutoSize = True
-        Label1.Font = New Font("MS UI Gothic", 26.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label1.ForeColor = Color.White
-        Label1.Location = New Point(53, 15)
-        Label1.Name = "Label1"
-        Label1.Size = New Size(323, 35)
-        Label1.TabIndex = 0
-        Label1.Text = "RBX Asset Extractor"
-        Label1.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' TabPage2
         ' 
@@ -611,8 +603,6 @@ Partial Class MainForm
         ' TabPage7
         ' 
         TabPage7.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
-        TabPage7.Controls.Add(MetroProgressBar1)
-        TabPage7.Controls.Add(MetroTabControl1)
         TabPage7.Controls.Add(CheckBox1)
         TabPage7.Controls.Add(Label9)
         TabPage7.Location = New Point(4, 24)
@@ -653,13 +643,6 @@ Partial Class MainForm
         VText_LBR.Size = New Size(241, 14)
         VText_LBR.TabIndex = 5
         VText_LBR.Text = "Currently running version:" & vbCrLf
-        ' 
-        ' ProgressBar1
-        ' 
-        ProgressBar1.Location = New Point(51, 509)
-        ProgressBar1.Name = "ProgressBar1"
-        ProgressBar1.Size = New Size(400, 17)
-        ProgressBar1.TabIndex = 3
         ' 
         ' CheckFOrButtons
         ' 
@@ -784,83 +767,20 @@ Partial Class MainForm
         ' MSGPopup
         ' 
         ' 
-        ' MetroTabControl1
+        ' ProgressBar1
         ' 
-        MetroTabControl1.Controls.Add(TabPage6)
-        MetroTabControl1.Controls.Add(TabPage8)
-        MetroTabControl1.Controls.Add(TabPage9)
-        MetroTabControl1.Controls.Add(TabPage10)
-        MetroTabControl1.Controls.Add(TabPage11)
-        MetroTabControl1.CustomBackground = False
-        MetroTabControl1.FontSize = MetroFramework.MetroTabControlSize.Medium
-        MetroTabControl1.FontWeight = MetroFramework.MetroTabControlWeight.Light
-        MetroTabControl1.Location = New Point(35, 139)
-        MetroTabControl1.Name = "MetroTabControl1"
-        MetroTabControl1.Padding = New Point(6, 8)
-        MetroTabControl1.SelectedIndex = 0
-        MetroTabControl1.Size = New Size(349, 160)
-        MetroTabControl1.Style = MetroFramework.MetroColorStyle.Blue
-        MetroTabControl1.StyleManager = Nothing
-        MetroTabControl1.TabIndex = 2
-        MetroTabControl1.TextAlign = ContentAlignment.MiddleLeft
-        MetroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light
-        MetroTabControl1.UseStyleColors = False
-        ' 
-        ' TabPage6
-        ' 
-        TabPage6.Location = New Point(4, 35)
-        TabPage6.Name = "TabPage6"
-        TabPage6.Size = New Size(341, 121)
-        TabPage6.TabIndex = 0
-        TabPage6.Text = "TabPage6"
-        ' 
-        ' TabPage8
-        ' 
-        TabPage8.Location = New Point(4, 35)
-        TabPage8.Name = "TabPage8"
-        TabPage8.Size = New Size(242, 121)
-        TabPage8.TabIndex = 1
-        TabPage8.Text = "TabPage8"
-        ' 
-        ' TabPage9
-        ' 
-        TabPage9.Location = New Point(4, 35)
-        TabPage9.Name = "TabPage9"
-        TabPage9.Size = New Size(242, 121)
-        TabPage9.TabIndex = 2
-        TabPage9.Text = "TabPage9"
-        ' 
-        ' TabPage10
-        ' 
-        TabPage10.Location = New Point(4, 35)
-        TabPage10.Name = "TabPage10"
-        TabPage10.Size = New Size(242, 121)
-        TabPage10.TabIndex = 3
-        TabPage10.Text = "TabPage10"
-        ' 
-        ' TabPage11
-        ' 
-        TabPage11.Location = New Point(4, 35)
-        TabPage11.Name = "TabPage11"
-        TabPage11.Size = New Size(242, 121)
-        TabPage11.TabIndex = 4
-        TabPage11.Text = "TabPage11"
-        ' 
-        ' MetroProgressBar1
-        ' 
-        MetroProgressBar1.FontSize = MetroFramework.MetroProgressBarSize.Medium
-        MetroProgressBar1.FontWeight = MetroFramework.MetroProgressBarWeight.Light
-        MetroProgressBar1.HideProgressText = True
-        MetroProgressBar1.Location = New Point(53, 317)
-        MetroProgressBar1.Name = "MetroProgressBar1"
-        MetroProgressBar1.ProgressBarStyle = ProgressBarStyle.Continuous
-        MetroProgressBar1.Size = New Size(305, 23)
-        MetroProgressBar1.Style = MetroFramework.MetroColorStyle.Green
-        MetroProgressBar1.StyleManager = Nothing
-        MetroProgressBar1.TabIndex = 3
-        MetroProgressBar1.TextAlign = ContentAlignment.MiddleRight
-        MetroProgressBar1.Theme = MetroFramework.MetroThemeStyle.Dark
-        MetroProgressBar1.Value = 55
+        ProgressBar1.FontSize = MetroFramework.MetroProgressBarSize.Medium
+        ProgressBar1.FontWeight = MetroFramework.MetroProgressBarWeight.Light
+        ProgressBar1.HideProgressText = True
+        ProgressBar1.Location = New Point(51, 509)
+        ProgressBar1.Name = "ProgressBar1"
+        ProgressBar1.ProgressBarStyle = ProgressBarStyle.Continuous
+        ProgressBar1.Size = New Size(412, 17)
+        ProgressBar1.Style = MetroFramework.MetroColorStyle.Blue
+        ProgressBar1.StyleManager = Nothing
+        ProgressBar1.TabIndex = 13
+        ProgressBar1.TextAlign = ContentAlignment.MiddleRight
+        ProgressBar1.Theme = MetroFramework.MetroThemeStyle.Light
         ' 
         ' MainForm
         ' 
@@ -868,18 +788,17 @@ Partial Class MainForm
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         BackgroundImageLayout = ImageLayout.Stretch
-        ClientSize = New Size(463, 535)
+        ClientSize = New Size(465, 535)
+        Controls.Add(ProgressBar1)
         Controls.Add(AlwaysOnTopCHK)
         Controls.Add(Panel2)
         Controls.Add(StatusLBR)
         Controls.Add(AxWindowsMediaPlayer1)
         Controls.Add(TabControl1)
-        Controls.Add(ProgressBar1)
         DoubleBuffered = True
         FormBorderStyle = FormBorderStyle.None
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         MaximizeBox = False
-        MaximumSize = New Size(472, 550)
         Name = "MainForm"
         StartPosition = FormStartPosition.CenterScreen
         Text = "RBX Asset Extractor (made by ZV800)"
@@ -899,7 +818,6 @@ Partial Class MainForm
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
-        MetroTabControl1.ResumeLayout(False)
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -928,7 +846,6 @@ Partial Class MainForm
     Friend WithEvents HTTPLISTBOX As ListBox
     Friend WithEvents DownloadAllHTTP_BTN As Button
     Friend WithEvents DOWNLOADHTTP_BTN As Button
-    Friend WithEvents ProgressBar1 As ProgressBar
     Friend WithEvents ClearHTTPTEMP_BTN As Button
     Friend WithEvents LoadHttpBtn As Button
     Friend WithEvents LoadHTTP0 As System.ComponentModel.BackgroundWorker
@@ -966,12 +883,6 @@ Partial Class MainForm
     Friend WithEvents TabPage7 As TabPage
     Friend WithEvents Label9 As Label
     Friend WithEvents CheckBox1 As CheckBox
-    Friend WithEvents MetroProgressBar1 As MetroFramework.Controls.MetroProgressBar
-    Friend WithEvents MetroTabControl1 As MetroFramework.Controls.MetroTabControl
-    Friend WithEvents TabPage6 As TabPage
-    Friend WithEvents TabPage8 As TabPage
-    Friend WithEvents TabPage9 As TabPage
-    Friend WithEvents TabPage10 As TabPage
-    Friend WithEvents TabPage11 As TabPage
+    Friend WithEvents ProgressBar1 As MetroFramework.Controls.MetroProgressBar
 
 End Class
