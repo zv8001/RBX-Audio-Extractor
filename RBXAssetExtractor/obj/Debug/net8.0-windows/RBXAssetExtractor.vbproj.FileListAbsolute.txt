@@ -16,7 +16,6 @@ C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\n
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\RBXAssetExtractor.runtimeconfig.json
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\RBXAssetExtractor.dll
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\RBXAssetExtractor.pdb
-C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\Bass.Net.dll
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\NAudio.dll
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\NAudio.Asio.dll
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\NAudio.Core.dll
@@ -135,3 +134,4 @@ C:\Users\Jeff\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Debug\n
 C:\Users\Jeff\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Debug\net8.0-windows\ref\RBXAssetExtractor.dll
 C:\Users\Jeff\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\MetroFramework.dll
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\MetroFramework.dll
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\MetroFramework.dll

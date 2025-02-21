@@ -63,22 +63,19 @@ Partial Class MainForm
         TabPage1 = New TabPage()
         SaveLogBtn = New Button()
         AutoScrollCHK = New CheckBox()
-        TabPage7 = New TabPage()
-        CheckBox1 = New CheckBox()
-        Label9 = New Label()
         VText_LBR = New Label()
         CheckFOrButtons = New Timer(components)
         ClearTmp = New ComponentModel.BackgroundWorker()
         ListboxAutoScrool = New Timer(components)
         StatusLBR = New Label()
         Panel2 = New Panel()
+        LoadingGif = New PictureBox()
         PictureBox1 = New PictureBox()
         Label6 = New Label()
         Button2 = New Button()
         CloseBTN = New Button()
         fadeInTimer = New Timer(components)
         fadeOutTimer = New Timer(components)
-        Timer3 = New Timer(components)
         AlwaysOnTopCHK = New CheckBox()
         KeepButtonsOff = New Timer(components)
         MainLoop = New Timer(components)
@@ -86,6 +83,7 @@ Partial Class MainForm
         ClearCache = New ComponentModel.BackgroundWorker()
         MSGPopup = New ComponentModel.BackgroundWorker()
         ProgressBar1 = New MetroFramework.Controls.MetroProgressBar()
+        TaskLBR = New Label()
         CType(AxWindowsMediaPlayer1, ComponentModel.ISupportInitialize).BeginInit()
         TabControl1.SuspendLayout()
         TabPage3.SuspendLayout()
@@ -94,8 +92,8 @@ Partial Class MainForm
         TabPage5.SuspendLayout()
         CType(PreVeiwImgBox, ComponentModel.ISupportInitialize).BeginInit()
         TabPage1.SuspendLayout()
-        TabPage7.SuspendLayout()
         Panel2.SuspendLayout()
+        CType(LoadingGif, ComponentModel.ISupportInitialize).BeginInit()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
@@ -198,7 +196,6 @@ Partial Class MainForm
         TabControl1.Controls.Add(TabPage4)
         TabControl1.Controls.Add(TabPage5)
         TabControl1.Controls.Add(TabPage1)
-        TabControl1.Controls.Add(TabPage7)
         TabControl1.Location = New Point(12, 45)
         TabControl1.Name = "TabControl1"
         TabControl1.SelectedIndex = 0
@@ -600,39 +597,6 @@ Partial Class MainForm
         AutoScrollCHK.Text = "auto scroll"
         AutoScrollCHK.UseVisualStyleBackColor = True
         ' 
-        ' TabPage7
-        ' 
-        TabPage7.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
-        TabPage7.Controls.Add(CheckBox1)
-        TabPage7.Controls.Add(Label9)
-        TabPage7.Location = New Point(4, 24)
-        TabPage7.Name = "TabPage7"
-        TabPage7.Size = New Size(431, 352)
-        TabPage7.TabIndex = 6
-        TabPage7.Text = "Options"
-        ' 
-        ' CheckBox1
-        ' 
-        CheckBox1.AutoSize = True
-        CheckBox1.Location = New Point(15, 91)
-        CheckBox1.Name = "CheckBox1"
-        CheckBox1.Size = New Size(85, 19)
-        CheckBox1.TabIndex = 1
-        CheckBox1.Text = "CheckBox1"
-        CheckBox1.UseVisualStyleBackColor = True
-        ' 
-        ' Label9
-        ' 
-        Label9.AutoSize = True
-        Label9.BackColor = Color.Transparent
-        Label9.Font = New Font("Segoe UI", 26.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label9.ForeColor = Color.White
-        Label9.Location = New Point(183, 10)
-        Label9.Name = "Label9"
-        Label9.Size = New Size(74, 47)
-        Label9.TabIndex = 0
-        Label9.Text = "wip"
-        ' 
         ' VText_LBR
         ' 
         VText_LBR.BackColor = Color.Transparent
@@ -655,12 +619,11 @@ Partial Class MainForm
         ' 
         ' StatusLBR
         ' 
-        StatusLBR.Anchor = AnchorStyles.Right
         StatusLBR.AutoSize = True
         StatusLBR.BackColor = Color.Transparent
         StatusLBR.Font = New Font("Segoe UI", 12.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         StatusLBR.ForeColor = Color.White
-        StatusLBR.Location = New Point(12, 505)
+        StatusLBR.Location = New Point(8, 505)
         StatusLBR.Name = "StatusLBR"
         StatusLBR.Size = New Size(33, 21)
         StatusLBR.TabIndex = 10
@@ -670,6 +633,7 @@ Partial Class MainForm
         ' Panel2
         ' 
         Panel2.BackColor = Color.FromArgb(CByte(20), CByte(23), CByte(29))
+        Panel2.Controls.Add(LoadingGif)
         Panel2.Controls.Add(PictureBox1)
         Panel2.Controls.Add(Label6)
         Panel2.Controls.Add(Button2)
@@ -679,6 +643,16 @@ Partial Class MainForm
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(476, 40)
         Panel2.TabIndex = 11
+        ' 
+        ' LoadingGif
+        ' 
+        LoadingGif.Image = My.Resources.Resources.Rolling_1x_1_0s_200px_200px
+        LoadingGif.Location = New Point(357, 6)
+        LoadingGif.Name = "LoadingGif"
+        LoadingGif.Size = New Size(28, 28)
+        LoadingGif.SizeMode = PictureBoxSizeMode.Zoom
+        LoadingGif.TabIndex = 6
+        LoadingGif.TabStop = False
         ' 
         ' PictureBox1
         ' 
@@ -771,16 +745,28 @@ Partial Class MainForm
         ' 
         ProgressBar1.FontSize = MetroFramework.MetroProgressBarSize.Medium
         ProgressBar1.FontWeight = MetroFramework.MetroProgressBarWeight.Light
+        ProgressBar1.ForeColor = Color.Red
         ProgressBar1.HideProgressText = True
-        ProgressBar1.Location = New Point(51, 509)
+        ProgressBar1.Location = New Point(47, 507)
         ProgressBar1.Name = "ProgressBar1"
         ProgressBar1.ProgressBarStyle = ProgressBarStyle.Continuous
-        ProgressBar1.Size = New Size(412, 17)
+        ProgressBar1.Size = New Size(404, 19)
         ProgressBar1.Style = MetroFramework.MetroColorStyle.Blue
         ProgressBar1.StyleManager = Nothing
         ProgressBar1.TabIndex = 13
         ProgressBar1.TextAlign = ContentAlignment.MiddleRight
         ProgressBar1.Theme = MetroFramework.MetroThemeStyle.Light
+        ' 
+        ' TaskLBR
+        ' 
+        TaskLBR.BackColor = Color.Transparent
+        TaskLBR.Font = New Font("MS UI Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TaskLBR.ForeColor = Color.White
+        TaskLBR.Location = New Point(362, 435)
+        TaskLBR.Name = "TaskLBR"
+        TaskLBR.Size = New Size(85, 19)
+        TaskLBR.TabIndex = 7
+        TaskLBR.Text = "Task 0 / 4"
         ' 
         ' MainForm
         ' 
@@ -788,7 +774,8 @@ Partial Class MainForm
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         BackgroundImageLayout = ImageLayout.Stretch
-        ClientSize = New Size(465, 535)
+        ClientSize = New Size(463, 536)
+        Controls.Add(TaskLBR)
         Controls.Add(ProgressBar1)
         Controls.Add(AlwaysOnTopCHK)
         Controls.Add(Panel2)
@@ -813,10 +800,9 @@ Partial Class MainForm
         CType(PreVeiwImgBox, ComponentModel.ISupportInitialize).EndInit()
         TabPage1.ResumeLayout(False)
         TabPage1.PerformLayout()
-        TabPage7.ResumeLayout(False)
-        TabPage7.PerformLayout()
         Panel2.ResumeLayout(False)
         Panel2.PerformLayout()
+        CType(LoadingGif, ComponentModel.ISupportInitialize).EndInit()
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
         PerformLayout()
@@ -869,7 +855,6 @@ Partial Class MainForm
     Friend WithEvents SaveAllBtn As Button
     Friend WithEvents DownloadImgBtn As Button
     Friend WithEvents LoadImgBtn As Button
-    Friend WithEvents Timer3 As Timer
     Friend WithEvents AlwaysOnTopCHK As CheckBox
     Friend WithEvents Label8 As Label
     Friend WithEvents ImgStats As Label
@@ -880,9 +865,8 @@ Partial Class MainForm
     Friend WithEvents LoadPartialBackgoundWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents ClearCache As System.ComponentModel.BackgroundWorker
     Friend WithEvents MSGPopup As System.ComponentModel.BackgroundWorker
-    Friend WithEvents TabPage7 As TabPage
-    Friend WithEvents Label9 As Label
-    Friend WithEvents CheckBox1 As CheckBox
     Friend WithEvents ProgressBar1 As MetroFramework.Controls.MetroProgressBar
+    Friend WithEvents LoadingGif As PictureBox
+    Friend WithEvents TaskLBR As Label
 
 End Class

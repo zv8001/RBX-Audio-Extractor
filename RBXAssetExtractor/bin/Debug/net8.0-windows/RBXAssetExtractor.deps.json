@@ -8,7 +8,6 @@
     ".NETCoreApp,Version=v8.0": {
       "RBXAssetExtractor/1.0.0": {
         "dependencies": {
-          "Bass.Net": "1.0.0",
           "ModernUI": "2.0.0",
           "Modernizr": "2.8.3",
           "NAudio": "2.2.1",
@@ -22,14 +21,6 @@
         },
         "runtime": {
           "RBXAssetExtractor.dll": {}
-        }
-      },
-      "Bass.Net/1.0.0": {
-        "runtime": {
-          "lib/Bass.Net.dll": {
-            "assemblyVersion": "2.4.10.3",
-            "fileVersion": "2.4.10.3"
-          }
         }
       },
       "Microsoft.NETCore.Platforms/3.1.0": {},
@@ -242,13 +233,6 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
-    },
-    "Bass.Net/1.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-gDZeQQeexlLY+OQKeEyMRj5wD2qNHTrBeXAdNfnoNcmfq5QQd4mKq8ZOoB76ZZTthb1m99QksjzFK6lGAy4ULA==",
-      "path": "bass.net/1.0.0",
-      "hashPath": "bass.net.1.0.0.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/3.1.0": {
       "type": "package",

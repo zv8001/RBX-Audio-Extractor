@@ -2,15 +2,6 @@
   "version": 3,
   "targets": {
     "net8.0-windows7.0": {
-      "Bass.Net/1.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/Bass.Net.dll": {}
-        },
-        "runtime": {
-          "lib/Bass.Net.dll": {}
-        }
-      },
       "Microsoft.NETCore.Platforms/3.1.0": {
         "type": "package",
         "compile": {
@@ -391,18 +382,6 @@
     }
   },
   "libraries": {
-    "Bass.Net/1.0.0": {
-      "sha512": "gDZeQQeexlLY+OQKeEyMRj5wD2qNHTrBeXAdNfnoNcmfq5QQd4mKq8ZOoB76ZZTthb1m99QksjzFK6lGAy4ULA==",
-      "type": "package",
-      "path": "bass.net/1.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "bass.net.1.0.0.nupkg.sha512",
-        "bass.net.nuspec",
-        "lib/Bass.Net.dll"
-      ]
-    },
     "Microsoft.NETCore.Platforms/3.1.0": {
       "sha512": "z7aeg8oHln2CuNulfhiLYxCVMPEwBl3rzicjvIX+4sUuCwvXw5oXQEtbiU2c0z4qYL5L3Kmx0mMA/+t/SbY67w==",
       "type": "package",
@@ -947,7 +926,6 @@
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
-      "Bass.Net >= 1.0.0",
       "ModernUI >= 2.0.0",
       "Modernizr >= 2.8.3",
       "NAudio >= 2.2.1",
@@ -959,23 +937,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\denve\\.nuget\\packages\\": {},
+    "C:\\Users\\Zack\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
+      "projectUniqueName": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
       "projectName": "RBXAssetExtractor",
-      "projectPath": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
-      "packagesPath": "C:\\Users\\denve\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\obj\\",
+      "projectPath": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
+      "packagesPath": "C:\\Users\\Zack\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\denve\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Zack\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1002,16 +980,12 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net8.0-windows7.0": {
         "targetAlias": "net8.0-windows",
         "dependencies": {
-          "Bass.Net": {
-            "target": "Package",
-            "version": "[1.0.0, )"
-          },
           "ModernUI": {
             "target": "Package",
             "version": "[2.0.0, )"
@@ -1064,21 +1038,11 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
   "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Bass.Net 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
-      "libraryId": "Bass.Net",
-      "targetGraphs": [
-        "net8.0-windows7.0"
-      ]
-    },
     {
       "code": "NU1701",
       "level": "Warning",

@@ -22,7 +22,7 @@ Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.1.2"
+    Dim V = "v1.1.3"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Private codecInstallerUrl As String = "https://files2.codecguide.com/K-Lite_Codec_Pack_1880_Standard.exe"
     Dim Stage As Integer = 0
@@ -36,10 +36,18 @@ Public Class MainForm
     Private startPoint As Point
     Dim HTTPDONE = True
 
+    Private Function CheckForRoblox()
+        If My.Computer.FileSystem.DirectoryExists($"{tempDirectory}\Roblox") Then
+            Return True
+        Else
+            CallError("Roblox tempDirectory not found")
+            Return False
+        End If
 
+    End Function
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        TaskLBR.Visible = False
         LoadHTTP0.WorkerReportsProgress = True
         VText_LBR.Text = V
         InstallCodec()
@@ -77,9 +85,8 @@ Public Class MainForm
         Dim tempPath As String = Path.Combine(Path.GetTempPath(), "new_version.exe")
 
         Try
-            Using client As New WebClient()
-                client.DownloadFile(updateUrl, tempPath)
-            End Using
+
+            My.Computer.Network.DownloadFile(updateUrl, tempPath) 'Replaced becuase Webclient is obsolete 2/21/2025 1:42 PM CST
 
             Dim batchFile As String = Path.Combine(Path.GetTempPath(), "update.bat")
             System.IO.File.WriteAllText(batchFile, $"
@@ -112,9 +119,10 @@ del %0
         output_log.Items.Add($"Checking for updates from server: {url}")
 
         Try
-            Using client As New System.Net.WebClient()
-                content = client.DownloadString(url).Trim()
+            Using client As New HttpClient()
+                content = client.GetStringAsync(url).GetAwaiter().GetResult().Trim()
             End Using
+
 
             If Not String.Equals(content, V, StringComparison.OrdinalIgnoreCase) Then
                 Outdated = True
@@ -132,7 +140,9 @@ del %0
             Else
                 output_log.Items.Add($"You are using the latest version: {V}")
             End If
+            Return True
         Catch ex As Exception
+            Return False
             output_log.Items.Add($"Error checking for updates: {ex.Message}")
         End Try
 
@@ -204,21 +214,24 @@ del %0
     Dim DisableTimer019 = False
 
     Private Sub LoadFullGame()
-        If ProgressBar1.Value = 0 Then
-            Dim result = MessageBox.Show("It is highly recommended you clear cache before each game considering audio files from previous sessions will remain and it may take a long time to process. Do you still want to continue?", "Do you still want to continue?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+        If CheckForRoblox() Then
+            If ProgressBar1.Value = 0 Then
+                Dim result = MessageBox.Show("It is highly recommended you clear cache before each game considering audio files from previous sessions will remain and it may take a long time to process. Do you still want to continue?", "Do you still want to continue?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
 
-            If result = DialogResult.Yes Then
+                If result = DialogResult.Yes Then
 
-                Try
-                    LoadHTTP0.RunWorkerAsync()
-                Catch ex As Exception
-                    CallError("Two processes cannot run at the same time please wait for the original process to stop.")
-                End Try
+                    Try
+                        LoadHTTP0.RunWorkerAsync()
+                    Catch ex As Exception
+                        CallError("Two processes cannot run at the same time please wait for the original process to stop.")
+                    End Try
 
+                End If
+            Else
+                CallError("Cannot start two processes at the same time.")
             End If
-        Else
-            CallError("Cannot start two processes at the same time.")
         End If
+
 
 
 
@@ -228,6 +241,11 @@ del %0
         LoadFullGame()
     End Sub
 
+    Private Sub UpdateTaskLBR(Text)
+        Me.Invoke(Sub()
+                      TaskLBR.Text = Text
+                  End Sub)
+    End Sub
 
     Private Sub LoadHTTP_DoWork_1(sender As Object, e As DoWorkEventArgs) Handles LoadHTTP0.DoWork
 
@@ -254,11 +272,15 @@ del %0
         If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBX_SOUND_RIPPER_HTTP") Then
             My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
         End If
+        Me.Invoke(Sub()
+                      TaskLBR.Visible = True
+                  End Sub)
 
         Stage = 1
-
+        UpdateTaskLBR("Task 1/6")
 
         RemoveAllFileInDir1(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
+        UpdateTaskLBR("Task 2/6")
         RemoveAllFileInDir1(tempDirectory & "\RBXAudioExtractorIMG")
 
 
@@ -268,7 +290,7 @@ del %0
 
 
         Dim files = Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories)
-
+        UpdateTaskLBR("Task 3/6")
         For i As Integer = 0 To files.Length - 1
 
             If LoadHTTP0.CancellationPending Then
@@ -284,7 +306,9 @@ del %0
 
 
         Stage = 3
+        UpdateTaskLBR("Task 4/6")
         RenameFileExtensions(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", ".ogg")
+        UpdateTaskLBR("Task 5/6")
         RenameFileExtensions(tempDirectory & "\RBXAudioExtractorIMG", ".png")
 
         Me.Invoke(Sub()
@@ -300,7 +324,7 @@ del %0
 
 
         Dim musicFiles = Directory.GetFiles(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", "*.ogg")
-
+        UpdateTaskLBR("Task 6/6")
         For Each file In musicFiles
             Dim InfoLoaded = True
 
@@ -345,6 +369,7 @@ del %0
         Stage = 0
         Me.Invoke(Sub()
                       ProgressBar1.Value = 0
+                      TaskLBR.Visible = False
                   End Sub)
 
 
@@ -503,11 +528,13 @@ del %0
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles LoadParButton.Click
-        Try
-            LoadPartialBackgoundWorker.RunWorkerAsync()
-        Catch ex As Exception
-            CallError("Two processes cannot run at the same time please wait for the original process to stop.")
-        End Try
+        If CheckForRoblox() Then
+            Try
+                LoadPartialBackgoundWorker.RunWorkerAsync()
+            Catch ex As Exception
+                CallError("Two processes cannot run at the same time please wait for the original process to stop.")
+            End Try
+        End If
 
 
     End Sub
@@ -702,11 +729,14 @@ del %0
 
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles ClearTMP_BTN.Click
-        Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
-        Dim tempDirectory = Path.GetTempPath
-        If result = DialogResult.Yes Then
-            RemoveAllFileInDir1(tempDirectory & "\Roblox\sounds")
+        If CheckForRoblox() Then
+            Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
+            Dim tempDirectory = Path.GetTempPath
+            If result = DialogResult.Yes Then
+                RemoveAllFileInDir1(tempDirectory & "\Roblox\sounds")
+            End If
         End If
+
     End Sub
 
 
@@ -786,7 +816,13 @@ del %0
             Try
                 Dim selectedFile = HTTPLISTBOX.SelectedItem.FilePath
                 SelFile = selectedFile
-                AxWindowsMediaPlayer1.URL = SelFile
+
+                If My.Computer.FileSystem.FileExists(SelFile) Then
+                    AxWindowsMediaPlayer1.URL = SelFile
+                Else
+                    CallError("File Not Found")
+                End If
+
             Catch ex As Exception
                 CallError(ex.Message)
             End Try
@@ -802,15 +838,18 @@ del %0
 
 
     Private Sub ClearHTTPTEMP_BTN_Click(sender As Object, e As EventArgs) Handles ClearHTTPTEMP_BTN.Click
-        Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios / images your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
-        Dim tempDirectory = Path.GetTempPath
-        If result = DialogResult.Yes Then
-            'EnableButtons(False)
-            Try
-                ClearCache.RunWorkerAsync()
-            Catch ex As Exception
-                CallError("cannot run two processes at the same time")
-            End Try
+
+        If CheckForRoblox() Then
+            Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios / images your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
+            Dim tempDirectory = Path.GetTempPath
+            If result = DialogResult.Yes Then
+                'EnableButtons(False)
+                Try
+                    ClearCache.RunWorkerAsync()
+                Catch ex As Exception
+                    CallError("cannot run two processes at the same time")
+                End Try
+            End If
         End If
     End Sub
 
@@ -995,7 +1034,7 @@ del %0
                                      $"File Size: {FormatBytes(fileSize)}"
 
             Catch ex As Exception
-                CallError(ex.Message)
+                CallError("File Not Found")
             End Try
 
         End If
@@ -1032,15 +1071,18 @@ del %0
     End Sub
 
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles ImgClearTmp.Click
-        Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios / images your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
-        Dim tempDirectory = Path.GetTempPath
-        If result = DialogResult.Yes Then
-            'EnableButtons(False)
-            Try
-                ClearCache.RunWorkerAsync()
-            Catch ex As Exception
-                CallError("cannot run two processes at the same time")
-            End Try
+
+        If CheckForRoblox() Then
+            Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios / images your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
+            Dim tempDirectory = Path.GetTempPath
+            If result = DialogResult.Yes Then
+                'EnableButtons(False)
+                Try
+                    ClearCache.RunWorkerAsync()
+                Catch ex As Exception
+                    CallError("cannot run two processes at the same time")
+                End Try
+            End If
         End If
     End Sub
 
@@ -1067,9 +1109,11 @@ del %0
         End If
         If ProgressBar1.Value = 0 Then
             EnableButtons(True)
+            LoadingGif.Visible = False
             ProgressBar1.Visible = False
         Else
             EnableButtons(False)
+            LoadingGif.Visible = True
             ProgressBar1.Visible = True
         End If
     End Sub
@@ -1099,31 +1143,41 @@ del %0
     End Sub
 
     Private Sub MSGPopup_DoWork(sender As Object, e As DoWorkEventArgs) Handles MSGPopup.DoWork
-        Try
-            Dim url = "https://animated-platypus-6ba0a9.netlify.app/message.txt"
 
-            Dim content As String
-            Using client As New System.Net.WebClient()
-                content = client.DownloadString(url).Trim()
-            End Using
-            If Not content = "" Then
+        Me.Invoke(Sub()
+                      Try
+                          Dim url = "https://animated-platypus-6ba0a9.netlify.app/message.txt"
 
-                Me.Invoke(Sub()
+                          Dim content As String
+
+                          Using client As New HttpClient()
+                              content = client.GetStringAsync(url).GetAwaiter().GetResult().Trim()
+                          End Using
+
+                          If Not content = "" Then
+
+
                               output_log.Items.Add($"received message: {content}")
-                          End Sub)
-                Me.Invoke(Sub()
-                              MsgBox($"Message from the Creator: {content}", 0 + 64, "Message from the Creator")
-                          End Sub)
-            End If
 
-        Catch ex As Exception
-            Me.Invoke(Sub()
+
+                              MsgBox($"Message from the Creator: {content}", 0 + 64, "Message from the Creator")
+
+                          End If
+
+                      Catch ex As Exception
+
                           output_log.Items.Add($"ERROR FAILED TO RECEIVE MESSAGE WITH ERROR CODE: {ex}")
-                      End Sub)
-        End Try
+
+                      End Try
+                  End Sub)
+
     End Sub
 
     Private Sub MetroTabControl1_SelectedIndexChanged(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub MetroTabControl1_SelectedIndexChanged_1(sender As Object, e As EventArgs)
 
     End Sub
 End Class
