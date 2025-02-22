@@ -48,7 +48,7 @@ Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.1.5"
+    Dim V = "v1.1.50"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Dim Stage As Integer = 0
     Dim tempDirectory = Path.GetTempPath
@@ -1176,11 +1176,12 @@ del %0
             trackBarTimeline.Maximum = CInt(audioReader.TotalTime.TotalSeconds)
             lblTotalTime.Text = FormatTime(audioReader.TotalTime)
             playbackTimer.Start()
+            ChangeVol.Start()
             KeepPlayback0.Stop()
             Playing = True
             SoundPlayerPlayBtn.BackgroundImage = My.Resources.RedPlayButton
         Catch ex As Exception
-            MessageBox.Show("Error playing file: " & ex.Message)
+            output_log.Items.Add("Error playing file: " & ex.Message)
         End Try
     End Sub
 
