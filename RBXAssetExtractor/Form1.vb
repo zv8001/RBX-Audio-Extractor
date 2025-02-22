@@ -48,7 +48,7 @@ Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.1.4"
+    Dim V = "v1.1.5"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Dim Stage As Integer = 0
     Dim tempDirectory = Path.GetTempPath
@@ -272,14 +272,26 @@ del %0
 
         Dim musicFiles = Directory.GetFiles(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", "*.ogg")
         UpdateTaskLBR("Task 6/6")
-        For Each file In musicFiles
+
+
+        Dim sortedMusicFiles = musicFiles.Select(Function(file)
+                                                     Dim track As New Track(file)
+                                                     Return New With {
+                                                 .FilePath = file,
+                                                 .Track = track,
+                                                 .Duration = track.Duration
+                                             }
+                                                 End Function).
+                                         OrderByDescending(Function(x) x.Duration).ToList()
+
+
+        For Each fileData In sortedMusicFiles
             Dim InfoLoaded = True
 
-            Dim track As New Track(file)
-
-            Dim title = track.Title
-            Dim Album = track.Album
-            Dim Artist = track.Artist
+            Dim title = fileData.Track.Title
+            Dim Album = fileData.Track.Album
+            Dim Artist = fileData.Track.Artist
+            Dim Duration = TimeSpan.FromSeconds(fileData.Duration).ToString("mm\:ss")
 
             If String.IsNullOrEmpty(Album) Then
                 InfoLoaded = False
@@ -287,19 +299,22 @@ del %0
 
             Try
                 Me.Invoke(Sub()
-
                               If InfoLoaded Then
-                                  HTTPLISTBOX.Items.Insert(0, New With {.DisplayText = $"" & title & " | Artists: " & Artist & " | Album: " & Album & "", .FilePath = file})
+                                  HTTPLISTBOX.Items.Insert(0, New With {
+                              .DisplayText = $"{title} | Artists: {Artist} | Album: {Album} | Duration: {Duration}",
+                              .FilePath = fileData.FilePath
+                          })
                               Else
-                                  HTTPLISTBOX.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
+                                  HTTPLISTBOX.Items.Add(New With {
+                              .DisplayText = $"{Duration} - {Path.GetFileName(fileData.FilePath)}",
+                              .FilePath = fileData.FilePath
+                          })
                               End If
                           End Sub)
-
             Catch ex As Exception
                 Me.Invoke(Sub()
-                              CallError($"Error reading file: {file} - {ex.Message}")
+                              CallError($"Error reading file: {fileData.FilePath} - {ex.Message}")
                           End Sub)
-
             End Try
         Next
 
@@ -436,14 +451,23 @@ del %0
 
         Dim musicFiles = Directory.GetFiles(tempDirectory & "\RBX_SOUND_RIPPER", "*.ogg")
 
-        For Each file In musicFiles
+        Dim sortedMusicFiles = musicFiles.Select(Function(file)
+                                                     Dim track As New Track(file)
+                                                     Return New With {
+                                                 .FilePath = file,
+                                                 .Track = track,
+                                                 .Duration = track.Duration
+                                             }
+                                                 End Function).
+                                         OrderByDescending(Function(x) x.Duration).ToList()
+
+        For Each fileData In sortedMusicFiles
             Dim InfoLoaded = True
 
-            Dim track As New Track(file)
-
-            Dim title = track.Title
-            Dim Album = track.Album
-            Dim Artist = track.Artist
+            Dim title = fileData.Track.Title
+            Dim Album = fileData.Track.Album
+            Dim Artist = fileData.Track.Artist
+            Dim Duration = TimeSpan.FromSeconds(fileData.Duration).ToString("mm\:ss")
 
             If String.IsNullOrEmpty(Album) Then
                 InfoLoaded = False
@@ -452,18 +476,21 @@ del %0
             Try
                 Me.Invoke(Sub()
                               If InfoLoaded Then
-                                  Sounds_Listbox.Items.Insert(0, New With {.DisplayText = $"" & title & " | Artists: " & Artist & " | Album: " & Album & "", .FilePath = file})
+                                  Sounds_Listbox.Items.Insert(0, New With {
+                              .DisplayText = $"{Duration} - {title} | Artists: {Artist} | Album: {Album} | Duration: {Duration}",
+                              .FilePath = fileData.FilePath
+                          })
                               Else
-                                  Sounds_Listbox.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
+                                  Sounds_Listbox.Items.Add(New With {
+                              .DisplayText = $"{Duration} - {Path.GetFileName(fileData.FilePath)}",
+                              .FilePath = fileData.FilePath
+                          })
                               End If
                           End Sub)
-
             Catch ex As Exception
                 Me.Invoke(Sub()
-                              CallError($"Error reading file: {file} - {ex.Message}")
+                              CallError($"Error reading file: {fileData.FilePath} - {ex.Message}")
                           End Sub)
-
-
             End Try
         Next
 
@@ -1126,27 +1153,45 @@ del %0
     Private outputDevice As IWavePlayer
     Private isDragging0 As Boolean = False
     Private isStopping As Boolean = False
-    Private Sub PlayOggFile(filePath As String)
 
+
+    Private Sub PlayOggFile(filePath As String)
         StopPlayback()
 
         Try
-            outputDevice = New WaveOutEvent()
-            audioReader = New VorbisWaveReader(filePath)
+            If HasMetadata(filePath) Then
+                outputDevice = New WaveOutEvent()
+                audioReader = New MediaFoundationReader(filePath)
+            Else
+                outputDevice = New WaveOutEvent()
+                audioReader = New VorbisWaveReader(filePath)
+            End If
+
+
             outputDevice.Init(audioReader)
+            outputDevice.Volume = CSng(VolumeControl1.Volume) / 100.0F
             outputDevice.Play()
+
             AddHandler outputDevice.PlaybackStopped, AddressOf OnPlaybackStopped
             trackBarTimeline.Maximum = CInt(audioReader.TotalTime.TotalSeconds)
             lblTotalTime.Text = FormatTime(audioReader.TotalTime)
-            KeepPlayback0.Stop()
             playbackTimer.Start()
-            ChangeVol.Start()
+            KeepPlayback0.Stop()
             Playing = True
             SoundPlayerPlayBtn.BackgroundImage = My.Resources.RedPlayButton
         Catch ex As Exception
-            output_log.Items.Add("Error playing file: " & ex.Message)
+            MessageBox.Show("Error playing file: " & ex.Message)
         End Try
     End Sub
+
+    Private Function HasMetadata(filePath As String) As Boolean
+        Try
+            Dim track As New Track(filePath)
+            Return Not String.IsNullOrEmpty(track.Artist) OrElse Not String.IsNullOrEmpty(track.Album)
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
     Private Sub OnPlaybackStopped(sender As Object, e As StoppedEventArgs)
         If Not isStopping AndAlso audioReader IsNot Nothing AndAlso audioReader.CurrentTime >= audioReader.TotalTime Then
             Invoke(Sub() StopPlayback())
