@@ -45,7 +45,6 @@ C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\b
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\RBXAssetExtractor.runtimeconfig.json
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\RBXAssetExtractor.dll
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\RBXAssetExtractor.pdb
-C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\Bass.Net.dll
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\NAudio.dll
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\NAudio.Asio.dll
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\NAudio.Core.dll
@@ -80,3 +79,4 @@ C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\o
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\RBXAssetExtractor.pdb
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\RBXAssetExtractor.genruntimeconfig.cache
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\ref\RBXAssetExtractor.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\MetroFramework.dll

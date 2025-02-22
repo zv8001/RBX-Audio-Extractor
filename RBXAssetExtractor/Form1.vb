@@ -4,6 +4,30 @@ Imports System.Security.Principal
 Imports System.Numerics
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports System.Net
+'MIT License
+
+'Copyright (c) 2025 zv8001
+
+'Permission is hereby granted, free of charge, to any person obtaining a copy
+'of this software and associated documentation files (the "Software"), to deal
+'in the Software without restriction, including without limitation the rights
+'to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+'copies of the Software, and to permit persons to whom the Software is
+'furnished to do so, subject to the following conditions:
+
+'The above copyright notice and this permission notice shall be included in all
+'copies or substantial portions of the Software.
+
+'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+'IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+''FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+'AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+'LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+'OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+'SOFTWARE.
+
+'https://github.com/zv8001/RBX-Audio-Extractor?tab=MIT-1-ov-file#readme
+
 Imports NVorbis
 Imports ATL.AudioData
 Imports ATL
@@ -18,18 +42,17 @@ Imports System.Reflection
 Imports System.Reflection.Metadata
 Imports System.Drawing
 Imports TagLib
+Imports NAudio.Wave
+Imports NAudio.Vorbis
 Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
     Dim V = "v1.1.3"
     Private WithEvents backgroundWorker As New BackgroundWorker()
-    Private codecInstallerUrl As String = "https://files2.codecguide.com/K-Lite_Codec_Pack_1880_Standard.exe"
     Dim Stage As Integer = 0
-
-    Private codecInstallerPath As String = "C:\Temp\klcp.exe"
     Dim tempDirectory = Path.GetTempPath
-
+    Dim Playing As Boolean = False
     Dim SelFile As String
     Dim Outdated As Boolean = False
     Private isDragging As Boolean = False
@@ -47,18 +70,10 @@ Public Class MainForm
     End Function
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         TaskLBR.Visible = False
         LoadHTTP0.WorkerReportsProgress = True
         VText_LBR.Text = V
-        InstallCodec()
-
-        Dim isInstalled As Boolean = IsKLiteInstalled()
-
-        If Not isInstalled Then
-            MsgBox("This program requires K-Lite_Codec_Pack please install it and try again.", 0 + 16, "balls")
-            Me.Close()
-            KillProcessByName(Path.GetFileNameWithoutExtension(Application.ExecutablePath))
-        End If
         CheckForUpdates()
         Me.Opacity = 0
         fadeInTimer.Interval = 50
@@ -68,16 +83,6 @@ Public Class MainForm
 
     End Sub
 
-    Function IsKLiteInstalled() As Boolean
-        If My.Computer.FileSystem.DirectoryExists("C:\Program Files (x86)\K-Lite Codec Pack") Then
-            Return True
-        End If
-
-        If My.Computer.FileSystem.DirectoryExists("C:\Program Files\K-Lite Codec Pack") Then
-            Return True
-        End If
-        Return False
-    End Function
 
     Public Sub DownloadUpdate()
 
@@ -152,65 +157,7 @@ del %0
     End Function
 
 
-    Private Sub InstallCodec()
-        Dim isInstalled As Boolean = IsKLiteInstalled()
 
-        If Not isInstalled Then
-            Dim result As DialogResult = MessageBox.Show("This program requires a custom Codec please click yes to install", "bruj", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-
-            If result = DialogResult.No Then
-
-
-            Else
-                If isInstalled Then
-
-                Else
-                    Try
-                        My.Computer.Network.DownloadFile(codecInstallerUrl, tempDirectory & "\K-Lite_Codec_Pack_1880_Standard.exe")
-                    Catch ex As Exception
-
-                    End Try
-
-                    Try
-
-                        Dim command As String = "cmd.exe /c " & tempDirectory & "\K-Lite_Codec_Pack_1880_Standard.exe /silent"
-
-                        Dim process As New Process()
-
-
-                        process.StartInfo.FileName = "cmd.exe"
-                        process.StartInfo.Arguments = "/c " & command
-                        process.StartInfo.RedirectStandardOutput = True
-                        process.StartInfo.UseShellExecute = False
-                        process.StartInfo.CreateNoWindow = False
-
-
-                        process.Start()
-
-
-                        Dim output As String = process.StandardOutput.ReadToEnd()
-                        Console.WriteLine(output)
-
-
-                        process.WaitForExit()
-                    Catch ex As Exception
-                        CallError("Automatic download failed with the error:  " & ex.Message & "")
-
-                        Try
-                            Process.Start("C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", "https://files2.codecguide.com/K-Lite_Codec_Pack_1880_Standard.exe")
-                        Catch ex2 As Exception
-                            CallError(ex.Message)
-                        End Try
-                    End Try
-                End If
-
-
-            End If
-
-        End If
-
-
-    End Sub
     Dim DisableTimer019 = False
 
     Private Sub LoadFullGame()
@@ -772,7 +719,7 @@ del %0
             Try
                 Dim selectedFile = Sounds_Listbox.SelectedItem.FilePath
                 SelFile = selectedFile
-                AxWindowsMediaPlayer1.URL = SelFile
+                PlayOggFile(SelFile)
             Catch ex As Exception
                 CallError(ex.Message)
             End Try
@@ -818,7 +765,7 @@ del %0
                 SelFile = selectedFile
 
                 If My.Computer.FileSystem.FileExists(SelFile) Then
-                    AxWindowsMediaPlayer1.URL = SelFile
+                    PlayOggFile(SelFile)
                 Else
                     CallError("File Not Found")
                 End If
@@ -1173,11 +1120,105 @@ del %0
 
     End Sub
 
-    Private Sub MetroTabControl1_SelectedIndexChanged(sender As Object, e As EventArgs)
 
+    'All of the code for the custom OGG player added in v1.1.3
+    Private audioReader As WaveStream
+    Private outputDevice As IWavePlayer
+    Private isDragging0 As Boolean = False
+    Private isStopping As Boolean = False
+    Private Sub PlayOggFile(filePath As String)
+
+        StopPlayback()
+
+        Try
+            outputDevice = New WaveOutEvent()
+            audioReader = New VorbisWaveReader(filePath)
+            outputDevice.Init(audioReader)
+            outputDevice.Play()
+            AddHandler outputDevice.PlaybackStopped, AddressOf OnPlaybackStopped
+            trackBarTimeline.Maximum = CInt(audioReader.TotalTime.TotalSeconds)
+            lblTotalTime.Text = FormatTime(audioReader.TotalTime)
+            KeepPlayback0.Stop()
+            playbackTimer.Start()
+            Playing = True
+            SoundPlayerPlayBtn.BackgroundImage = My.Resources.RedPlayButton
+        Catch ex As Exception
+            output_log.Items.Add("Error playing file: " & ex.Message)
+        End Try
+    End Sub
+    Private Sub OnPlaybackStopped(sender As Object, e As StoppedEventArgs)
+        If Not isStopping AndAlso audioReader IsNot Nothing AndAlso audioReader.CurrentTime >= audioReader.TotalTime Then
+            Invoke(Sub() StopPlayback())
+        End If
     End Sub
 
-    Private Sub MetroTabControl1_SelectedIndexChanged_1(sender As Object, e As EventArgs)
+    Private Sub StopPlayback()
+        KeepPlayback0.Start()
+        isStopping = True
 
+        If outputDevice IsNot Nothing Then
+            RemoveHandler outputDevice.PlaybackStopped, AddressOf OnPlaybackStopped
+            outputDevice.Stop()
+            outputDevice.Dispose()
+            outputDevice = Nothing
+        End If
+
+        If audioReader IsNot Nothing Then
+            audioReader.Dispose()
+            audioReader = Nothing
+        End If
+
+        playbackTimer.Stop()
+        trackBarTimeline.Value = 0
+        lblElapsedTime.Text = "00:00"
+        lblTotalTime.Text = "00:00"
+        Playing = False
+        SoundPlayerPlayBtn.BackgroundImage = My.Resources.GreenPlayButton
+        isStopping = False
+    End Sub
+
+
+    Private Sub playbackTimer_Tick(sender As Object, e As EventArgs) Handles playbackTimer.Tick
+        If audioReader IsNot Nothing AndAlso Not isDragging0 Then
+            trackBarTimeline.Value = CInt(audioReader.CurrentTime.TotalSeconds)
+            lblElapsedTime.Text = FormatTime(audioReader.CurrentTime)
+        End If
+    End Sub
+
+
+    Private Function FormatTime(time As TimeSpan) As String
+        Return time.Minutes.ToString("D2") & ":" & time.Seconds.ToString("D2")
+    End Function
+
+
+    Private Sub trackBarTimeline_Scroll(sender As Object, e As EventArgs) Handles trackBarTimeline.Scroll
+        If audioReader IsNot Nothing AndAlso Not isStopping Then
+            Try
+                isDragging0 = True
+                Dim newTime As TimeSpan = TimeSpan.FromSeconds(trackBarTimeline.Value)
+                lblElapsedTime.Text = FormatTime(newTime)
+                If audioReader IsNot Nothing Then
+
+                    audioReader.CurrentTime = newTime
+                End If
+
+                isDragging0 = False
+            Catch ex As Exception
+                output_log.Items.Add("Seek error: " & ex.Message)
+            End Try
+        End If
+    End Sub
+
+    Private Sub SoundPlayerPlayBtn_Click(sender As Object, e As EventArgs) Handles SoundPlayerPlayBtn.Click
+        If Playing Then
+            StopPlayback()
+        Else
+
+            PlayOggFile(SelFile)
+        End If
+    End Sub
+
+    Private Sub KeepPlayback0_Tick(sender As Object, e As EventArgs) Handles KeepPlayback0.Tick
+        trackBarTimeline.Value = 0
     End Sub
 End Class

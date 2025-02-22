@@ -30,7 +30,6 @@ Partial Class MainForm
         LoadParButton = New Button()
         Download_BTN = New Button()
         ClearTMP_BTN = New Button()
-        AxWindowsMediaPlayer1 = New AxWMPLib.AxWindowsMediaPlayer()
         DownloadALL_BTN = New Button()
         FolderBrowserDialog1 = New FolderBrowserDialog()
         TabControl1 = New TabControl()
@@ -84,7 +83,13 @@ Partial Class MainForm
         MSGPopup = New ComponentModel.BackgroundWorker()
         ProgressBar1 = New MetroFramework.Controls.MetroProgressBar()
         TaskLBR = New Label()
-        CType(AxWindowsMediaPlayer1, ComponentModel.ISupportInitialize).BeginInit()
+        trackBarTimeline = New MetroFramework.Controls.MetroTrackBar()
+        lblElapsedTime = New Label()
+        lblTotalTime = New Label()
+        playbackTimer = New Timer(components)
+        SoundPlayerPlayBtn = New Button()
+        Panel3 = New Panel()
+        KeepPlayback0 = New Timer(components)
         TabControl1.SuspendLayout()
         TabPage3.SuspendLayout()
         TabPage2.SuspendLayout()
@@ -95,6 +100,7 @@ Partial Class MainForm
         Panel2.SuspendLayout()
         CType(LoadingGif, ComponentModel.ISupportInitialize).BeginInit()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
+        Panel3.SuspendLayout()
         SuspendLayout()
         ' 
         ' LoadHTTP0
@@ -162,15 +168,6 @@ Partial Class MainForm
         ClearTMP_BTN.TabIndex = 5
         ClearTMP_BTN.Text = "Clear Cache"
         ClearTMP_BTN.UseVisualStyleBackColor = False
-        ' 
-        ' AxWindowsMediaPlayer1
-        ' 
-        AxWindowsMediaPlayer1.Enabled = True
-        AxWindowsMediaPlayer1.Location = New Point(12, 456)
-        AxWindowsMediaPlayer1.Name = "AxWindowsMediaPlayer1"
-        AxWindowsMediaPlayer1.OcxState = CType(resources.GetObject("AxWindowsMediaPlayer1.OcxState"), AxHost.State)
-        AxWindowsMediaPlayer1.Size = New Size(439, 45)
-        AxWindowsMediaPlayer1.TabIndex = 6
         ' 
         ' DownloadALL_BTN
         ' 
@@ -623,7 +620,7 @@ Partial Class MainForm
         StatusLBR.BackColor = Color.Transparent
         StatusLBR.Font = New Font("Segoe UI", 12.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         StatusLBR.ForeColor = Color.White
-        StatusLBR.Location = New Point(8, 505)
+        StatusLBR.Location = New Point(12, 520)
         StatusLBR.Name = "StatusLBR"
         StatusLBR.Size = New Size(33, 21)
         StatusLBR.TabIndex = 10
@@ -747,26 +744,101 @@ Partial Class MainForm
         ProgressBar1.FontWeight = MetroFramework.MetroProgressBarWeight.Light
         ProgressBar1.ForeColor = Color.Red
         ProgressBar1.HideProgressText = True
-        ProgressBar1.Location = New Point(47, 507)
+        ProgressBar1.Location = New Point(52, 522)
         ProgressBar1.Name = "ProgressBar1"
         ProgressBar1.ProgressBarStyle = ProgressBarStyle.Continuous
-        ProgressBar1.Size = New Size(404, 19)
+        ProgressBar1.Size = New Size(399, 19)
         ProgressBar1.Style = MetroFramework.MetroColorStyle.Blue
         ProgressBar1.StyleManager = Nothing
         ProgressBar1.TabIndex = 13
         ProgressBar1.TextAlign = ContentAlignment.MiddleRight
-        ProgressBar1.Theme = MetroFramework.MetroThemeStyle.Light
+        ProgressBar1.Theme = MetroFramework.MetroThemeStyle.Dark
         ' 
         ' TaskLBR
         ' 
+        TaskLBR.AutoSize = True
         TaskLBR.BackColor = Color.Transparent
         TaskLBR.Font = New Font("MS UI Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         TaskLBR.ForeColor = Color.White
         TaskLBR.Location = New Point(362, 435)
         TaskLBR.Name = "TaskLBR"
-        TaskLBR.Size = New Size(85, 19)
+        TaskLBR.Size = New Size(60, 12)
         TaskLBR.TabIndex = 7
         TaskLBR.Text = "Task 0 / 4"
+        ' 
+        ' trackBarTimeline
+        ' 
+        trackBarTimeline.BackColor = Color.White
+        trackBarTimeline.CustomBackground = False
+        trackBarTimeline.LargeChange = 5UI
+        trackBarTimeline.Location = New Point(3, 3)
+        trackBarTimeline.Maximum = 100
+        trackBarTimeline.Minimum = 0
+        trackBarTimeline.MouseWheelBarPartitions = 10
+        trackBarTimeline.Name = "trackBarTimeline"
+        trackBarTimeline.Size = New Size(432, 23)
+        trackBarTimeline.SmallChange = 1UI
+        trackBarTimeline.Style = MetroFramework.MetroColorStyle.Blue
+        trackBarTimeline.StyleManager = Nothing
+        trackBarTimeline.TabIndex = 14
+        trackBarTimeline.Text = "MetroTrackBar1"
+        trackBarTimeline.Theme = MetroFramework.MetroThemeStyle.Dark
+        trackBarTimeline.Value = 50
+        ' 
+        ' lblElapsedTime
+        ' 
+        lblElapsedTime.AutoSize = True
+        lblElapsedTime.Font = New Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        lblElapsedTime.ForeColor = Color.White
+        lblElapsedTime.Location = New Point(10, 26)
+        lblElapsedTime.Name = "lblElapsedTime"
+        lblElapsedTime.Size = New Size(44, 20)
+        lblElapsedTime.TabIndex = 15
+        lblElapsedTime.Text = "00:00"
+        ' 
+        ' lblTotalTime
+        ' 
+        lblTotalTime.AutoSize = True
+        lblTotalTime.Font = New Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        lblTotalTime.ForeColor = Color.White
+        lblTotalTime.Location = New Point(355, 26)
+        lblTotalTime.Name = "lblTotalTime"
+        lblTotalTime.Size = New Size(44, 20)
+        lblTotalTime.TabIndex = 16
+        lblTotalTime.Text = "00:00"
+        ' 
+        ' playbackTimer
+        ' 
+        ' 
+        ' SoundPlayerPlayBtn
+        ' 
+        SoundPlayerPlayBtn.BackgroundImage = My.Resources.Resources.RedPlayButton
+        SoundPlayerPlayBtn.BackgroundImageLayout = ImageLayout.Zoom
+        SoundPlayerPlayBtn.FlatAppearance.BorderSize = 0
+        SoundPlayerPlayBtn.FlatStyle = FlatStyle.Flat
+        SoundPlayerPlayBtn.ForeColor = Color.Transparent
+        SoundPlayerPlayBtn.Location = New Point(398, 26)
+        SoundPlayerPlayBtn.Name = "SoundPlayerPlayBtn"
+        SoundPlayerPlayBtn.Size = New Size(37, 23)
+        SoundPlayerPlayBtn.TabIndex = 17
+        SoundPlayerPlayBtn.UseVisualStyleBackColor = True
+        ' 
+        ' Panel3
+        ' 
+        Panel3.BackColor = Color.FromArgb(CByte(15), CByte(15), CByte(15))
+        Panel3.Controls.Add(trackBarTimeline)
+        Panel3.Controls.Add(SoundPlayerPlayBtn)
+        Panel3.Controls.Add(lblElapsedTime)
+        Panel3.Controls.Add(lblTotalTime)
+        Panel3.Location = New Point(12, 457)
+        Panel3.Name = "Panel3"
+        Panel3.Size = New Size(439, 59)
+        Panel3.TabIndex = 18
+        ' 
+        ' KeepPlayback0
+        ' 
+        KeepPlayback0.Enabled = True
+        KeepPlayback0.Interval = 1
         ' 
         ' MainForm
         ' 
@@ -774,13 +846,13 @@ Partial Class MainForm
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         BackgroundImageLayout = ImageLayout.Stretch
-        ClientSize = New Size(463, 536)
+        ClientSize = New Size(463, 549)
+        Controls.Add(Panel3)
         Controls.Add(TaskLBR)
         Controls.Add(ProgressBar1)
         Controls.Add(AlwaysOnTopCHK)
         Controls.Add(Panel2)
         Controls.Add(StatusLBR)
-        Controls.Add(AxWindowsMediaPlayer1)
         Controls.Add(TabControl1)
         DoubleBuffered = True
         FormBorderStyle = FormBorderStyle.None
@@ -789,7 +861,6 @@ Partial Class MainForm
         Name = "MainForm"
         StartPosition = FormStartPosition.CenterScreen
         Text = "RBX Asset Extractor (made by ZV800)"
-        CType(AxWindowsMediaPlayer1, ComponentModel.ISupportInitialize).EndInit()
         TabControl1.ResumeLayout(False)
         TabPage3.ResumeLayout(False)
         TabPage3.PerformLayout()
@@ -804,6 +875,8 @@ Partial Class MainForm
         Panel2.PerformLayout()
         CType(LoadingGif, ComponentModel.ISupportInitialize).EndInit()
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
+        Panel3.ResumeLayout(False)
+        Panel3.PerformLayout()
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -812,7 +885,6 @@ Partial Class MainForm
     Friend WithEvents LoadParButton As Button
     Friend WithEvents Download_BTN As Button
     Friend WithEvents ClearTMP_BTN As Button
-    Friend WithEvents AxWindowsMediaPlayer1 As AxWMPLib.AxWindowsMediaPlayer
     Friend WithEvents DownloadALL_BTN As Button
     Friend WithEvents FolderBrowserDialog1 As FolderBrowserDialog
     Friend WithEvents TabControl1 As TabControl
@@ -868,5 +940,12 @@ Partial Class MainForm
     Friend WithEvents ProgressBar1 As MetroFramework.Controls.MetroProgressBar
     Friend WithEvents LoadingGif As PictureBox
     Friend WithEvents TaskLBR As Label
+    Friend WithEvents trackBarTimeline As MetroFramework.Controls.MetroTrackBar
+    Friend WithEvents lblElapsedTime As Label
+    Friend WithEvents lblTotalTime As Label
+    Friend WithEvents playbackTimer As Timer
+    Friend WithEvents SoundPlayerPlayBtn As Button
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents KeepPlayback0 As Timer
 
 End Class

@@ -9,8 +9,9 @@
     ".NETCoreApp,Version=v8.0/win-x64": {
       "RBXAssetExtractor/1.0.0": {
         "dependencies": {
-          "Bass.Net": "1.0.0",
           "Microsoft.NET.ILLink.Tasks": "8.0.11",
+          "ModernUI": "2.0.0",
+          "Modernizr": "2.8.3",
           "NAudio": "2.2.1",
           "NAudio.Vorbis": "1.5.0",
           "TagLibSharp": "2.3.0",
@@ -24,20 +25,29 @@
           "RBXAssetExtractor.dll": {}
         }
       },
-      "Bass.Net/1.0.0": {
-        "runtime": {
-          "lib/Bass.Net.dll": {
-            "assemblyVersion": "2.4.10.3",
-            "fileVersion": "2.4.10.3"
-          }
-        }
-      },
       "Microsoft.NET.ILLink.Tasks/8.0.11": {},
       "Microsoft.NETCore.Platforms/3.1.0": {},
       "Microsoft.Win32.Registry/4.7.0": {
         "dependencies": {
           "System.Security.AccessControl": "4.7.0",
           "System.Security.Principal.Windows": "4.7.0"
+        }
+      },
+      "Microsoft.Win32.SystemEvents/4.7.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "3.1.0"
+        }
+      },
+      "Modernizr/2.8.3": {},
+      "ModernUI/2.0.0": {
+        "dependencies": {
+          "System.Drawing.Common": "4.7.0"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/MetroFramework.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.0.0"
+          }
         }
       },
       "NAudio/2.2.1": {
@@ -145,6 +155,12 @@
           }
         }
       },
+      "System.Drawing.Common/4.7.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "3.1.0",
+          "Microsoft.Win32.SystemEvents": "4.7.0"
+        }
+      },
       "System.Memory/4.5.3": {},
       "System.Security.AccessControl/4.7.0": {
         "dependencies": {
@@ -221,13 +237,6 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Bass.Net/1.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-gDZeQQeexlLY+OQKeEyMRj5wD2qNHTrBeXAdNfnoNcmfq5QQd4mKq8ZOoB76ZZTthb1m99QksjzFK6lGAy4ULA==",
-      "path": "bass.net/1.0.0",
-      "hashPath": "bass.net.1.0.0.nupkg.sha512"
-    },
     "Microsoft.NET.ILLink.Tasks/8.0.11": {
       "type": "package",
       "serviceable": true,
@@ -248,6 +257,27 @@
       "sha512": "sha512-KSrRMb5vNi0CWSGG1++id2ZOs/1QhRqROt+qgbEAdQuGjGrFcl4AOl4/exGPUYz2wUnU42nvJqon1T3U0kPXLA==",
       "path": "microsoft.win32.registry/4.7.0",
       "hashPath": "microsoft.win32.registry.4.7.0.nupkg.sha512"
+    },
+    "Microsoft.Win32.SystemEvents/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mtVirZr++rq+XCDITMUdnETD59XoeMxSpLRIII7JRI6Yj0LEDiO1pPn0ktlnIj12Ix8bfvQqQDMMIF9wC98oCA==",
+      "path": "microsoft.win32.systemevents/4.7.0",
+      "hashPath": "microsoft.win32.systemevents.4.7.0.nupkg.sha512"
+    },
+    "Modernizr/2.8.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OiV7LzwGvejI0lxQAx7HaAA+H6xC3FL6Pgv23Qo5O+5fKp5bt2zj0qz7ZmF+jtWmm9dcQkoTInO7eTFH1JtXEQ==",
+      "path": "modernizr/2.8.3",
+      "hashPath": "modernizr.2.8.3.nupkg.sha512"
+    },
+    "ModernUI/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uFs5caxyT0YXJ08jXI80LlP7TE7LpMUXB2duD1TU697zUl+QCJAFCiu+b9wmzwUFkjsNvmed7okNK94yKv6pVA==",
+      "path": "modernui/2.0.0",
+      "hashPath": "modernui.2.0.0.nupkg.sha512"
     },
     "NAudio/2.2.1": {
       "type": "package",
@@ -311,6 +341,13 @@
       "sha512": "sha512-WYnil3DhQHzjCY0dM9I2B3r1vWip90AOuQd25KE4NrjPQBg0tBJFluRLm5YPnO5ZLDmwrfosY8jCQGQRmWI/Pg==",
       "path": "nvorbis/0.10.4",
       "hashPath": "nvorbis.0.10.4.nupkg.sha512"
+    },
+    "System.Drawing.Common/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-v+XbyYHaZjDfn0ENmJEV1VYLgGgCTx1gnfOBcppowbpOAriglYgGCvFCPr2EEZyBvXlpxbEsTwkOlInl107ahA==",
+      "path": "system.drawing.common/4.7.0",
+      "hashPath": "system.drawing.common.4.7.0.nupkg.sha512"
     },
     "System.Memory/4.5.3": {
       "type": "package",
