@@ -17,6 +17,9 @@
           "TagLibSharp": "2.3.0",
           "TradeWright.TabControlExtra": "2.0.1",
           "VedooControls": "3.0.1",
+          "cmdwtf.Toolkit.Win32": "1.0.0",
+          "cmdwtf.Toolkit.WinForms": "1.0.0",
+          "cmdwtf.Toolkit.WinForms.Dialogs": "1.0.0",
           "z440.atl.core": "6.17.0",
           "Interop.WMPLib": "1.0.0.0",
           "AxInterop.WMPLib": "1.0.0.0"
@@ -25,12 +28,55 @@
           "RBXAssetExtractor.dll": {}
         }
       },
+      "cmdwtf.Toolkit.Core/1.0.0": {
+        "runtime": {
+          "lib/net7.0-windows7.0/cmdwtf.Toolkit.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "cmdwtf.Toolkit.Win32/1.0.0": {
+        "dependencies": {
+          "System.Security.Principal.Windows": "5.0.0"
+        },
+        "runtime": {
+          "lib/net7.0-windows7.0/cmdwtf.Toolkit.Win32.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "cmdwtf.Toolkit.WinForms/1.0.0": {
+        "dependencies": {
+          "System.Resources.Extensions": "5.0.0",
+          "cmdwtf.Toolkit.Core": "1.0.0"
+        },
+        "runtime": {
+          "lib/net7.0-windows7.0/cmdwtf.Toolkit.WinForms.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "cmdwtf.Toolkit.WinForms.Dialogs/1.0.0": {
+        "dependencies": {
+          "Ookii.Dialogs.WinForms": "3.0.0",
+          "cmdwtf.Toolkit.Core": "1.0.0"
+        },
+        "runtime": {
+          "lib/net7.0-windows7.0/cmdwtf.Toolkit.Winforms.Dialogs.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Microsoft.NET.ILLink.Tasks/8.0.11": {},
       "Microsoft.NETCore.Platforms/3.1.0": {},
       "Microsoft.Win32.Registry/4.7.0": {
         "dependencies": {
           "System.Security.AccessControl": "4.7.0",
-          "System.Security.Principal.Windows": "4.7.0"
+          "System.Security.Principal.Windows": "5.0.0"
         }
       },
       "Microsoft.Win32.SystemEvents/4.7.0": {
@@ -155,6 +201,17 @@
           }
         }
       },
+      "Ookii.Dialogs.WinForms/3.0.0": {
+        "dependencies": {
+          "System.Resources.Extensions": "5.0.0"
+        },
+        "runtime": {
+          "lib/net5.0-windows7.0/Ookii.Dialogs.WinForms.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.0.0"
+          }
+        }
+      },
       "System.Drawing.Common/4.7.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "3.1.0",
@@ -162,13 +219,14 @@
         }
       },
       "System.Memory/4.5.3": {},
+      "System.Resources.Extensions/5.0.0": {},
       "System.Security.AccessControl/4.7.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "3.1.0",
-          "System.Security.Principal.Windows": "4.7.0"
+          "System.Security.Principal.Windows": "5.0.0"
         }
       },
-      "System.Security.Principal.Windows/4.7.0": {},
+      "System.Security.Principal.Windows/5.0.0": {},
       "System.ValueTuple/4.5.0": {},
       "TagLibSharp/2.3.0": {
         "runtime": {
@@ -236,6 +294,34 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "cmdwtf.Toolkit.Core/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DZQGsLqZdSKeFJhxAPfzBAn02Hohfkkhvz8vba+FDJQEKCu7qS4qf0E03W+Vgg1ul6ts1+RiaigxStK45wwy5g==",
+      "path": "cmdwtf.toolkit.core/1.0.0",
+      "hashPath": "cmdwtf.toolkit.core.1.0.0.nupkg.sha512"
+    },
+    "cmdwtf.Toolkit.Win32/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-aqhy5eOfyS4kn00YlLmlZi0/K4NW/2iV2pG4jPEGLoIIwtJrO8YtccOLX2n/idzxxmfQyb4KDx1qOXrjo251ug==",
+      "path": "cmdwtf.toolkit.win32/1.0.0",
+      "hashPath": "cmdwtf.toolkit.win32.1.0.0.nupkg.sha512"
+    },
+    "cmdwtf.Toolkit.WinForms/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bMVrRs1UMskpszMIiY1gRf+TBX1vu66Vg44fnDN4BFt/Fl1txettO3azUap7CwVrVIGZVXHf+y9HAMHX1j5IYw==",
+      "path": "cmdwtf.toolkit.winforms/1.0.0",
+      "hashPath": "cmdwtf.toolkit.winforms.1.0.0.nupkg.sha512"
+    },
+    "cmdwtf.Toolkit.WinForms.Dialogs/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QZpGjBVAhscOt9+qiEgmYyvR7LSbDbs3bo8MScqLhYmfrmajmWfI6lf2I1lcNeHdkAM6woMvCyYEOTgsGKe17g==",
+      "path": "cmdwtf.toolkit.winforms.dialogs/1.0.0",
+      "hashPath": "cmdwtf.toolkit.winforms.dialogs.1.0.0.nupkg.sha512"
     },
     "Microsoft.NET.ILLink.Tasks/8.0.11": {
       "type": "package",
@@ -342,6 +428,13 @@
       "path": "nvorbis/0.10.4",
       "hashPath": "nvorbis.0.10.4.nupkg.sha512"
     },
+    "Ookii.Dialogs.WinForms/3.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rCBOBghNTud4lI3PwtV3hQcbw4zPGgSH4zYWNjQNdqVoHsgETqYkO3uAvUCrEjR34nW08xssSzspQ0y3IKRbMw==",
+      "path": "ookii.dialogs.winforms/3.0.0",
+      "hashPath": "ookii.dialogs.winforms.3.0.0.nupkg.sha512"
+    },
     "System.Drawing.Common/4.7.0": {
       "type": "package",
       "serviceable": true,
@@ -356,6 +449,13 @@
       "path": "system.memory/4.5.3",
       "hashPath": "system.memory.4.5.3.nupkg.sha512"
     },
+    "System.Resources.Extensions/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KBiqY/+W6hWVwucHBHO76JkgBGyawlxCcP946MhK8dNjalaBgZkyHaux8ko58PENTqQHHjoDa7cfIkAchfJPPA==",
+      "path": "system.resources.extensions/5.0.0",
+      "hashPath": "system.resources.extensions.5.0.0.nupkg.sha512"
+    },
     "System.Security.AccessControl/4.7.0": {
       "type": "package",
       "serviceable": true,
@@ -363,12 +463,12 @@
       "path": "system.security.accesscontrol/4.7.0",
       "hashPath": "system.security.accesscontrol.4.7.0.nupkg.sha512"
     },
-    "System.Security.Principal.Windows/4.7.0": {
+    "System.Security.Principal.Windows/5.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ojD0PX0XhneCsUbAZVKdb7h/70vyYMDYs85lwEI+LngEONe/17A0cFaRFqZU+sOEidcVswYWikYOQ9PPfjlbtQ==",
-      "path": "system.security.principal.windows/4.7.0",
-      "hashPath": "system.security.principal.windows.4.7.0.nupkg.sha512"
+      "sha512": "sha512-t0MGLukB5WAVU9bO3MGzvlGnyJPgUlcwerXn1kzBRjwLKixT96XV0Uza41W49gVd8zEMFu9vQEFlv0IOrytICA==",
+      "path": "system.security.principal.windows/5.0.0",
+      "hashPath": "system.security.principal.windows.5.0.0.nupkg.sha512"
     },
     "System.ValueTuple/4.5.0": {
       "type": "package",

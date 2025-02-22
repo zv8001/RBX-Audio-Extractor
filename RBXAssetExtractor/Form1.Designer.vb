@@ -89,7 +89,9 @@ Partial Class MainForm
         playbackTimer = New Timer(components)
         SoundPlayerPlayBtn = New Button()
         Panel3 = New Panel()
+        VolumeControl1 = New cmdwtf.Toolkit.WinForms.Controls.VolumeControl()
         KeepPlayback0 = New Timer(components)
+        ChangeVol = New Timer(components)
         TabControl1.SuspendLayout()
         TabPage3.SuspendLayout()
         TabPage2.SuspendLayout()
@@ -826,6 +828,7 @@ Partial Class MainForm
         ' Panel3
         ' 
         Panel3.BackColor = Color.FromArgb(CByte(15), CByte(15), CByte(15))
+        Panel3.Controls.Add(VolumeControl1)
         Panel3.Controls.Add(trackBarTimeline)
         Panel3.Controls.Add(SoundPlayerPlayBtn)
         Panel3.Controls.Add(lblElapsedTime)
@@ -835,10 +838,24 @@ Partial Class MainForm
         Panel3.Size = New Size(439, 59)
         Panel3.TabIndex = 18
         ' 
+        ' VolumeControl1
+        ' 
+        VolumeControl1.Location = New Point(216, 24)
+        VolumeControl1.Margin = New Padding(4, 3, 4, 3)
+        VolumeControl1.MinimumSize = New Size(64, 22)
+        VolumeControl1.Mute = False
+        VolumeControl1.Name = "VolumeControl1"
+        VolumeControl1.Size = New Size(132, 22)
+        VolumeControl1.TabIndex = 19
+        VolumeControl1.Volume = 100
+        ' 
         ' KeepPlayback0
         ' 
         KeepPlayback0.Enabled = True
         KeepPlayback0.Interval = 1
+        ' 
+        ' ChangeVol
+        ' 
         ' 
         ' MainForm
         ' 
@@ -947,5 +964,7 @@ Partial Class MainForm
     Friend WithEvents SoundPlayerPlayBtn As Button
     Friend WithEvents Panel3 As Panel
     Friend WithEvents KeepPlayback0 As Timer
+    Friend WithEvents VolumeControl1 As cmdwtf.Toolkit.WinForms.Controls.VolumeControl
+    Friend WithEvents ChangeVol As Timer
 
 End Class

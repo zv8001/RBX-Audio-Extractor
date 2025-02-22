@@ -49,6 +49,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="cmdwtf.Toolkit.Win32" Version="1.0.0" />
+    <PackageReference Include="cmdwtf.Toolkit.WinForms" Version="1.0.0" />
+    <PackageReference Include="cmdwtf.Toolkit.WinForms.Dialogs" Version="1.0.0" />
     <PackageReference Include="Modernizr" Version="2.8.3" />
     <PackageReference Include="ModernUI" Version="2.0.0" />
     <PackageReference Include="NAudio" Version="2.2.1" />

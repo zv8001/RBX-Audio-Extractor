@@ -80,3 +80,8 @@ C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\o
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\win-x64\RBXAssetExtractor.genruntimeconfig.cache
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\win-x64\ref\RBXAssetExtractor.dll
 C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\MetroFramework.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\cmdwtf.Toolkit.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\cmdwtf.Toolkit.Win32.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\cmdwtf.Toolkit.WinForms.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\cmdwtf.Toolkit.Winforms.Dialogs.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\Ookii.Dialogs.WinForms.dll

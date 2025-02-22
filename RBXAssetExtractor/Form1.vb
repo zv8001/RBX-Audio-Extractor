@@ -48,7 +48,7 @@ Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.1.3"
+    Dim V = "v1.1.4"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Dim Stage As Integer = 0
     Dim tempDirectory = Path.GetTempPath
@@ -1140,6 +1140,7 @@ del %0
             lblTotalTime.Text = FormatTime(audioReader.TotalTime)
             KeepPlayback0.Stop()
             playbackTimer.Start()
+            ChangeVol.Start()
             Playing = True
             SoundPlayerPlayBtn.BackgroundImage = My.Resources.RedPlayButton
         Catch ex As Exception
@@ -1167,7 +1168,7 @@ del %0
             audioReader.Dispose()
             audioReader = Nothing
         End If
-
+        ChangeVol.Stop()
         playbackTimer.Stop()
         trackBarTimeline.Value = 0
         lblElapsedTime.Text = "00:00"
@@ -1220,5 +1221,12 @@ del %0
 
     Private Sub KeepPlayback0_Tick(sender As Object, e As EventArgs) Handles KeepPlayback0.Tick
         trackBarTimeline.Value = 0
+
+    End Sub
+
+    Private Sub ChangeVol_Tick(sender As Object, e As EventArgs) Handles ChangeVol.Tick
+        If outputDevice IsNot Nothing Then
+            outputDevice.Volume = CSng(VolumeControl1.Volume) / 100.0F
+        End If
     End Sub
 End Class

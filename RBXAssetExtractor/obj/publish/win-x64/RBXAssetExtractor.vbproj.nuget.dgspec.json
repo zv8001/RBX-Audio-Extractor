@@ -84,6 +84,18 @@
               "target": "Package",
               "version": "[3.0.1, )"
             },
+            "cmdwtf.Toolkit.Win32": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "cmdwtf.Toolkit.WinForms": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "cmdwtf.Toolkit.WinForms.Dialogs": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
             "z440.atl.core": {
               "target": "Package",
               "version": "[6.17.0, )"

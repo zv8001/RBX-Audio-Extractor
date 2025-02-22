@@ -11,6 +11,10 @@
       "RelativeMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAssetExtractor\\RBXAssetExtractor.vbproj|solutionrelative:rbxassetextractor\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAssetExtractor\\RBXAssetExtractor.vbproj|c:\\users\\denve\\onedrive\\documents\\github\\rbx-audio-extractor\\rbxassetextractor\\resources\\cti exit2.png||{177559E0-D141-11D0-92DF-00A0C9138C45}",
+      "RelativeMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAssetExtractor\\RBXAssetExtractor.vbproj|solutionrelative:rbxassetextractor\\resources\\cti exit2.png||{177559E0-D141-11D0-92DF-00A0C9138C45}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAssetExtractor\\RBXAssetExtractor.vbproj|c:\\users\\denve\\onedrive\\documents\\github\\rbx-audio-extractor\\rbxassetextractor\\form1.designer.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
       "RelativeMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAssetExtractor\\RBXAssetExtractor.vbproj|solutionrelative:rbxassetextractor\\form1.designer.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
     },
@@ -49,10 +53,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAssetExtractor\\RBXAssetExtractor.vbproj|c:\\users\\denve\\onedrive\\documents\\github\\rbx-audio-extractor\\rbxassetextractor\\resources\\robloxrippper.png||{177559E0-D141-11D0-92DF-00A0C9138C45}",
       "RelativeMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAssetExtractor\\RBXAssetExtractor.vbproj|solutionrelative:rbxassetextractor\\resources\\robloxrippper.png||{177559E0-D141-11D0-92DF-00A0C9138C45}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAssetExtractor\\RBXAssetExtractor.vbproj|c:\\users\\denve\\onedrive\\documents\\github\\rbx-audio-extractor\\rbxassetextractor\\resources\\cti exit2.png||{177559E0-D141-11D0-92DF-00A0C9138C45}",
-      "RelativeMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAssetExtractor\\RBXAssetExtractor.vbproj|solutionrelative:rbxassetextractor\\resources\\cti exit2.png||{177559E0-D141-11D0-92DF-00A0C9138C45}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{571AA3AF-BF38-4B17-84B0-F04D1522AE67}|RBXAssetExtractor\\RBXAssetExtractor.vbproj|c:\\users\\denve\\onedrive\\documents\\github\\rbx-audio-extractor\\rbxassetextractor\\resources\\25231.png||{177559E0-D141-11D0-92DF-00A0C9138C45}",
@@ -106,15 +106,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 10,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Resources.Designer.vb",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\My Project\\Resources.Designer.vb",
               "RelativeDocumentMoniker": "RBXAssetExtractor\\My Project\\Resources.Designer.vb",
@@ -127,7 +123,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "volume-icon-1946251.png - PNG [256x256, 32 bit, PNG]",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\Resources\\volume-icon-1946251.png",
               "RelativeDocumentMoniker": "RBXAssetExtractor\\Resources\\volume-icon-1946251.png",
@@ -139,7 +135,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "volume-icon-194625.png - PNG [256x256, 32 bit, PNG]",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\Resources\\volume-icon-194625.png",
               "RelativeDocumentMoniker": "RBXAssetExtractor\\Resources\\volume-icon-194625.png",
@@ -151,7 +147,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "Success.wav",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\Resources\\Success.wav",
               "RelativeDocumentMoniker": "RBXAssetExtractor\\Resources\\Success.wav",
@@ -162,7 +158,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "RobloxRippperV3.png - PNG [500x500, 32 bit, PNG]",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\Resources\\RobloxRippperV3.png",
               "RelativeDocumentMoniker": "RBXAssetExtractor\\Resources\\RobloxRippperV3.png",
@@ -174,7 +170,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "RobloxRippper.png - PNG [300x300, 32 bit, PNG]",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\Resources\\RobloxRippper.png",
               "RelativeDocumentMoniker": "RBXAssetExtractor\\Resources\\RobloxRippper.png",
@@ -186,7 +182,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 2,
               "Title": "CTI Exit2.png - PNG [774x752, 32 bit, PNG]",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\Resources\\CTI Exit2.png",
               "RelativeDocumentMoniker": "RBXAssetExtractor\\Resources\\CTI Exit2.png",
@@ -240,20 +236,20 @@
               "RelativeDocumentMoniker": "RBXAssetExtractor\\Form1.vb",
               "ToolTip": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\Form1.vb",
               "RelativeToolTip": "RBXAssetExtractor\\Form1.vb",
-              "ViewState": "AgIAABsAAAAAAAAAAAAAADIAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAADIAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
               "WhenOpened": "2025-02-20T03:24:12.174Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Form1.Designer.vb",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\Form1.Designer.vb",
               "RelativeDocumentMoniker": "RBXAssetExtractor\\Form1.Designer.vb",
               "ToolTip": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\Form1.Designer.vb",
               "RelativeToolTip": "RBXAssetExtractor\\Form1.Designer.vb",
-              "ViewState": "AgIAADsDAAAAAAAAAAAAAEwDAAALAAAAAAAAAA==",
+              "ViewState": "AgIAADQDAAAAAAAAACBjwF0DAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
               "WhenOpened": "2025-02-20T20:19:14.848Z",
               "EditorCaption": ""
@@ -273,7 +269,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "RBXAssetExtractor",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
               "RelativeDocumentMoniker": "RBXAssetExtractor\\RBXAssetExtractor.vbproj",
@@ -285,7 +281,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Form1.resx",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX Asset Extractor\\Form1.resx",
               "RelativeDocumentMoniker": "RBX Asset Extractor\\Form1.resx",
@@ -351,7 +347,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Form1.resx",
               "DocumentMoniker": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAudioExtractor\\Form1.resx",
               "RelativeDocumentMoniker": "RBXAudioExtractor\\Form1.resx",
