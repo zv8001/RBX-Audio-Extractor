@@ -1,0 +1,1 @@
+If the auto downloader did not work put these two files in the same directory as the executable.
