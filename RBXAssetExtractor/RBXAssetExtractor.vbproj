@@ -56,6 +56,7 @@
     <PackageReference Include="ModernUI" Version="2.0.0" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
     <PackageReference Include="TradeWright.TabControlExtra" Version="2.0.1" />
     <PackageReference Include="VedooControls" Version="3.0.1" />

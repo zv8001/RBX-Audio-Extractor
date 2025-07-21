@@ -1,1 +1,15 @@
-{"ShowEmptyProjects":false,"CustomColumnOrderings":{"name":0,"type":1,"file-path":1,"file-name":2,"neutral-value":3,"neutral-comment":4},"ShowValidationErrors":true,"SelectedResourceGroupsByProject":{"C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj":["C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\Form1.resx"]},"VisibleColumnKeys":["name","neutral-value","neutral-comment"]}
+{
+  "ShowEmptyProjects": false,
+  "SelectedGroups": [],
+  "ExpandedProjects": [],
+  "EnableSpellChecker": true,
+  "ColumnOrder": [
+    "name",
+    "type"
+  ],
+  "VisibleColumnKeys": [
+    "name",
+    "neutral-comment",
+    "neutral-value"
+  ]
+}

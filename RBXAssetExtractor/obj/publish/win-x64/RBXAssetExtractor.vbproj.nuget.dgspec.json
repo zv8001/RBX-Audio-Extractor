@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj": {}
+    "C:\\Users\\denve\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj": {}
   },
   "projects": {
-    "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj": {
+    "C:\\Users\\denve\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
+        "projectUniqueName": "C:\\Users\\denve\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
         "projectName": "RBXAssetExtractor",
-        "projectPath": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
+        "projectPath": "C:\\Users\\denve\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
         "packagesPath": "C:\\Users\\denve\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\obj\\publish\\win-x64\\",
+        "outputPath": "C:\\Users\\denve\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\obj\\publish\\win-x64\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -44,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0-windows7.0": {
@@ -53,7 +53,7 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.11, )",
+              "version": "[8.0.18, )",
               "autoReferenced": true
             },
             "ModernUI": {
@@ -71,6 +71,10 @@
             "NAudio.Vorbis": {
               "target": "Package",
               "version": "[1.5.0, )"
+            },
+            "System.Data.SQLite": {
+              "target": "Package",
+              "version": "[1.0.119, )"
             },
             "TagLibSharp": {
               "target": "Package",
@@ -120,7 +124,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

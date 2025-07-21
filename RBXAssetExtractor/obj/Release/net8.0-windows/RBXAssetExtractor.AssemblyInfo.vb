@@ -16,7 +16,7 @@ Imports System.Reflection
 <Assembly: System.Reflection.AssemblyCompanyAttribute("RBXAssetExtractor"),  _
  Assembly: System.Reflection.AssemblyConfigurationAttribute("Release"),  _
  Assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0"),  _
- Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+518366a6622b174c10b2184c086f278c3e760fb0"),  _
+ Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+152e0ff29aa3bdfc17de204b372fe85c0b40d0c8"),  _
  Assembly: System.Reflection.AssemblyProductAttribute("RBXAssetExtractor"),  _
  Assembly: System.Reflection.AssemblyTitleAttribute("RBXAssetExtractor"),  _
  Assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0"),  _

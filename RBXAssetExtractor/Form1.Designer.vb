@@ -281,7 +281,7 @@ Partial Class MainForm
         LinkLabel2.LinkColor = Color.White
         LinkLabel2.Location = New Point(5, 327)
         LinkLabel2.Name = "LinkLabel2"
-        LinkLabel2.Size = New Size(264, 15)
+        LinkLabel2.Size = New Size(263, 15)
         LinkLabel2.TabIndex = 8
         LinkLabel2.TabStop = True
         LinkLabel2.Text = "https://github.com/zv8001/RBX-Audio-Extractor"
@@ -479,7 +479,7 @@ Partial Class MainForm
         ImgStats.ForeColor = Color.White
         ImgStats.Location = New Point(194, 184)
         ImgStats.Name = "ImgStats"
-        ImgStats.Size = New Size(102, 15)
+        ImgStats.Size = New Size(100, 15)
         ImgStats.TabIndex = 11
         ImgStats.Text = "Image size: 0x0 px"
         ' 
@@ -718,7 +718,7 @@ Partial Class MainForm
         AlwaysOnTopCHK.ForeColor = Color.White
         AlwaysOnTopCHK.Location = New Point(12, 432)
         AlwaysOnTopCHK.Name = "AlwaysOnTopCHK"
-        AlwaysOnTopCHK.Size = New Size(104, 19)
+        AlwaysOnTopCHK.Size = New Size(105, 19)
         AlwaysOnTopCHK.TabIndex = 12
         AlwaysOnTopCHK.Text = "Always On Top"
         AlwaysOnTopCHK.UseVisualStyleBackColor = True
