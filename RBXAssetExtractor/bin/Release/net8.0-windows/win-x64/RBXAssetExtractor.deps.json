@@ -22,6 +22,7 @@
           "cmdwtf.Toolkit.WinForms": "1.0.0",
           "cmdwtf.Toolkit.WinForms.Dialogs": "1.0.0",
           "z440.atl.core": "6.17.0",
+          "DracoMeshDecoder": "1.0.0.0",
           "Interop.WMPLib": "1.0.0.0",
           "AxInterop.WMPLib": "1.0.0.0"
         },
@@ -373,6 +374,14 @@
           "lib/net6.0/ATL.dll": {
             "assemblyVersion": "6.17.0.0",
             "fileVersion": "6.17.0.0"
+          }
+        }
+      },
+      "DracoMeshDecoder/1.0.0.0": {
+        "runtime": {
+          "DracoMeshDecoder.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -735,6 +744,11 @@
       "sha512": "sha512-fzLcDsvIa4c7tzQmW+3hvVypJG5E2ANtrI0K2Yw+k7UdjgqJgpZkRcy3nw7D//+o/eLqf/JKsO3mlhRYTx+I3Q==",
       "path": "z440.atl.core/6.17.0",
       "hashPath": "z440.atl.core.6.17.0.nupkg.sha512"
+    },
+    "DracoMeshDecoder/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
     },
     "Interop.WMPLib/1.0.0.0": {
       "type": "reference",

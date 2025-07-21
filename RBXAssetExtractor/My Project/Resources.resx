@@ -133,6 +133,15 @@
   <data name="volume-icon-1946251" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\volume-icon-1946251.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="GreenPlayButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GreenPlayButton.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RedPlayButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RedPlayButton.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pfp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pfp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="RobloxRippperV3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RobloxRippperV3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -142,10 +151,10 @@
   <data name="Rolling@1x-1.0s-200px-200px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Rolling@1x-1.0s-200px-200px.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="RedPlayButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\RedPlayButton.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PROTO-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PROTO-01.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="GreenPlayButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GreenPlayButton.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Untitled-2-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Untitled-2-01.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

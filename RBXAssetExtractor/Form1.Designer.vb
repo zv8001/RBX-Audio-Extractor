@@ -34,6 +34,8 @@ Partial Class MainForm
         FolderBrowserDialog1 = New FolderBrowserDialog()
         TabControl1 = New TabControl()
         TabPage3 = New TabPage()
+        Label9 = New Label()
+        PictureBox2 = New PictureBox()
         Label7 = New Label()
         Label4 = New Label()
         Label5 = New Label()
@@ -94,6 +96,7 @@ Partial Class MainForm
         ChangeVol = New Timer(components)
         TabControl1.SuspendLayout()
         TabPage3.SuspendLayout()
+        CType(PictureBox2, ComponentModel.ISupportInitialize).BeginInit()
         TabPage2.SuspendLayout()
         TabPage4.SuspendLayout()
         TabPage5.SuspendLayout()
@@ -129,7 +132,7 @@ Partial Class MainForm
         LoadParButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         LoadParButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         LoadParButton.FlatStyle = FlatStyle.Flat
-        LoadParButton.Font = New Font("Segoe UI", 12F)
+        LoadParButton.Font = New Font("Segoe UI", 12.0F)
         LoadParButton.ForeColor = Color.White
         LoadParButton.Location = New Point(6, 311)
         LoadParButton.Name = "LoadParButton"
@@ -146,7 +149,7 @@ Partial Class MainForm
         Download_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         Download_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         Download_BTN.FlatStyle = FlatStyle.Flat
-        Download_BTN.Font = New Font("Segoe UI", 12F)
+        Download_BTN.Font = New Font("Segoe UI", 12.0F)
         Download_BTN.ForeColor = Color.White
         Download_BTN.Location = New Point(87, 311)
         Download_BTN.Name = "Download_BTN"
@@ -162,7 +165,7 @@ Partial Class MainForm
         ClearTMP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         ClearTMP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         ClearTMP_BTN.FlatStyle = FlatStyle.Flat
-        ClearTMP_BTN.Font = New Font("Segoe UI", 12F)
+        ClearTMP_BTN.Font = New Font("Segoe UI", 12.0F)
         ClearTMP_BTN.ForeColor = Color.White
         ClearTMP_BTN.Location = New Point(318, 311)
         ClearTMP_BTN.Name = "ClearTMP_BTN"
@@ -179,7 +182,7 @@ Partial Class MainForm
         DownloadALL_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DownloadALL_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DownloadALL_BTN.FlatStyle = FlatStyle.Flat
-        DownloadALL_BTN.Font = New Font("Segoe UI", 12F)
+        DownloadALL_BTN.Font = New Font("Segoe UI", 12.0F)
         DownloadALL_BTN.ForeColor = Color.White
         DownloadALL_BTN.Location = New Point(198, 311)
         DownloadALL_BTN.Name = "DownloadALL_BTN"
@@ -199,12 +202,14 @@ Partial Class MainForm
         TabControl1.Name = "TabControl1"
         TabControl1.SelectedIndex = 0
         TabControl1.ShowToolTips = True
-        TabControl1.Size = New Size(439, 380)
+        TabControl1.Size = New Size(439, 381)
         TabControl1.TabIndex = 9
         ' 
         ' TabPage3
         ' 
         TabPage3.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        TabPage3.Controls.Add(Label9)
+        TabPage3.Controls.Add(PictureBox2)
         TabPage3.Controls.Add(Label7)
         TabPage3.Controls.Add(Label4)
         TabPage3.Controls.Add(Label5)
@@ -215,15 +220,36 @@ Partial Class MainForm
         TabPage3.Controls.Add(Label2)
         TabPage3.Location = New Point(4, 24)
         TabPage3.Name = "TabPage3"
-        TabPage3.Size = New Size(431, 352)
+        TabPage3.Size = New Size(431, 353)
         TabPage3.TabIndex = 2
         TabPage3.Text = "About"
+        ' 
+        ' Label9
+        ' 
+        Label9.AutoSize = True
+        Label9.Font = New Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label9.ForeColor = Color.Gray
+        Label9.Location = New Point(82, 60)
+        Label9.Name = "Label9"
+        Label9.Size = New Size(157, 13)
+        Label9.TabIndex = 12
+        Label9.Text = "pfp credit: @MIGHTBEMOD | "
+        ' 
+        ' PictureBox2
+        ' 
+        PictureBox2.BackgroundImage = My.Resources.Resources.Untitled_2_01
+        PictureBox2.BackgroundImageLayout = ImageLayout.Stretch
+        PictureBox2.Location = New Point(6, 3)
+        PictureBox2.Name = "PictureBox2"
+        PictureBox2.Size = New Size(70, 70)
+        PictureBox2.TabIndex = 11
+        PictureBox2.TabStop = False
         ' 
         ' Label7
         ' 
         Label7.Font = New Font("MS UI Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label7.ForeColor = Color.White
-        Label7.Location = New Point(25, 224)
+        Label7.Location = New Point(25, 234)
         Label7.Name = "Label7"
         Label7.Size = New Size(386, 23)
         Label7.TabIndex = 10
@@ -232,11 +258,11 @@ Partial Class MainForm
         ' 
         ' Label4
         ' 
-        Label4.Font = New Font("MS UI Gothic", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label4.Font = New Font("MS UI Gothic", 12.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label4.ForeColor = Color.White
-        Label4.Location = New Point(25, 247)
+        Label4.Location = New Point(25, 257)
         Label4.Name = "Label4"
-        Label4.Size = New Size(386, 37)
+        Label4.Size = New Size(386, 43)
         Label4.TabIndex = 9
         Label4.Text = "THIS PROGRAM IS FOR EDUCATIONAL PURPOSES"
         Label4.TextAlign = ContentAlignment.MiddleCenter
@@ -245,7 +271,7 @@ Partial Class MainForm
         ' 
         Label5.Font = New Font("MS UI Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label5.ForeColor = Color.White
-        Label5.Location = New Point(25, 154)
+        Label5.Location = New Point(25, 176)
         Label5.Name = "Label5"
         Label5.Size = New Size(386, 58)
         Label5.TabIndex = 4
@@ -257,18 +283,18 @@ Partial Class MainForm
         Label1.AutoSize = True
         Label1.Font = New Font("MS UI Gothic", 26.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label1.ForeColor = Color.White
-        Label1.Location = New Point(55, 15)
+        Label1.Location = New Point(82, 3)
         Label1.Name = "Label1"
-        Label1.Size = New Size(323, 35)
+        Label1.Size = New Size(342, 35)
         Label1.TabIndex = 0
-        Label1.Text = "RBX Asset Extractor"
+        Label1.Text = "| RBX Asset Extractor"
         Label1.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' Label3
         ' 
         Label3.Font = New Font("MS UI Gothic", 15.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label3.ForeColor = Color.White
-        Label3.Location = New Point(25, 63)
+        Label3.Location = New Point(23, 85)
         Label3.Name = "Label3"
         Label3.Size = New Size(386, 91)
         Label3.TabIndex = 2
@@ -301,13 +327,13 @@ Partial Class MainForm
         ' 
         Label2.Anchor = AnchorStyles.Top
         Label2.AutoSize = True
-        Label2.Font = New Font("MS UI Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label2.Font = New Font("MS UI Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label2.ForeColor = Color.White
-        Label2.Location = New Point(241, 50)
+        Label2.Location = New Point(99, 38)
         Label2.Name = "Label2"
-        Label2.Size = New Size(153, 13)
+        Label2.Size = New Size(245, 15)
         Label2.TabIndex = 1
-        Label2.Text = "Made by zv800 and Fusion"
+        Label2.Text = "Made by VexTheProtogen and Fusion"
         Label2.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' TabPage2
@@ -323,7 +349,7 @@ Partial Class MainForm
         TabPage2.Location = New Point(4, 24)
         TabPage2.Name = "TabPage2"
         TabPage2.Padding = New Padding(3)
-        TabPage2.Size = New Size(431, 352)
+        TabPage2.Size = New Size(431, 353)
         TabPage2.TabIndex = 1
         TabPage2.Text = "Partial Game Audio"
         ' 
@@ -358,7 +384,7 @@ Partial Class MainForm
         TabPage4.Controls.Add(HTTPLISTBOX)
         TabPage4.Location = New Point(4, 24)
         TabPage4.Name = "TabPage4"
-        TabPage4.Size = New Size(431, 352)
+        TabPage4.Size = New Size(431, 353)
         TabPage4.TabIndex = 3
         TabPage4.Text = "Full Game Audio"
         ' 
@@ -369,7 +395,7 @@ Partial Class MainForm
         LoadHttpBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         LoadHttpBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         LoadHttpBtn.FlatStyle = FlatStyle.Flat
-        LoadHttpBtn.Font = New Font("Segoe UI", 12F)
+        LoadHttpBtn.Font = New Font("Segoe UI", 12.0F)
         LoadHttpBtn.ForeColor = Color.White
         LoadHttpBtn.Location = New Point(6, 311)
         LoadHttpBtn.Name = "LoadHttpBtn"
@@ -385,7 +411,7 @@ Partial Class MainForm
         ClearHTTPTEMP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         ClearHTTPTEMP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         ClearHTTPTEMP_BTN.FlatStyle = FlatStyle.Flat
-        ClearHTTPTEMP_BTN.Font = New Font("Segoe UI", 12F)
+        ClearHTTPTEMP_BTN.Font = New Font("Segoe UI", 12.0F)
         ClearHTTPTEMP_BTN.ForeColor = Color.White
         ClearHTTPTEMP_BTN.Location = New Point(318, 311)
         ClearHTTPTEMP_BTN.MaximumSize = New Size(107, 35)
@@ -403,7 +429,7 @@ Partial Class MainForm
         DownloadAllHTTP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DownloadAllHTTP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DownloadAllHTTP_BTN.FlatStyle = FlatStyle.Flat
-        DownloadAllHTTP_BTN.Font = New Font("Segoe UI", 12F)
+        DownloadAllHTTP_BTN.Font = New Font("Segoe UI", 12.0F)
         DownloadAllHTTP_BTN.ForeColor = Color.White
         DownloadAllHTTP_BTN.Location = New Point(198, 311)
         DownloadAllHTTP_BTN.Name = "DownloadAllHTTP_BTN"
@@ -419,7 +445,7 @@ Partial Class MainForm
         DOWNLOADHTTP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DOWNLOADHTTP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DOWNLOADHTTP_BTN.FlatStyle = FlatStyle.Flat
-        DOWNLOADHTTP_BTN.Font = New Font("Segoe UI", 12F)
+        DOWNLOADHTTP_BTN.Font = New Font("Segoe UI", 12.0F)
         DOWNLOADHTTP_BTN.ForeColor = Color.White
         DOWNLOADHTTP_BTN.Location = New Point(87, 311)
         DOWNLOADHTTP_BTN.Name = "DOWNLOADHTTP_BTN"
@@ -453,7 +479,7 @@ Partial Class MainForm
         TabPage5.Controls.Add(PreVeiwImgBox)
         TabPage5.Location = New Point(4, 24)
         TabPage5.Name = "TabPage5"
-        TabPage5.Size = New Size(431, 352)
+        TabPage5.Size = New Size(431, 353)
         TabPage5.TabIndex = 4
         TabPage5.Text = "Full Game Images"
         ' 
@@ -464,7 +490,7 @@ Partial Class MainForm
         ImgClearTmp.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         ImgClearTmp.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         ImgClearTmp.FlatStyle = FlatStyle.Flat
-        ImgClearTmp.Font = New Font("Segoe UI", 12F)
+        ImgClearTmp.Font = New Font("Segoe UI", 12.0F)
         ImgClearTmp.ForeColor = Color.White
         ImgClearTmp.Location = New Point(194, 219)
         ImgClearTmp.Name = "ImgClearTmp"
@@ -490,7 +516,7 @@ Partial Class MainForm
         SaveAllBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         SaveAllBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         SaveAllBtn.FlatStyle = FlatStyle.Flat
-        SaveAllBtn.Font = New Font("Segoe UI", 12F)
+        SaveAllBtn.Font = New Font("Segoe UI", 12.0F)
         SaveAllBtn.ForeColor = Color.White
         SaveAllBtn.Location = New Point(194, 302)
         SaveAllBtn.Name = "SaveAllBtn"
@@ -506,7 +532,7 @@ Partial Class MainForm
         DownloadImgBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DownloadImgBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DownloadImgBtn.FlatStyle = FlatStyle.Flat
-        DownloadImgBtn.Font = New Font("Segoe UI", 12F)
+        DownloadImgBtn.Font = New Font("Segoe UI", 12.0F)
         DownloadImgBtn.ForeColor = Color.White
         DownloadImgBtn.Location = New Point(275, 261)
         DownloadImgBtn.Name = "DownloadImgBtn"
@@ -522,7 +548,7 @@ Partial Class MainForm
         LoadImgBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         LoadImgBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         LoadImgBtn.FlatStyle = FlatStyle.Flat
-        LoadImgBtn.Font = New Font("Segoe UI", 12F)
+        LoadImgBtn.Font = New Font("Segoe UI", 12.0F)
         LoadImgBtn.ForeColor = Color.White
         LoadImgBtn.Location = New Point(194, 261)
         LoadImgBtn.Name = "LoadImgBtn"
@@ -563,7 +589,7 @@ Partial Class MainForm
         TabPage1.Location = New Point(4, 24)
         TabPage1.Name = "TabPage1"
         TabPage1.Padding = New Padding(3)
-        TabPage1.Size = New Size(431, 352)
+        TabPage1.Size = New Size(431, 353)
         TabPage1.TabIndex = 0
         TabPage1.Text = "Log"
         ' 
@@ -573,7 +599,7 @@ Partial Class MainForm
         SaveLogBtn.FlatAppearance.BorderColor = Color.Silver
         SaveLogBtn.FlatAppearance.BorderSize = 2
         SaveLogBtn.FlatStyle = FlatStyle.Popup
-        SaveLogBtn.Font = New Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        SaveLogBtn.Font = New Font("Segoe UI", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         SaveLogBtn.ForeColor = Color.White
         SaveLogBtn.Location = New Point(350, 322)
         SaveLogBtn.Name = "SaveLogBtn"
@@ -599,7 +625,7 @@ Partial Class MainForm
         ' VText_LBR
         ' 
         VText_LBR.BackColor = Color.Transparent
-        VText_LBR.Font = New Font("MS UI Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        VText_LBR.Font = New Font("MS UI Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         VText_LBR.ForeColor = Color.White
         VText_LBR.Location = New Point(44, 20)
         VText_LBR.Name = "VText_LBR"
@@ -620,7 +646,7 @@ Partial Class MainForm
         ' 
         StatusLBR.AutoSize = True
         StatusLBR.BackColor = Color.Transparent
-        StatusLBR.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        StatusLBR.Font = New Font("Segoe UI", 12.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         StatusLBR.ForeColor = Color.White
         StatusLBR.Location = New Point(12, 520)
         StatusLBR.Name = "StatusLBR"
@@ -670,9 +696,9 @@ Partial Class MainForm
         Label6.ForeColor = Color.White
         Label6.Location = New Point(42, 3)
         Label6.Name = "Label6"
-        Label6.Size = New Size(234, 17)
+        Label6.Size = New Size(270, 17)
         Label6.TabIndex = 2
-        Label6.Text = "RBX Asset Extractor (made by zv800)"
+        Label6.Text = "RBX Asset Extractor (made by zv800 / Vex)"
         Label6.TextAlign = ContentAlignment.TopCenter
         ' 
         ' Button2
@@ -681,7 +707,7 @@ Partial Class MainForm
         Button2.FlatAppearance.BorderSize = 0
         Button2.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         Button2.FlatStyle = FlatStyle.Flat
-        Button2.Font = New Font("Franklin Gothic Medium", 18F, FontStyle.Bold)
+        Button2.Font = New Font("Franklin Gothic Medium", 18.0F, FontStyle.Bold)
         Button2.ForeColor = Color.White
         Button2.Location = New Point(391, 0)
         Button2.Name = "Button2"
@@ -696,7 +722,7 @@ Partial Class MainForm
         CloseBTN.FlatAppearance.BorderSize = 0
         CloseBTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(208), CByte(1), CByte(27))
         CloseBTN.FlatStyle = FlatStyle.Flat
-        CloseBTN.Font = New Font("Franklin Gothic Medium", 18F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        CloseBTN.Font = New Font("Franklin Gothic Medium", 18.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         CloseBTN.ForeColor = Color.White
         CloseBTN.Location = New Point(429, 0)
         CloseBTN.Name = "CloseBTN"
@@ -760,7 +786,7 @@ Partial Class MainForm
         ' 
         TaskLBR.AutoSize = True
         TaskLBR.BackColor = Color.Transparent
-        TaskLBR.Font = New Font("MS UI Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TaskLBR.Font = New Font("MS UI Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         TaskLBR.ForeColor = Color.White
         TaskLBR.Location = New Point(362, 435)
         TaskLBR.Name = "TaskLBR"
@@ -859,7 +885,7 @@ Partial Class MainForm
         ' 
         ' MainForm
         ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         BackgroundImageLayout = ImageLayout.Stretch
@@ -881,6 +907,7 @@ Partial Class MainForm
         TabControl1.ResumeLayout(False)
         TabPage3.ResumeLayout(False)
         TabPage3.PerformLayout()
+        CType(PictureBox2, ComponentModel.ISupportInitialize).EndInit()
         TabPage2.ResumeLayout(False)
         TabPage4.ResumeLayout(False)
         TabPage5.ResumeLayout(False)
@@ -966,5 +993,7 @@ Partial Class MainForm
     Friend WithEvents KeepPlayback0 As Timer
     Friend WithEvents VolumeControl1 As cmdwtf.Toolkit.WinForms.Controls.VolumeControl
     Friend WithEvents ChangeVol As Timer
+    Friend WithEvents PictureBox2 As PictureBox
+    Friend WithEvents Label9 As Label
 
 End Class

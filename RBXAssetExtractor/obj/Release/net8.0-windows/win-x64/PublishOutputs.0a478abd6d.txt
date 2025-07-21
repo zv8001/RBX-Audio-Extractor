@@ -2,4 +2,5 @@ C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Releas
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\publish\win-x64\RBXAssetExtractor.dll.config
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\publish\win-x64\sni.dll
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\publish\win-x64\SQLite.Interop.dll
+C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\publish\win-x64\DracoMeshDecoder.pdb
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\publish\win-x64\RBXAssetExtractor.exe

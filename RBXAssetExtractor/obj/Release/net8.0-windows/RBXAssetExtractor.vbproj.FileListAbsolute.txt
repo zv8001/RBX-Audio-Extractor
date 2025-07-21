@@ -146,3 +146,5 @@ C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Releas
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\RBXAssetExtractor.genruntimeconfig.cache
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\ref\RBXAssetExtractor.dll
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\RBXAssetExtractor.FailedError.resources
+C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\DracoMeshDecoder.dll
+C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\DracoMeshDecoder.pdb

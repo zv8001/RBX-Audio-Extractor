@@ -49,7 +49,7 @@ Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.2.1"
+    Dim V = "v1.2.2"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Dim Stage As Integer = 0
     Dim tempDirectory = Path.GetTempPath
@@ -74,12 +74,12 @@ Public Class MainForm
 
         Try
             If Not My.Computer.FileSystem.FileExists($"{Application.StartupPath}\sni.dll") Then
-                My.Computer.Network.DownloadFile("https://animated-platypus-6ba0a9.netlify.app/sni.dll", $"{Application.StartupPath}\sni.dll")
+                My.Computer.Network.DownloadFile("https://rbxaudioextractor-update-server.netlify.app/SQL%20dependencies/sni.dll", $"{Application.StartupPath}\sni.dll")
 
             End If
 
             If Not My.Computer.FileSystem.FileExists($"{Application.StartupPath}\SQLite.Interop.dll") Then
-                My.Computer.Network.DownloadFile("https://animated-platypus-6ba0a9.netlify.app/SQLite.Interop.dll", $"{Application.StartupPath}\SQLite.Interop.dll")
+                My.Computer.Network.DownloadFile("https://rbxaudioextractor-update-server.netlify.app/SQL%20dependencies/SQLite.Interop.dll", $"{Application.StartupPath}\SQLite.Interop.dll")
             End If
         Catch ex As Exception
             FailedError.ShowDialog()
@@ -133,7 +133,41 @@ del %0
 
     End Sub
 
-    Public Function CheckForUpdates()
+    Private Function CompareVersions(v1 As String, v2 As String) As Integer
+        Dim cleanV1 = CleanVersionString(v1)
+        Dim cleanV2 = CleanVersionString(v2)
+
+        Dim parts1 = cleanV1.Split("."c)
+        Dim parts2 = cleanV2.Split("."c)
+
+        Dim length = Math.Max(parts1.Length, parts2.Length)
+
+        For i = 0 To length - 1
+            Dim num1 = If(i < parts1.Length, Integer.Parse(parts1(i)), 0)
+            Dim num2 = If(i < parts2.Length, Integer.Parse(parts2(i)), 0)
+
+            If num1 < num2 Then Return -1
+            If num1 > num2 Then Return 1
+        Next
+
+        Return 0
+    End Function
+
+    Private Function CleanVersionString(version As String) As String
+        Dim v = version.ToLower()
+        If v.StartsWith("v") Then
+            v = v.Substring(1)
+        End If
+
+        Dim dashIndex = v.IndexOf("-"c)
+        If dashIndex >= 0 Then
+            v = v.Substring(0, dashIndex)
+        End If
+
+        Return v
+    End Function
+
+    Public Function CheckForUpdates() As Boolean
         Dim content As String
         Dim url As String = "https://animated-platypus-6ba0a9.netlify.app/v.txt"
 
@@ -145,31 +179,30 @@ del %0
             End Using
 
 
-            If Not String.Equals(content, V, StringComparison.OrdinalIgnoreCase) Then
+            Dim compareResult As Integer = CompareVersions(V, content)
+
+            If compareResult < 0 Then
                 Outdated = True
-                Dim text As String = $"The program is out of date. You have version: {V} and the latest available version is: {content}. would you like to automatically download the update?"
+                Dim text As String = $"The program is out of date. You have version: {V} and the latest available version is: {content}. Would you like to automatically download the update?"
                 output_log.Items.Add(text)
-                ' MsgBox(text, MsgBoxStyle.OkOnly Or MsgBoxStyle.Exclamation, "Update detected!")
 
                 Dim Update As DialogResult = MessageBox.Show(text, "BRUJ", MessageBoxButtons.YesNo)
 
                 If Update = DialogResult.Yes Then
                     DownloadUpdate()
                 End If
-
-
+            ElseIf compareResult > 0 Then
+                output_log.Items.Add($"You are running a newer version ({V}) than the latest release ({content}). This may be a dev build.")
+                MsgBox($"You are running a newer version ({V}) than the latest release ({content}). This may be a dev build. If you are seeing this by mistake, please report it to the developers, as this build may be unstable.", 48 + 0, "Warning")
             Else
                 output_log.Items.Add($"You are using the latest version: {V}")
             End If
+
             Return True
         Catch ex As Exception
-            Return False
             output_log.Items.Add($"Error checking for updates: {ex.Message}")
+            Return False
         End Try
-
-        If Not Outdated Then
-            output_log.Items.Add($"The program is up to date, currently running version: {V}")
-        End If
     End Function
 
 
@@ -565,100 +598,6 @@ del %0
 
 
 
-    Private Sub ProcessFile(file As String, targetDir As String)
-        UpdateLog($"Begin processing on : {file}")
-
-        Try
-            Dim fileBytes = System.IO.File.ReadAllBytes(file)
-            Dim oggHeader As Byte() = Encoding.ASCII.GetBytes("OggS")
-            Dim pngHeader As Byte() = {&H89, &H50, &H4E, &H47, &HD, &HA, &H1A, &HA}
-            Dim objHeader As Byte() = Encoding.ASCII.GetBytes("v ")
-
-            Dim oggIndex As Integer = -1
-            Dim pngIndex As Integer = -1
-            Dim objIndex As Integer = -1
-
-            UpdateLog($"First 16 bytes of {file}: " & BitConverter.ToString(fileBytes.Take(16).ToArray()))
-
-            For i As Integer = 0 To fileBytes.Length - 1
-                If oggIndex = -1 AndAlso i <= fileBytes.Length - oggHeader.Length Then
-                    If fileBytes.AsSpan(i, oggHeader.Length).SequenceEqual(oggHeader) Then
-                        oggIndex = i
-                        UpdateLog($"Found OGG header at index {oggIndex}")
-                    End If
-                End If
-
-                If pngIndex = -1 AndAlso i <= fileBytes.Length - pngHeader.Length Then
-                    If fileBytes.AsSpan(i, pngHeader.Length).SequenceEqual(pngHeader) Then
-                        pngIndex = i
-                        UpdateLog($"Found PNG header at index {pngIndex}")
-                    End If
-                End If
-
-                If objIndex = -1 AndAlso i <= fileBytes.Length - objHeader.Length Then
-                    If fileBytes.AsSpan(i, objHeader.Length).SequenceEqual(objHeader) Then
-                        objIndex = i
-                        UpdateLog($"Found OBJ header at index {objIndex}")
-                    End If
-                End If
-
-                If oggIndex >= 0 AndAlso pngIndex >= 0 AndAlso objIndex >= 0 Then Exit For
-            Next
-
-            If oggIndex >= 0 Then
-                UpdateLog($"Processing OGG file at index {oggIndex}")
-                Dim fileName = Path.GetFileName(file)
-                Dim targetPath = Path.Combine(targetDir, fileName)
-                System.IO.File.Copy(file, targetPath, True)
-
-                Dim modifiedBytes = fileBytes.Skip(oggIndex).ToArray()
-                System.IO.File.WriteAllBytes(targetPath, modifiedBytes)
-                UpdateLog($"Done processing OGG file: {file}")
-            Else
-                UpdateLog($"Skipping: {file} is not a valid OGG file.")
-            End If
-
-            If pngIndex >= 0 Then
-                Dim imageDir = Path.Combine(tempDirectory, "RBXAudioExtractorIMG")
-                Directory.CreateDirectory(imageDir)
-
-                UpdateLog($"Processing PNG file at index {pngIndex}")
-                Dim fileName = Path.GetFileName(file)
-                Dim targetPath = Path.Combine(imageDir, fileName)
-                System.IO.File.Copy(file, targetPath, True)
-
-                Dim modifiedBytes = fileBytes.Skip(pngIndex).ToArray()
-                System.IO.File.WriteAllBytes(targetPath, modifiedBytes)
-                UpdateLog($"Done processing PNG file: {file}")
-            Else
-                UpdateLog($"Skipping: {file} is not a valid PNG file.")
-            End If
-
-            If objIndex >= 0 Then
-                Dim objDir = Path.Combine(tempDirectory, "RBXAudioExtractorOBJ")
-                Directory.CreateDirectory(objDir)
-
-                UpdateLog($"Processing OBJ file at index {objIndex}")
-                Dim fileName = Path.GetFileName(file)
-                Dim targetPath = Path.Combine(objDir, fileName)
-                System.IO.File.Copy(file, targetPath, True)
-
-                Dim modifiedBytes = fileBytes.Skip(objIndex).ToArray()
-                System.IO.File.WriteAllBytes(targetPath, modifiedBytes)
-                UpdateLog($"Done processing OBJ file: {file}")
-            Else
-                UpdateLog($"Skipping: {file} is not a valid OBJ file.")
-            End If
-
-        Catch ex As Exception
-            UpdateLog($"Error processing file: {file} - {ex.Message}")
-        End Try
-    End Sub
-
-    Private Sub LoadHTTP0_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles LoadHTTP0.RunWorkerCompleted
-
-    End Sub
-
 
 
     Sub EnableButtons(Enabled)
@@ -1012,12 +951,25 @@ del %0
         End If
     End Sub
 
-    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+    Public Sub OpenWebAdder(Adder)
         Try
-            Process.Start("C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", "http://zv800.com/")
-        Catch ex As Exception
-            CallError(ex.Message)
+            Process.Start(New ProcessStartInfo(Adder) With {.UseShellExecute = True})
+        Catch ex1 As Exception
+            Try
+                Dim edgePath As String = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+                If Not System.IO.File.Exists(edgePath) Then
+                    edgePath = "C:\Program Files\Microsoft\Edge\Application\msedge.exe"
+                End If
+
+                Process.Start(edgePath, "http://zv800.com/")
+            Catch ex2 As Exception
+                CallError("Failed to open browser: " & ex2.Message)
+            End Try
         End Try
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        OpenWebAdder("http://zv800.com/")
     End Sub
 
 
@@ -1171,11 +1123,8 @@ del %0
     End Sub
 
     Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
-        Try
-            Process.Start("C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", "https://github.com/zv8001/RBX-Audio-Extractor")
-        Catch ex As Exception
-            CallError(ex.Message)
-        End Try
+        OpenWebAdder("https://github.com/zv8001/RBX-Audio-Extractor")
+
     End Sub
 
     Private Sub SaveLogBtn_Click(sender As Object, e As EventArgs) Handles SaveLogBtn.Click
@@ -1553,9 +1502,5 @@ del %0
         If outputDevice IsNot Nothing Then
             outputDevice.Volume = CSng(VolumeControl1.Volume) / 100.0F
         End If
-    End Sub
-
-    Private Sub Label5_Click(sender As Object, e As EventArgs) Handles Label5.Click
-
     End Sub
 End Class

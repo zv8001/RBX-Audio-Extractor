@@ -105,4 +105,10 @@
     <Folder Include="NewFolder\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="DracoMeshDecoder">
+      <HintPath>..\..\..\..\source\repos\DracoMeshDecoder\DracoMeshDecoder\bin\Debug\net8.0\DracoMeshDecoder.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
