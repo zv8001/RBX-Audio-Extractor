@@ -138,3 +138,4 @@ C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Releas
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\win-x64\RBXAssetExtractor.pdb
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\win-x64\RBXAssetExtractor.genruntimeconfig.cache
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\win-x64\ref\RBXAssetExtractor.dll
+C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\win-x64\RBXAssetExtractor.FailedError.resources

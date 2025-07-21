@@ -49,7 +49,7 @@ Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.2.0"
+    Dim V = "v1.2.1"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Dim Stage As Integer = 0
     Dim tempDirectory = Path.GetTempPath
@@ -82,7 +82,8 @@ Public Class MainForm
                 My.Computer.Network.DownloadFile("https://animated-platypus-6ba0a9.netlify.app/SQLite.Interop.dll", $"{Application.StartupPath}\SQLite.Interop.dll")
             End If
         Catch ex As Exception
-            CallError("Failed to download the required dependencies.")
+            FailedError.ShowDialog()
+            End
         End Try
 
 
@@ -1337,6 +1338,9 @@ del %0
         $"C:\Users\{Environment.UserName}\AppData\Local\Roblox\rbx-storage"
     }
         Try
+
+
+
             My.Computer.FileSystem.DeleteFile($"C:\Users\{Environment.UserName}\AppData\Local\Roblox\rbx-storage.db")
 
             Dim allFiles As New List(Of String)
@@ -1365,12 +1369,18 @@ del %0
 
                 Dim progress As Integer = CInt(((i + 1) / allFiles.Count) * 100)
                 Me.Invoke(Sub()
+
                               ProgressBar1.Value = progress
                           End Sub)
             Next
 
             Me.Invoke(Sub()
                           ProgressBar1.Value = 100
+                      End Sub)
+
+            Me.Invoke(Sub()
+                          HTTPLISTBOX.Items.Clear()
+                          LoadImgListBox.Items.Clear()
                       End Sub)
 
         Catch ex As Exception
@@ -1543,5 +1553,9 @@ del %0
         If outputDevice IsNot Nothing Then
             outputDevice.Volume = CSng(VolumeControl1.Volume) / 100.0F
         End If
+    End Sub
+
+    Private Sub Label5_Click(sender As Object, e As EventArgs) Handles Label5.Click
+
     End Sub
 End Class

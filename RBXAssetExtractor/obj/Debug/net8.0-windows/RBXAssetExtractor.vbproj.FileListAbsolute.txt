@@ -199,3 +199,4 @@ C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\runtimes\win-x86\native\SQLite.Interop.dll
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Debug\net8.0-windows\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Debug\net8.0-windows\RBXAssetExtractor.FailedError.resources

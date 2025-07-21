@@ -129,7 +129,7 @@ Partial Class MainForm
         LoadParButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         LoadParButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         LoadParButton.FlatStyle = FlatStyle.Flat
-        LoadParButton.Font = New Font("Segoe UI", 12.0F)
+        LoadParButton.Font = New Font("Segoe UI", 12F)
         LoadParButton.ForeColor = Color.White
         LoadParButton.Location = New Point(6, 311)
         LoadParButton.Name = "LoadParButton"
@@ -146,7 +146,7 @@ Partial Class MainForm
         Download_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         Download_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         Download_BTN.FlatStyle = FlatStyle.Flat
-        Download_BTN.Font = New Font("Segoe UI", 12.0F)
+        Download_BTN.Font = New Font("Segoe UI", 12F)
         Download_BTN.ForeColor = Color.White
         Download_BTN.Location = New Point(87, 311)
         Download_BTN.Name = "Download_BTN"
@@ -162,7 +162,7 @@ Partial Class MainForm
         ClearTMP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         ClearTMP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         ClearTMP_BTN.FlatStyle = FlatStyle.Flat
-        ClearTMP_BTN.Font = New Font("Segoe UI", 12.0F)
+        ClearTMP_BTN.Font = New Font("Segoe UI", 12F)
         ClearTMP_BTN.ForeColor = Color.White
         ClearTMP_BTN.Location = New Point(318, 311)
         ClearTMP_BTN.Name = "ClearTMP_BTN"
@@ -179,7 +179,7 @@ Partial Class MainForm
         DownloadALL_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DownloadALL_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DownloadALL_BTN.FlatStyle = FlatStyle.Flat
-        DownloadALL_BTN.Font = New Font("Segoe UI", 12.0F)
+        DownloadALL_BTN.Font = New Font("Segoe UI", 12F)
         DownloadALL_BTN.ForeColor = Color.White
         DownloadALL_BTN.Location = New Point(198, 311)
         DownloadALL_BTN.Name = "DownloadALL_BTN"
@@ -232,7 +232,7 @@ Partial Class MainForm
         ' 
         ' Label4
         ' 
-        Label4.Font = New Font("MS UI Gothic", 12.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label4.Font = New Font("MS UI Gothic", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label4.ForeColor = Color.White
         Label4.Location = New Point(25, 247)
         Label4.Name = "Label4"
@@ -369,7 +369,7 @@ Partial Class MainForm
         LoadHttpBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         LoadHttpBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         LoadHttpBtn.FlatStyle = FlatStyle.Flat
-        LoadHttpBtn.Font = New Font("Segoe UI", 12.0F)
+        LoadHttpBtn.Font = New Font("Segoe UI", 12F)
         LoadHttpBtn.ForeColor = Color.White
         LoadHttpBtn.Location = New Point(6, 311)
         LoadHttpBtn.Name = "LoadHttpBtn"
@@ -385,7 +385,7 @@ Partial Class MainForm
         ClearHTTPTEMP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         ClearHTTPTEMP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         ClearHTTPTEMP_BTN.FlatStyle = FlatStyle.Flat
-        ClearHTTPTEMP_BTN.Font = New Font("Segoe UI", 12.0F)
+        ClearHTTPTEMP_BTN.Font = New Font("Segoe UI", 12F)
         ClearHTTPTEMP_BTN.ForeColor = Color.White
         ClearHTTPTEMP_BTN.Location = New Point(318, 311)
         ClearHTTPTEMP_BTN.MaximumSize = New Size(107, 35)
@@ -403,7 +403,7 @@ Partial Class MainForm
         DownloadAllHTTP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DownloadAllHTTP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DownloadAllHTTP_BTN.FlatStyle = FlatStyle.Flat
-        DownloadAllHTTP_BTN.Font = New Font("Segoe UI", 12.0F)
+        DownloadAllHTTP_BTN.Font = New Font("Segoe UI", 12F)
         DownloadAllHTTP_BTN.ForeColor = Color.White
         DownloadAllHTTP_BTN.Location = New Point(198, 311)
         DownloadAllHTTP_BTN.Name = "DownloadAllHTTP_BTN"
@@ -419,7 +419,7 @@ Partial Class MainForm
         DOWNLOADHTTP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DOWNLOADHTTP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DOWNLOADHTTP_BTN.FlatStyle = FlatStyle.Flat
-        DOWNLOADHTTP_BTN.Font = New Font("Segoe UI", 12.0F)
+        DOWNLOADHTTP_BTN.Font = New Font("Segoe UI", 12F)
         DOWNLOADHTTP_BTN.ForeColor = Color.White
         DOWNLOADHTTP_BTN.Location = New Point(87, 311)
         DOWNLOADHTTP_BTN.Name = "DOWNLOADHTTP_BTN"
@@ -464,7 +464,7 @@ Partial Class MainForm
         ImgClearTmp.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         ImgClearTmp.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         ImgClearTmp.FlatStyle = FlatStyle.Flat
-        ImgClearTmp.Font = New Font("Segoe UI", 12.0F)
+        ImgClearTmp.Font = New Font("Segoe UI", 12F)
         ImgClearTmp.ForeColor = Color.White
         ImgClearTmp.Location = New Point(194, 219)
         ImgClearTmp.Name = "ImgClearTmp"
@@ -490,7 +490,7 @@ Partial Class MainForm
         SaveAllBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         SaveAllBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         SaveAllBtn.FlatStyle = FlatStyle.Flat
-        SaveAllBtn.Font = New Font("Segoe UI", 12.0F)
+        SaveAllBtn.Font = New Font("Segoe UI", 12F)
         SaveAllBtn.ForeColor = Color.White
         SaveAllBtn.Location = New Point(194, 302)
         SaveAllBtn.Name = "SaveAllBtn"
@@ -506,7 +506,7 @@ Partial Class MainForm
         DownloadImgBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DownloadImgBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DownloadImgBtn.FlatStyle = FlatStyle.Flat
-        DownloadImgBtn.Font = New Font("Segoe UI", 12.0F)
+        DownloadImgBtn.Font = New Font("Segoe UI", 12F)
         DownloadImgBtn.ForeColor = Color.White
         DownloadImgBtn.Location = New Point(275, 261)
         DownloadImgBtn.Name = "DownloadImgBtn"
@@ -522,7 +522,7 @@ Partial Class MainForm
         LoadImgBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         LoadImgBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         LoadImgBtn.FlatStyle = FlatStyle.Flat
-        LoadImgBtn.Font = New Font("Segoe UI", 12.0F)
+        LoadImgBtn.Font = New Font("Segoe UI", 12F)
         LoadImgBtn.ForeColor = Color.White
         LoadImgBtn.Location = New Point(194, 261)
         LoadImgBtn.Name = "LoadImgBtn"
@@ -573,7 +573,7 @@ Partial Class MainForm
         SaveLogBtn.FlatAppearance.BorderColor = Color.Silver
         SaveLogBtn.FlatAppearance.BorderSize = 2
         SaveLogBtn.FlatStyle = FlatStyle.Popup
-        SaveLogBtn.Font = New Font("Segoe UI", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        SaveLogBtn.Font = New Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         SaveLogBtn.ForeColor = Color.White
         SaveLogBtn.Location = New Point(350, 322)
         SaveLogBtn.Name = "SaveLogBtn"
@@ -599,7 +599,7 @@ Partial Class MainForm
         ' VText_LBR
         ' 
         VText_LBR.BackColor = Color.Transparent
-        VText_LBR.Font = New Font("MS UI Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        VText_LBR.Font = New Font("MS UI Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         VText_LBR.ForeColor = Color.White
         VText_LBR.Location = New Point(44, 20)
         VText_LBR.Name = "VText_LBR"
@@ -620,7 +620,7 @@ Partial Class MainForm
         ' 
         StatusLBR.AutoSize = True
         StatusLBR.BackColor = Color.Transparent
-        StatusLBR.Font = New Font("Segoe UI", 12.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        StatusLBR.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         StatusLBR.ForeColor = Color.White
         StatusLBR.Location = New Point(12, 520)
         StatusLBR.Name = "StatusLBR"
@@ -681,7 +681,7 @@ Partial Class MainForm
         Button2.FlatAppearance.BorderSize = 0
         Button2.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         Button2.FlatStyle = FlatStyle.Flat
-        Button2.Font = New Font("Franklin Gothic Medium", 18.0F, FontStyle.Bold)
+        Button2.Font = New Font("Franklin Gothic Medium", 18F, FontStyle.Bold)
         Button2.ForeColor = Color.White
         Button2.Location = New Point(391, 0)
         Button2.Name = "Button2"
@@ -696,7 +696,7 @@ Partial Class MainForm
         CloseBTN.FlatAppearance.BorderSize = 0
         CloseBTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(208), CByte(1), CByte(27))
         CloseBTN.FlatStyle = FlatStyle.Flat
-        CloseBTN.Font = New Font("Franklin Gothic Medium", 18.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        CloseBTN.Font = New Font("Franklin Gothic Medium", 18F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         CloseBTN.ForeColor = Color.White
         CloseBTN.Location = New Point(429, 0)
         CloseBTN.Name = "CloseBTN"
@@ -760,7 +760,7 @@ Partial Class MainForm
         ' 
         TaskLBR.AutoSize = True
         TaskLBR.BackColor = Color.Transparent
-        TaskLBR.Font = New Font("MS UI Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TaskLBR.Font = New Font("MS UI Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         TaskLBR.ForeColor = Color.White
         TaskLBR.Location = New Point(362, 435)
         TaskLBR.Name = "TaskLBR"
@@ -859,7 +859,7 @@ Partial Class MainForm
         ' 
         ' MainForm
         ' 
-        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
+        AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         BackgroundImageLayout = ImageLayout.Stretch
