@@ -133,8 +133,7 @@
               "ToolTip": "C:\\Users\\denve\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\My Project\\Resources.resx",
               "RelativeToolTip": "RBXAssetExtractor\\My Project\\Resources.resx",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2025-07-21T19:07:54.989Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-21T19:07:54.989Z"
             },
             {
               "$type": "Document",
@@ -192,14 +191,10 @@
               "RelativeDocumentMoniker": "RBXAssetExtractor\\Form1.vb",
               "ToolTip": "C:\\Users\\denve\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\Form1.vb",
               "RelativeToolTip": "RBXAssetExtractor\\Form1.vb",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAIwF8AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFwAAAAAAAAAAAAcwG8AAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
               "WhenOpened": "2025-02-20T03:24:12.174Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
@@ -211,8 +206,7 @@
               "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.302\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Publish.targets",
               "ViewState": "AgIAAFAEAAAAAAAAAAAWwFsEAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
-              "WhenOpened": "2025-07-21T20:13:07.758Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-21T20:13:07.758Z"
             },
             {
               "$type": "Document",
@@ -235,8 +229,7 @@
               "ToolTip": "C:\\Users\\denve\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
               "RelativeToolTip": "RBXAssetExtractor\\RBXAssetExtractor.vbproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003380|",
-              "WhenOpened": "2025-02-20T19:43:17.541Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-20T19:43:17.541Z"
             },
             {
               "$type": "Document",
@@ -297,8 +290,7 @@
               "RelativeToolTip": "RBXAssetExtractor\\My Project\\Resources.Designer.vb",
               "ViewState": "AgIAAFkAAAAAAAAAAAAewGcAAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
-              "WhenOpened": "2025-02-21T22:42:41.12Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-21T22:42:41.12Z"
             },
             {
               "$type": "Document",
@@ -334,8 +326,7 @@
               "RelativeToolTip": "RBXAssetExtractor\\My Project\\app.manifest",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001203|",
-              "WhenOpened": "2025-02-20T19:43:24.889Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-20T19:43:24.889Z"
             },
             {
               "$type": "Document",
@@ -437,6 +428,10 @@
               "WhenOpened": "2025-02-19T20:12:38.324Z"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 27,
               "Title": "Settings.settings",
@@ -445,8 +440,7 @@
               "ToolTip": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX Asset Extractor\\My Project\\Settings.settings",
               "RelativeToolTip": "..\\..\\..\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX Asset Extractor\\My Project\\Settings.settings",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002767|",
-              "WhenOpened": "2025-02-20T02:07:45.196Z",
-              "EditorCaption": " [Read Only]"
+              "WhenOpened": "2025-02-20T02:07:45.196Z"
             }
           ]
         }
