@@ -19,6 +19,7 @@ Imports ATL.AudioData
 Imports Microsoft.Win32
 Imports NAudio.Vorbis
 Imports NAudio.Wave
+Imports ImageMagick
 'MIT License
 
 'Copyright (c) 2025 zv8001
@@ -45,11 +46,13 @@ Imports NAudio.Wave
 
 Imports NVorbis
 Imports TagLib
+
+
 Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.2.2"
+    Dim V = "v1.2.3"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Dim Stage As Integer = 0
     Dim tempDirectory = Path.GetTempPath
@@ -80,6 +83,10 @@ Public Class MainForm
 
             If Not My.Computer.FileSystem.FileExists($"{Application.StartupPath}\SQLite.Interop.dll") Then
                 My.Computer.Network.DownloadFile("https://rbxaudioextractor-update-server.netlify.app/SQL%20dependencies/SQLite.Interop.dll", $"{Application.StartupPath}\SQLite.Interop.dll")
+            End If
+
+            If Not My.Computer.FileSystem.FileExists($"{Application.StartupPath}\Magick.Native-Q8-x64.dll") Then
+                My.Computer.Network.DownloadFile("https://rbxaudioextractor-update-server.netlify.app/SQL%20dependencies/Magick.Native-Q8-x64.dll", $"{Application.StartupPath}\Magick.Native-Q8-x64.dll")
             End If
         Catch ex As Exception
             FailedError.ShowDialog()
@@ -1157,15 +1164,30 @@ del %0
         ProgressBar1.Value = e.ProgressPercentage
     End Sub
     Private Sub DownloadImgBtn_Click(sender As Object, e As EventArgs) Handles DownloadImgBtn.Click
-        Dim Open As New SaveFileDialog
-        Open.Filter = "PNG Files (*.png)|*.png"
-        If Open.ShowDialog = DialogResult.OK Then
+        Dim saveDialog As New SaveFileDialog()
+
+        If SaveAlAsPngCheck.Checked Then
+            saveDialog.Filter = "PNG Files (*.png)|*.png"
+            saveDialog.DefaultExt = "png"
+        Else
+            Dim ext As String = Path.GetExtension(SelFile)
+            saveDialog.Filter = $"{ext.ToUpper().Trim("."c)} Files (*{ext})|*{ext}"
+            saveDialog.DefaultExt = ext.TrimStart("."c)
+        End If
+
+        If saveDialog.ShowDialog() = DialogResult.OK Then
             Try
-                My.Computer.FileSystem.CopyFile(SelFile, Open.FileName)
+                If SaveAlAsPngCheck.Checked Then
+                    Using image As New MagickImage(SelFile)
+                        image.Format = MagickFormat.Png
+                        image.Write(saveDialog.FileName)
+                    End Using
+                Else
+                    My.Computer.FileSystem.CopyFile(SelFile, saveDialog.FileName, overwrite:=True)
+                End If
             Catch ex As Exception
                 CallError(ex)
             End Try
-
         End If
     End Sub
 
@@ -1180,19 +1202,36 @@ del %0
             Return (bytes / 1073741824).ToString("0.##") & " GB"
         End If
     End Function
+
+    Public Function LoadWebPToImage(filePath As String) As Image
+        Try
+            Using magickImage As New MagickImage(filePath)
+                Using ms As New MemoryStream()
+                    magickImage.Format = MagickFormat.Bmp
+                    magickImage.Write(ms)
+                    ms.Position = 0
+                    Return System.Drawing.Image.FromStream(ms)
+                End Using
+            End Using
+        Catch ex As Exception
+            MessageBox.Show("Failed to load image: " & ex.Message)
+            Return Nothing
+        End Try
+    End Function
+
     Private Sub LoadImgListBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LoadImgListBox.SelectedIndexChanged
         If LoadImgListBox.SelectedItem IsNot Nothing Then
 
             Try
 
-                Dim selectedFile = LoadImgListBox.SelectedItem.FilePath
-                PreVeiwImgBox.Image = Image.FromFile(selectedFile)
-                SelFile = selectedFile
-                Dim image0 As Image = Image.FromFile(SelFile)
+                Dim img = LoadWebPToImage(LoadImgListBox.SelectedItem.FilePath)
+                PreVeiwImgBox.Image = img
+                SelFile = LoadImgListBox.SelectedItem.FilePath
+                Dim image0 As Image = img
                 Dim width As Integer = image0.Width
                 Dim height As Integer = image0.Height
-                Dim fileInfo As New FileInfo(SelFile)
-                Dim fileSize As Long = fileInfo.Length
+                Dim fileInfo As New FileInfo(LoadImgListBox.SelectedItem.FilePath)
+                Dim fileSize As Long = FileInfo.Length
                 ImgStats.Text = $"Dimensions: {width} x {height}" & vbCrLf &
                                      $"File Size: {FormatBytes(fileSize)}"
 

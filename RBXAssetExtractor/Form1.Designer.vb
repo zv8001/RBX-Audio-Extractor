@@ -94,6 +94,7 @@ Partial Class MainForm
         VolumeControl1 = New cmdwtf.Toolkit.WinForms.Controls.VolumeControl()
         KeepPlayback0 = New Timer(components)
         ChangeVol = New Timer(components)
+        SaveAlAsPngCheck = New CheckBox()
         TabControl1.SuspendLayout()
         TabPage3.SuspendLayout()
         CType(PictureBox2, ComponentModel.ISupportInitialize).BeginInit()
@@ -470,6 +471,7 @@ Partial Class MainForm
         ' TabPage5
         ' 
         TabPage5.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        TabPage5.Controls.Add(SaveAlAsPngCheck)
         TabPage5.Controls.Add(ImgClearTmp)
         TabPage5.Controls.Add(ImgStats)
         TabPage5.Controls.Add(SaveAllBtn)
@@ -883,6 +885,18 @@ Partial Class MainForm
         ' ChangeVol
         ' 
         ' 
+        ' SaveAlAsPngCheck
+        ' 
+        SaveAlAsPngCheck.AutoSize = True
+        SaveAlAsPngCheck.Font = New Font("Segoe UI", 6.25F)
+        SaveAlAsPngCheck.ForeColor = Color.White
+        SaveAlAsPngCheck.Location = New Point(329, 197)
+        SaveAlAsPngCheck.Name = "SaveAlAsPngCheck"
+        SaveAlAsPngCheck.Size = New Size(99, 16)
+        SaveAlAsPngCheck.TabIndex = 13
+        SaveAlAsPngCheck.Text = "SaveAlwaysAsPNG"
+        SaveAlAsPngCheck.UseVisualStyleBackColor = True
+        ' 
         ' MainForm
         ' 
         AutoScaleDimensions = New SizeF(7.0F, 15.0F)
@@ -995,5 +1009,6 @@ Partial Class MainForm
     Friend WithEvents ChangeVol As Timer
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents Label9 As Label
+    Friend WithEvents SaveAlAsPngCheck As CheckBox
 
 End Class

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "DjNiQuHCeW8=",
+  "dgSpecHash": "BRREqLf2MIo=",
   "success": true,
   "projectFilePath": "C:\\Users\\denve\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
   "expectedPackageFiles": [
@@ -9,6 +9,8 @@
     "C:\\Users\\denve\\.nuget\\packages\\cmdwtf.toolkit.winforms\\1.0.0\\cmdwtf.toolkit.winforms.1.0.0.nupkg.sha512",
     "C:\\Users\\denve\\.nuget\\packages\\cmdwtf.toolkit.winforms.dialogs\\1.0.0\\cmdwtf.toolkit.winforms.dialogs.1.0.0.nupkg.sha512",
     "C:\\Users\\denve\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
+    "C:\\Users\\denve\\.nuget\\packages\\magick.net-q8-anycpu\\14.7.0\\magick.net-q8-anycpu.14.7.0.nupkg.sha512",
+    "C:\\Users\\denve\\.nuget\\packages\\magick.net.core\\14.7.0\\magick.net.core.14.7.0.nupkg.sha512",
     "C:\\Users\\denve\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\denve\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.18\\microsoft.net.illink.tasks.8.0.18.nupkg.sha512",
     "C:\\Users\\denve\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",

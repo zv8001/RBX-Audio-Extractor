@@ -141,3 +141,6 @@ C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Releas
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\win-x64\RBXAssetExtractor.FailedError.resources
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\DracoMeshDecoder.dll
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\DracoMeshDecoder.pdb
+C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\Magick.NET-Q8-AnyCPU.dll
+C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\Magick.NET.Core.dll
+C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\Magick.Native-Q8-x64.dll

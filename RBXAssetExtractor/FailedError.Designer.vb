@@ -69,9 +69,9 @@ Partial Class FailedError
         Label3.ForeColor = Color.FromArgb(CByte(255), CByte(128), CByte(128))
         Label3.Location = New Point(12, 149)
         Label3.Name = "Label3"
-        Label3.Size = New Size(571, 28)
+        Label3.Size = New Size(548, 28)
         Label3.TabIndex = 3
-        Label3.Text = "The link to manually download the files can be found here. Download SQLite.Interop.dll and sni.dll, and " & vbCrLf & "place them in the same directory as the program."
+        Label3.Text = "The link to manually download the files can be found here. Download SQLite.Interop.dll, sni.dll and " & vbCrLf & "Magick.Native-Q8-x64.dll, and place them in the same directory as the program."
         ' 
         ' FailedError
         ' 
