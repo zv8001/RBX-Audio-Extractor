@@ -144,3 +144,17 @@ C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Releas
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\Magick.NET-Q8-AnyCPU.dll
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\Magick.NET.Core.dll
 C:\Users\denve\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\Magick.Native-Q8-x64.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\EntityFramework.SqlServer.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\EntityFramework.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\Magick.NET-Q8-AnyCPU.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\Magick.NET.Core.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\Microsoft.Win32.SystemEvents.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\System.Data.SQLite.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\System.Data.SqlClient.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\System.Data.SQLite.EF6.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\System.Drawing.Common.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\System.Private.Windows.Core.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\Magick.Native-Q8-x64.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\sni.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\win-x64\SQLite.Interop.dll
+C:\Users\denve\OneDrive\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\obj\Release\net8.0-windows\win-x64\RBXAssetExtractor.FailedError.resources

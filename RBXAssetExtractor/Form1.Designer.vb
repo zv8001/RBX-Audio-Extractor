@@ -54,6 +54,7 @@ Partial Class MainForm
         DOWNLOADHTTP_BTN = New Button()
         HTTPLISTBOX = New ListBox()
         TabPage5 = New TabPage()
+        SaveAlAsPngCheck = New CheckBox()
         ImgClearTmp = New Button()
         ImgStats = New Label()
         SaveAllBtn = New Button()
@@ -94,7 +95,6 @@ Partial Class MainForm
         VolumeControl1 = New cmdwtf.Toolkit.WinForms.Controls.VolumeControl()
         KeepPlayback0 = New Timer(components)
         ChangeVol = New Timer(components)
-        SaveAlAsPngCheck = New CheckBox()
         TabControl1.SuspendLayout()
         TabPage3.SuspendLayout()
         CType(PictureBox2, ComponentModel.ISupportInitialize).BeginInit()
@@ -484,6 +484,18 @@ Partial Class MainForm
         TabPage5.Size = New Size(431, 353)
         TabPage5.TabIndex = 4
         TabPage5.Text = "Full Game Images"
+        ' 
+        ' SaveAlAsPngCheck
+        ' 
+        SaveAlAsPngCheck.AutoSize = True
+        SaveAlAsPngCheck.Font = New Font("Segoe UI", 6.25F)
+        SaveAlAsPngCheck.ForeColor = Color.White
+        SaveAlAsPngCheck.Location = New Point(329, 197)
+        SaveAlAsPngCheck.Name = "SaveAlAsPngCheck"
+        SaveAlAsPngCheck.Size = New Size(99, 16)
+        SaveAlAsPngCheck.TabIndex = 13
+        SaveAlAsPngCheck.Text = "SaveAlwaysAsPNG"
+        SaveAlAsPngCheck.UseVisualStyleBackColor = True
         ' 
         ' ImgClearTmp
         ' 
@@ -884,18 +896,6 @@ Partial Class MainForm
         ' 
         ' ChangeVol
         ' 
-        ' 
-        ' SaveAlAsPngCheck
-        ' 
-        SaveAlAsPngCheck.AutoSize = True
-        SaveAlAsPngCheck.Font = New Font("Segoe UI", 6.25F)
-        SaveAlAsPngCheck.ForeColor = Color.White
-        SaveAlAsPngCheck.Location = New Point(329, 197)
-        SaveAlAsPngCheck.Name = "SaveAlAsPngCheck"
-        SaveAlAsPngCheck.Size = New Size(99, 16)
-        SaveAlAsPngCheck.TabIndex = 13
-        SaveAlAsPngCheck.Text = "SaveAlwaysAsPNG"
-        SaveAlAsPngCheck.UseVisualStyleBackColor = True
         ' 
         ' MainForm
         ' 
