@@ -2,6 +2,60 @@
 
 All notable changes to RBX Asset Extractor are documented in this file.
 
+## [v3.0.0 OVERHAUL MP2] - 2026-06-28
+
+### WPF migration
+
+- Established the .NET 10 WPF application under `RBX-Audio-Extractor2` as the canonical RBX Asset Extractor project.
+- Replaced the legacy generated WinForms surface with a custom graphite, violet, and blue desktop design system.
+- Added compact sidebar navigation, feature workspaces, consistent cards, responsive progress reporting, and centralized activity logs.
+- Split the new application into independent views for overview, audio, images, meshes, cache files, supplemental assets, maintenance, and about/update functions.
+- Moved the Roblox SQLite cache readers and mesh decoder into the new project's own `Core` folder.
+
+### Features transferred
+
+- Added direct OGG and MP3 cache scanning, filtering, playback, seeking, volume control, and selected/bulk export.
+- Added PNG, JPEG, BMP, and WebP scanning with in-memory previews and selected/bulk export.
+- Added Roblox mesh discovery, native WPF 3D previews, and selected/bulk OBJ export.
+- Added RBXM, KTX, and KTX2 filtering and export.
+- Added thumbnail previews, font extraction, and JSON/XML/HLS metadata inspection and export.
+- Added cache size reporting, cache-folder access, confirmed cache deletion, and optional two-stage Roblox/Studio process termination.
+- Added update checks, creator messages, GitHub access, and activity history.
+- Preserved direct read-only SQLite scanning and avoided the legacy mass temporary-file dump approach.
+
+### UI fixes
+
+- Restored per-track audio timestamps and longest-to-shortest ordering without returning to temporary cache dumps.
+- Fixed blank supplemental metadata names by deriving readable labels with unique cache-key suffixes.
+- Fixed metadata preview rendering and added explicit loading, failure, and stale-selection handling.
+- Fixed audio-player crashes when seeking to the exact end of a track or beyond decoder-reported duration boundaries.
+- Prevented result tables from flashing white during scans and exports by blocking interaction without activating WPF's native disabled-list appearance.
+- Replaced the hardcoded `WPF` title badge and About version with the version embedded by the project build.
+- Added `vexthatprotogen.com` to the About page and replaced all links to the previous legacy domain.
+- Replaced the remaining light Windows control chrome with dark templates for combo boxes, selected tabs, GridView headers, sliders, scrollbars, and checkboxes.
+- Replaced unsupported title-bar font glyphs with resolution-independent vector minimize, maximize, and close icons.
+- Replaced every native Windows message box with a themed modal supporting OK, cancel, yes/no, warning, error, question, keyboard, and owner-window behavior.
+- Restored the startup creator-message popup using the custom modal while preserving the creator-message card and refresh action on the About page.
+
+### Packaging and security
+
+- Configured self-contained `win-x64` single-file publishing with native-library self-extraction.
+- Added a repository-level .NET 10 SDK selection for the canonical WPF solution.
+- Replaced the `System.Data.SQLite` meta-package with `System.Data.SQLite.Core`, removing vulnerable transitive `System.Data.SqlClient` packages.
+- Added repository exclusions for Visual Studio state and generated `bin`/`obj` output.
+
+## [2.0.15] - 2026-06-27
+
+### Changed
+
+- Split the 1,883-line `Form1.vb` into focused `MainForm.*.vb` partial-class files.
+- Separated mesh, cache asset, supplemental asset, audio, image, update, maintenance, logging, window, and file utility responsibilities.
+- Relocated feature state fields into their owning partial classes.
+- Removed empty event handlers and unused legacy fields.
+- Reduced `Form1.vb` to the core form startup and shared state.
+- Marked split partial-class files as code-only so Visual Studio opens only `Form1.vb` in the WinForms Designer.
+- Migrated the executable download, version check, and creator-message update endpoints to `https://rbxextr.vexthatprotogen.com/`.
+
 ## [2.0.1] - 2026-06-27
 
 ### Fixed
@@ -9,7 +63,9 @@ All notable changes to RBX Asset Extractor are documented in this file.
 - Embedded native Magick.NET, SQLite, and SNI libraries into the published single-file executable.
 - Removed the startup DLL downloader and its dependency on the hosted Netlify files.
 - Native libraries are now extracted locally by the .NET bundle loader without an internet connection.
-## [2.0.0] - 2026-06-27
+- Added project attribution and provenance metadata to exported OBJ files.
+
+## [v2.0.0 OVERHAUL MP1] - 2026-06-27
 
 ### Performance
 

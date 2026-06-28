@@ -1,0 +1,2 @@
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\publish\RBXAssetExtractor.pdb
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\publish\RBXAssetExtractor.exe

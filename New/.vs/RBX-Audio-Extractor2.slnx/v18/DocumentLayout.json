@@ -1,0 +1,210 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\new\\rbx-audio-extractor2\\mainwindow.xaml.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\mainwindow.xaml.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\new\\rbx-audio-extractor2\\views\\overviewview.xaml.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\views\\overviewview.xaml.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\new\\rbx-audio-extractor2\\views\\maintenanceview.xaml.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\views\\maintenanceview.xaml.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\new\\rbx-audio-extractor2\\core\\robloxsupplementalcacheextractor.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\core\\robloxsupplementalcacheextractor.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\new\\rbx-audio-extractor2\\core\\robloxmeshextractor.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\core\\robloxmeshextractor.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\new\\rbx-audio-extractor2\\core\\robloxcacheassetextractor.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\core\\robloxcacheassetextractor.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\new\\rbx-audio-extractor2\\views\\aboutview.xaml.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\views\\aboutview.xaml.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\new\\rbx-audio-extractor2\\views\\audioview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\views\\audioview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\new\\rbx-audio-extractor2\\services\\appservices.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\services\\appservices.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\new\\rbx-audio-extractor2\\services\\remotecontentservice.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\services\\remotecontentservice.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\new\\rbx-audio-extractor2\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\new\\rbx-audio-extractor2\\views\\maintenanceview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\views\\maintenanceview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 11,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "OverviewView.xaml.vb",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Views\\OverviewView.xaml.vb",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Views\\OverviewView.xaml.vb",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Views\\OverviewView.xaml.vb",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\Views\\OverviewView.xaml.vb",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-06-28T06:31:29.821Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MaintenanceView.xaml.vb",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Views\\MaintenanceView.xaml.vb",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Views\\MaintenanceView.xaml.vb",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Views\\MaintenanceView.xaml.vb",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\Views\\MaintenanceView.xaml.vb",
+              "ViewState": "AgIAAFgAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-06-28T06:31:21.853Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AboutView.xaml.vb",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Views\\AboutView.xaml.vb",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Views\\AboutView.xaml.vb",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Views\\AboutView.xaml.vb",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\Views\\AboutView.xaml.vb",
+              "ViewState": "AgIAABgAAAAAAAAAAAAYwBEAAABaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-06-28T06:30:05.663Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AudioView.xaml",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Views\\AudioView.xaml",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Views\\AudioView.xaml",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Views\\AudioView.xaml",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\Views\\AudioView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-28T06:25:24.932Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "RobloxSupplementalCacheExtractor.vb",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Core\\RobloxSupplementalCacheExtractor.vb",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Core\\RobloxSupplementalCacheExtractor.vb",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Core\\RobloxSupplementalCacheExtractor.vb",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\Core\\RobloxSupplementalCacheExtractor.vb",
+              "ViewState": "AgIAABQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-06-28T06:24:48.366Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "RobloxCacheAssetExtractor.vb",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Core\\RobloxCacheAssetExtractor.vb",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Core\\RobloxCacheAssetExtractor.vb",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Core\\RobloxCacheAssetExtractor.vb",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\Core\\RobloxCacheAssetExtractor.vb",
+              "ViewState": "AgIAAFAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-06-28T06:24:43.589Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AppServices.vb",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Services\\AppServices.vb",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Services\\AppServices.vb",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Services\\AppServices.vb",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\Services\\AppServices.vb",
+              "ViewState": "AgIAAEAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-06-28T06:24:34.418Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "RemoteContentService.vb",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Services\\RemoteContentService.vb",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Services\\RemoteContentService.vb",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Services\\RemoteContentService.vb",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\Services\\RemoteContentService.vb",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-06-28T06:23:09.202Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "MaintenanceView.xaml",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Views\\MaintenanceView.xaml",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Views\\MaintenanceView.xaml",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Views\\MaintenanceView.xaml",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\Views\\MaintenanceView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-28T06:08:07.464Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RobloxMeshExtractor.vb",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Core\\RobloxMeshExtractor.vb",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Core\\RobloxMeshExtractor.vb",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\Core\\RobloxMeshExtractor.vb",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\Core\\RobloxMeshExtractor.vb",
+              "ViewState": "AgIAABMAAAAAAAAAAAAAAFgBAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-06-28T06:07:57.293Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\MainWindow.xaml",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-28T05:49:01.712Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml.vb",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\MainWindow.xaml.vb",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\MainWindow.xaml.vb",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\New\\RBX-Audio-Extractor2\\MainWindow.xaml.vb",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\MainWindow.xaml.vb",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAwwF8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-06-28T05:07:51.056Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

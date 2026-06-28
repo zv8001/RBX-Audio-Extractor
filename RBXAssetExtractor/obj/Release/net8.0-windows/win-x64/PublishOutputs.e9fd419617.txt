@@ -1,3 +1,0 @@
-C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\publish\win-x64\RBXAssetExtractor.pdb
-C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\publish\win-x64\RBXAssetExtractor.dll.config
-C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBXAssetExtractor\bin\Release\net8.0-windows\publish\win-x64\RBXAssetExtractor.exe

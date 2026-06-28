@@ -1,0 +1,112 @@
+Imports System.Diagnostics
+Imports System.IO
+
+Namespace Views
+    Public Class MaintenanceView
+        Public Sub New()
+            InitializeComponent()
+            CachePathText.Text = AppServices.DatabasePath
+            AddHandler Loaded, AddressOf MaintenanceView_Loaded
+        End Sub
+
+        Private Async Sub MaintenanceView_Loaded(sender As Object, e As RoutedEventArgs)
+            Await RefreshStatsAsync()
+        End Sub
+
+        Private Async Sub RefreshButton_Click(sender As Object, e As RoutedEventArgs)
+            Await RefreshStatsAsync()
+        End Sub
+
+        Private Async Function RefreshStatsAsync() As Task
+            CacheSizeText.Text = "Calculating cache size..."
+            Dim result = Await Task.Run(
+                Function()
+                    Dim size As Long = 0
+                    Dim files As Long = 0
+                    If File.Exists(AppServices.DatabasePath) Then
+                        size += New FileInfo(AppServices.DatabasePath).Length
+                        files += 1
+                    End If
+                    If Directory.Exists(AppServices.PayloadPath) Then
+                        For Each path In Directory.EnumerateFiles(AppServices.PayloadPath, "*", SearchOption.AllDirectories)
+                            Try
+                                size += New FileInfo(path).Length
+                                files += 1
+                            Catch
+                            End Try
+                        Next
+                    End If
+                    Return (Size:=size, Files:=files)
+                End Function)
+            CacheSizeText.Text = $"{AppServices.FormatBytes(result.Size)} across {result.Files:N0} files"
+        End Function
+
+        Private Sub OpenFolderButton_Click(sender As Object, e As RoutedEventArgs)
+            If Directory.Exists(AppServices.RobloxLocalPath) Then AppServices.OpenPath(AppServices.RobloxLocalPath)
+        End Sub
+
+        Private Async Sub ClearCacheButton_Click(sender As Object, e As RoutedEventArgs)
+            Dim first = AppDialog.Show("This will delete Roblox's local asset cache, including rbx-storage.db. Continue?", "Clear Roblox asset cache?", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No)
+            If first <> MessageBoxResult.Yes Then Return
+
+            Dim forceClose = AppDialog.Show("Force-close all running Roblox processes first?", "Force-close Roblox?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Cancel)
+            If forceClose = MessageBoxResult.Cancel Then Return
+            If forceClose = MessageBoxResult.Yes Then
+                Dim final = AppDialog.Show("WARNING: This immediately closes Roblox Player, Roblox Studio, and every process whose name begins with 'Roblox'. Unsaved Studio work may be lost.", "Roblox Studio will be closed", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No)
+                If final <> MessageBoxResult.Yes Then Return
+                Dim result = Await Task.Run(AddressOf ForceCloseRoblox)
+                AppServices.AddLog($"Roblox process close complete: {result.Killed} closed, {result.Failed} failed.")
+            End If
+
+            AppServices.Report("Clearing Roblox asset cache...", 0, True)
+            Try
+                Await Task.Run(AddressOf DeleteCache)
+                AppServices.Report("Roblox asset cache cleared. Scan again to refresh each workspace.", 100)
+                AppServices.NotifyCacheCleared()
+                Await RefreshStatsAsync()
+            Catch ex As Exception
+                AppServices.Report($"Cache clear failed: {ex.Message}")
+                AppDialog.Show("The cache could not be completely cleared. Roblox may still be using one of its files." & Environment.NewLine & Environment.NewLine & ex.Message, "Cache clear failed", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
+        End Sub
+
+        Private Shared Function ForceCloseRoblox() As (Killed As Integer, Failed As Integer)
+            Dim killed = 0
+            Dim failed = 0
+            For Each proc As Process In Process.GetProcesses()
+                Try
+                    If Not proc.ProcessName.StartsWith("Roblox", StringComparison.OrdinalIgnoreCase) Then Continue For
+                    proc.Kill(entireProcessTree:=True)
+                    proc.WaitForExit(5000)
+                    killed += 1
+                Catch
+                    failed += 1
+                Finally
+                    proc.Dispose()
+                End Try
+            Next
+            Return (killed, failed)
+        End Function
+
+        Private Shared Sub DeleteCache()
+            Dim failures As New List(Of Exception)()
+            If File.Exists(AppServices.DatabasePath) Then
+                Try
+                    File.Delete(AppServices.DatabasePath)
+                Catch ex As Exception
+                    failures.Add(ex)
+                End Try
+            End If
+            Dim directories = {AppServices.PayloadPath, Path.Combine(Path.GetTempPath(), "Roblox", "http")}
+            For Each directoryPath In directories
+                If Not System.IO.Directory.Exists(directoryPath) Then Continue For
+                Try
+                    System.IO.Directory.Delete(directoryPath, recursive:=True)
+                Catch ex As Exception
+                    failures.Add(ex)
+                End Try
+            Next
+            If failures.Count > 0 Then Throw New AggregateException(failures)
+        End Sub
+    End Class
+End Namespace
