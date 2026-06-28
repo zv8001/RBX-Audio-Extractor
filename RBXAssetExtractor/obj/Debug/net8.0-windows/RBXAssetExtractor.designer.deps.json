@@ -68,14 +68,14 @@
           }
         }
       },
-      "Magick.NET-Q8-AnyCPU/14.9.0": {
+      "Magick.NET-Q8-AnyCPU/14.14.0": {
         "dependencies": {
-          "Magick.NET.Core": "14.9.0"
+          "Magick.NET.Core": "14.14.0"
         },
         "runtime": {
           "lib/net8.0/Magick.NET-Q8-AnyCPU.dll": {
-            "assemblyVersion": "14.9.0.0",
-            "fileVersion": "14.9.0.0"
+            "assemblyVersion": "14.14.0.0",
+            "fileVersion": "14.14.0.0"
           }
         },
         "runtimeTargets": {
@@ -121,11 +121,11 @@
           }
         }
       },
-      "Magick.NET.Core/14.9.0": {
+      "Magick.NET.Core/14.14.0": {
         "runtime": {
           "lib/net8.0/Magick.NET.Core.dll": {
-            "assemblyVersion": "14.9.0.0",
-            "fileVersion": "14.9.0.0"
+            "assemblyVersion": "14.14.0.0",
+            "fileVersion": "14.14.0.0"
           }
         }
       },
@@ -298,6 +298,14 @@
           "lib/net5.0-windows7.0/Ookii.Dialogs.WinForms.dll": {
             "assemblyVersion": "3.0.0.0",
             "fileVersion": "3.0.0.0"
+          }
+        }
+      },
+      "Openize.Drako/26.2.0": {
+        "runtime": {
+          "lib/net8.0/Openize.Drako.dll": {
+            "assemblyVersion": "26.2.0.0",
+            "fileVersion": "26.2.0.0"
           }
         }
       },
@@ -635,19 +643,19 @@
       "path": "entityframework/6.4.4",
       "hashPath": "entityframework.6.4.4.nupkg.sha512"
     },
-    "Magick.NET-Q8-AnyCPU/14.9.0": {
+    "Magick.NET-Q8-AnyCPU/14.14.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-VSjPVoKMG6Gjt5z9ySJlC82dyNv9m5JmLvhuj7bcFHGL0xP9gwFCGdCMLl0sY5fwWBKOvbRMiUSD3LOewRScJg==",
-      "path": "magick.net-q8-anycpu/14.9.0",
-      "hashPath": "magick.net-q8-anycpu.14.9.0.nupkg.sha512"
+      "sha512": "sha512-Af7QdAb1AfLN09gpr4lzrTjioDez1hW1IQN3Tb0qJWi8NY3ywTJyteoH/8P/mripXq4D5Khz0uWBEX5O59i5Zw==",
+      "path": "magick.net-q8-anycpu/14.14.0",
+      "hashPath": "magick.net-q8-anycpu.14.14.0.nupkg.sha512"
     },
-    "Magick.NET.Core/14.9.0": {
+    "Magick.NET.Core/14.14.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-PIhf/KtxA+9QKIV2Ru/8/jSU46UjMhkIFSY4K2m4JiS0wjvC2/QHCL/f7EQD5EqvVDod7E1P0owpqBY0m3OyhQ==",
-      "path": "magick.net.core/14.9.0",
-      "hashPath": "magick.net.core.14.9.0.nupkg.sha512"
+      "sha512": "sha512-pACR3w4QmjBkebtYvZwNk0oow8YwEAF4CLfzSrGmPcWsObL8wvt/lOXsrzK9M0cVwYES7jp+bdnHQBTeQgfoIg==",
+      "path": "magick.net.core/14.14.0",
+      "hashPath": "magick.net.core.14.14.0.nupkg.sha512"
     },
     "Microsoft.CSharp/4.7.0": {
       "type": "package",
@@ -760,6 +768,13 @@
       "sha512": "sha512-rCBOBghNTud4lI3PwtV3hQcbw4zPGgSH4zYWNjQNdqVoHsgETqYkO3uAvUCrEjR34nW08xssSzspQ0y3IKRbMw==",
       "path": "ookii.dialogs.winforms/3.0.0",
       "hashPath": "ookii.dialogs.winforms.3.0.0.nupkg.sha512"
+    },
+    "Openize.Drako/26.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vAs2iCxfOCcEUMlEi9VcaxfRxu2DkssNiYuzMUaFiF1BMPjYxOllNhVT72ZSGbI1KFB+7lrtVp486DcwePNK3Q==",
+      "path": "openize.drako/26.2.0",
+      "hashPath": "openize.drako.26.2.0.nupkg.sha512"
     },
     "runtime.native.System.Data.SqlClient.sni/4.4.0": {
       "type": "package",

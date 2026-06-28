@@ -101,10 +101,10 @@
           "buildTransitive/netcoreapp3.0/EntityFramework.targets": {}
         }
       },
-      "Magick.NET-Q8-AnyCPU/14.9.0": {
+      "Magick.NET-Q8-AnyCPU/14.14.0": {
         "type": "package",
         "dependencies": {
-          "Magick.NET.Core": "14.9.0"
+          "Magick.NET.Core": "14.14.0"
         },
         "compile": {
           "lib/net8.0/Magick.NET-Q8-AnyCPU.dll": {
@@ -154,7 +154,7 @@
           }
         }
       },
-      "Magick.NET.Core/14.9.0": {
+      "Magick.NET.Core/14.14.0": {
         "type": "package",
         "compile": {
           "lib/net8.0/Magick.NET.Core.dll": {
@@ -176,7 +176,7 @@
           "lib/netcoreapp2.0/_._": {}
         }
       },
-      "Microsoft.NET.ILLink.Tasks/8.0.21": {
+      "Microsoft.NET.ILLink.Tasks/8.0.28": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -432,6 +432,15 @@
         "frameworkReferences": [
           "Microsoft.WindowsDesktop.App.WindowsForms"
         ]
+      },
+      "Openize.Drako/26.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Openize.Drako.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/Openize.Drako.dll": {}
+        }
       },
       "runtime.native.System.Data.SqlClient.sni/4.4.0": {
         "type": "package",
@@ -913,10 +922,10 @@
           "buildTransitive/netcoreapp3.0/EntityFramework.targets": {}
         }
       },
-      "Magick.NET-Q8-AnyCPU/14.9.0": {
+      "Magick.NET-Q8-AnyCPU/14.14.0": {
         "type": "package",
         "dependencies": {
-          "Magick.NET.Core": "14.9.0"
+          "Magick.NET.Core": "14.14.0"
         },
         "compile": {
           "lib/net8.0/Magick.NET-Q8-AnyCPU.dll": {
@@ -935,7 +944,7 @@
           "buildTransitive/netstandard20/Magick.NET-Q8-AnyCPU.targets": {}
         }
       },
-      "Magick.NET.Core/14.9.0": {
+      "Magick.NET.Core/14.14.0": {
         "type": "package",
         "compile": {
           "lib/net8.0/Magick.NET.Core.dll": {
@@ -957,7 +966,7 @@
           "lib/netcoreapp2.0/_._": {}
         }
       },
-      "Microsoft.NET.ILLink.Tasks/8.0.21": {
+      "Microsoft.NET.ILLink.Tasks/8.0.28": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -1197,6 +1206,15 @@
         "frameworkReferences": [
           "Microsoft.WindowsDesktop.App.WindowsForms"
         ]
+      },
+      "Openize.Drako/26.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Openize.Drako.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/Openize.Drako.dll": {}
+        }
       },
       "runtime.native.System.Data.SqlClient.sni/4.4.0": {
         "type": "package",
@@ -1709,10 +1727,10 @@
         "tools/netcoreapp3.0/any/ef6.runtimeconfig.json"
       ]
     },
-    "Magick.NET-Q8-AnyCPU/14.9.0": {
-      "sha512": "VSjPVoKMG6Gjt5z9ySJlC82dyNv9m5JmLvhuj7bcFHGL0xP9gwFCGdCMLl0sY5fwWBKOvbRMiUSD3LOewRScJg==",
+    "Magick.NET-Q8-AnyCPU/14.14.0": {
+      "sha512": "Af7QdAb1AfLN09gpr4lzrTjioDez1hW1IQN3Tb0qJWi8NY3ywTJyteoH/8P/mripXq4D5Khz0uWBEX5O59i5Zw==",
       "type": "package",
-      "path": "magick.net-q8-anycpu/14.9.0",
+      "path": "magick.net-q8-anycpu/14.14.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1725,7 +1743,7 @@
         "lib/net8.0/Magick.NET-Q8-AnyCPU.xml",
         "lib/netstandard20/Magick.NET-Q8-AnyCPU.dll",
         "lib/netstandard20/Magick.NET-Q8-AnyCPU.xml",
-        "magick.net-q8-anycpu.14.9.0.nupkg.sha512",
+        "magick.net-q8-anycpu.14.14.0.nupkg.sha512",
         "magick.net-q8-anycpu.nuspec",
         "runtimes/linux-arm64/native/Magick.Native-Q8-arm64.dll.so",
         "runtimes/linux-musl-x64/native/Magick.Native-Q8-x64.dll.so",
@@ -1737,10 +1755,10 @@
         "runtimes/win-x86/native/Magick.Native-Q8-x86.dll"
       ]
     },
-    "Magick.NET.Core/14.9.0": {
-      "sha512": "PIhf/KtxA+9QKIV2Ru/8/jSU46UjMhkIFSY4K2m4JiS0wjvC2/QHCL/f7EQD5EqvVDod7E1P0owpqBY0m3OyhQ==",
+    "Magick.NET.Core/14.14.0": {
+      "sha512": "pACR3w4QmjBkebtYvZwNk0oow8YwEAF4CLfzSrGmPcWsObL8wvt/lOXsrzK9M0cVwYES7jp+bdnHQBTeQgfoIg==",
       "type": "package",
-      "path": "magick.net.core/14.9.0",
+      "path": "magick.net.core/14.14.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1751,7 +1769,7 @@
         "lib/net8.0/Magick.NET.Core.xml",
         "lib/netstandard20/Magick.NET.Core.dll",
         "lib/netstandard20/Magick.NET.Core.xml",
-        "magick.net.core.14.9.0.nupkg.sha512",
+        "magick.net.core.14.14.0.nupkg.sha512",
         "magick.net.core.nuspec"
       ]
     },
@@ -1824,10 +1842,10 @@
         "version.txt"
       ]
     },
-    "Microsoft.NET.ILLink.Tasks/8.0.21": {
-      "sha512": "s8H5PZQs50OcNkaB6Si54+v3GWM7vzs6vxFRMlD3aXsbM+aPCtod62gmK0BYWou9diGzmo56j8cIf/PziijDqQ==",
+    "Microsoft.NET.ILLink.Tasks/8.0.28": {
+      "sha512": "XMqgVjlLxLqWmEh3c49haXLQwsMNtvo6YscUaqfvEGfg1iA8hnYgkUVq3i9Zu9gKeNKMWiiZKVwZExc/qyEAsQ==",
       "type": "package",
-      "path": "microsoft.net.illink.tasks/8.0.21",
+      "path": "microsoft.net.illink.tasks/8.0.28",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -1841,7 +1859,7 @@
         "build/Microsoft.NET.ILLink.Analyzers.props",
         "build/Microsoft.NET.ILLink.Tasks.props",
         "build/Microsoft.NET.ILLink.targets",
-        "microsoft.net.illink.tasks.8.0.21.nupkg.sha512",
+        "microsoft.net.illink.tasks.8.0.28.nupkg.sha512",
         "microsoft.net.illink.tasks.nuspec",
         "tools/net472/ILLink.Tasks.dll",
         "tools/net472/ILLink.Tasks.dll.config",
@@ -2157,6 +2175,25 @@
         "lib/netcoreapp3.1/Ookii.Dialogs.WinForms.pdb",
         "ookii.dialogs.winforms.3.0.0.nupkg.sha512",
         "ookii.dialogs.winforms.nuspec"
+      ]
+    },
+    "Openize.Drako/26.2.0": {
+      "sha512": "vAs2iCxfOCcEUMlEi9VcaxfRxu2DkssNiYuzMUaFiF1BMPjYxOllNhVT72ZSGbI1KFB+7lrtVp486DcwePNK3Q==",
+      "type": "package",
+      "path": "openize.drako/26.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "icon.png",
+        "lib/net46/Openize.Drako.dll",
+        "lib/net6.0/Openize.Drako.dll",
+        "lib/net7.0/Openize.Drako.dll",
+        "lib/net8.0/Openize.Drako.dll",
+        "lib/netstandard2.1/Openize.Drako.dll",
+        "openize.drako.26.2.0.nupkg.sha512",
+        "openize.drako.nuspec"
       ]
     },
     "runtime.native.System.Data.SqlClient.sni/4.4.0": {
@@ -2869,12 +2906,13 @@
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
-      "Magick.NET-Q8-AnyCPU >= 14.9.0",
-      "Microsoft.NET.ILLink.Tasks >= 8.0.21",
+      "Magick.NET-Q8-AnyCPU >= 14.14.0",
+      "Microsoft.NET.ILLink.Tasks >= 8.0.28",
       "ModernUI >= 2.0.0",
       "Modernizr >= 2.8.3",
       "NAudio >= 2.2.1",
       "NAudio.Vorbis >= 1.5.0",
+      "Openize.Drako >= 26.2.0",
       "System.Data.SQLite >= 1.0.119",
       "System.Data.SqlClient >= 4.9.0",
       "System.Drawing.Common >= 9.0.10",
@@ -2888,23 +2926,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\denve\\.nuget\\packages\\": {},
+    "C:\\Users\\Zack\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
+      "projectUniqueName": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
       "projectName": "RBXAssetExtractor",
-      "projectPath": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
-      "packagesPath": "C:\\Users\\denve\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\denve\\OneDrive\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\obj\\publish\\win-x64\\",
+      "projectPath": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\RBXAssetExtractor.vbproj",
+      "packagesPath": "C:\\Users\\Zack\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBXAssetExtractor\\obj\\publish\\win-x64\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\denve\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Zack\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2913,10 +2951,12 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0-windows7.0": {
+          "framework": "net8.0-windows7.0",
           "targetAlias": "net8.0-windows",
           "projectReferences": {}
         }
@@ -2930,21 +2970,21 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.300"
+      }
     },
     "frameworks": {
       "net8.0-windows7.0": {
+        "framework": "net8.0-windows7.0",
         "targetAlias": "net8.0-windows",
         "dependencies": {
           "Magick.NET-Q8-AnyCPU": {
             "target": "Package",
-            "version": "[14.9.0, )"
+            "version": "[14.14.0, )"
           },
           "Microsoft.NET.ILLink.Tasks": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[8.0.21, )",
+            "version": "[8.0.28, )",
             "autoReferenced": true
           },
           "ModernUI": {
@@ -2962,6 +3002,10 @@
           "NAudio.Vorbis": {
             "target": "Package",
             "version": "[1.5.0, )"
+          },
+          "Openize.Drako": {
+            "target": "Package",
+            "version": "[26.2.0, )"
           },
           "System.Data.SQLite": {
             "target": "Package",
@@ -3023,7 +3067,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.422/PortableRuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
@@ -3040,7 +3084,7 @@
       "message": "Package 'TradeWright.TabControlExtra 2.0.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
       "libraryId": "TradeWright.TabControlExtra",
       "targetGraphs": [
-        "net8.0-windows7.0"
+        "net8.0-windows"
       ]
     },
     {
@@ -3050,7 +3094,7 @@
       "message": "Package 'VedooControls 3.0.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
       "libraryId": "VedooControls",
       "targetGraphs": [
-        "net8.0-windows7.0"
+        "net8.0-windows"
       ]
     }
   ]

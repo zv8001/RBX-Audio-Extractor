@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -52,11 +52,12 @@
     <PackageReference Include="cmdwtf.Toolkit.Win32" Version="1.0.0" />
     <PackageReference Include="cmdwtf.Toolkit.WinForms" Version="1.0.0" />
     <PackageReference Include="cmdwtf.Toolkit.WinForms.Dialogs" Version="1.0.0" />
-    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.9.0" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.14.0" />
     <PackageReference Include="Modernizr" Version="2.8.3" />
     <PackageReference Include="ModernUI" Version="2.0.0" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
+    <PackageReference Include="Openize.Drako" Version="26.2.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
     <PackageReference Include="System.Drawing.Common" Version="9.0.10" />
@@ -106,12 +107,6 @@
 
   <ItemGroup>
     <Folder Include="NewFolder\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="DracoMeshDecoder">
-      <HintPath>..\..\..\..\source\repos\DracoMeshDecoder\DracoMeshDecoder\bin\Debug\net8.0\DracoMeshDecoder.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

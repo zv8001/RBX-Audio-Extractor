@@ -1,4 +1,4 @@
-﻿
+
 Imports System.ComponentModel
 Imports System.Data.SQLite
 Imports System.Diagnostics.CodeAnalysis
@@ -52,7 +52,7 @@ Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "v1.2.4"
+    Dim V = "2.0.0 OVERHAUL"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Dim Stage As Integer = 0
     Dim tempDirectory = Path.GetTempPath
@@ -63,6 +63,208 @@ Public Class MainForm
     Private startPoint As Point
     Dim HTTPDONE = True
 
+    Private meshEntries As New List(Of MeshCacheEntry)()
+
+    Private cacheAssetEntries As New List(Of RobloxCacheAssetEntry)()
+
+    Private fullAudioEntries As New List(Of RobloxCacheAssetEntry)()
+    Private fullImageEntries As New List(Of RobloxCacheAssetEntry)()
+    Private selectedFullAudioEntry As RobloxCacheAssetEntry
+    Private selectedFullImageEntry As RobloxCacheAssetEntry
+    Private imagePreviewLoadVersion As Integer
+    Private thumbnailEntries As New List(Of SupplementalCacheEntry)()
+    Private fontEntries As New List(Of SupplementalCacheEntry)()
+    Private metadataEntries As New List(Of SupplementalCacheEntry)()
+    Private thumbnailPreviewLoadVersion As Integer
+
+    Private Async Sub ThumbnailScanButton_Click(sender As Object, e As EventArgs) Handles thumbnailScanButton.Click
+        SetSupplementalBusy(thumbnailScanButton, thumbnailExportButton, thumbnailExportAllButton, thumbnailList, True)
+        thumbnailEntries.Clear()
+        thumbnailList.Items.Clear()
+        thumbnailStatus.Text = "Scanning the embedded Roblox thumbnail cache..."
+        thumbnailProgress.Value = 0
+        Try
+            thumbnailEntries = Await Task.Run(Function() RobloxSupplementalCacheExtractor.ScanThumbnails(
+                Sub(value)
+                    Me.BeginInvoke(New Action(Sub()
+                                                  If value.Total > 0 Then thumbnailProgress.Value = Math.Min(100, CInt(CLng(value.Current) * 100L \ value.Total))
+                                                  thumbnailStatus.Text = $"Scanning thumbnails... {value.Found:N0} found"
+                                              End Sub))
+                End Sub))
+            thumbnailList.Items.AddRange(thumbnailEntries.Cast(Of Object)().ToArray())
+            thumbnailStatus.Text = $"Found {thumbnailEntries.Count:N0} cached avatar, headshot, and thumbnail images."
+        Catch ex As Exception
+            thumbnailStatus.Text = "Thumbnail scan failed."
+            CallError(ex.Message)
+        Finally
+            SetSupplementalBusy(thumbnailScanButton, thumbnailExportButton, thumbnailExportAllButton, thumbnailList, False, thumbnailEntries.Count)
+            thumbnailProgress.Value = 0
+        End Try
+    End Sub
+
+    Private Async Sub FontScanButton_Click(sender As Object, e As EventArgs) Handles fontScanButton.Click
+        SetSupplementalBusy(fontScanButton, fontExportButton, fontExportAllButton, fontList, True)
+        fontEntries.Clear()
+        fontList.Items.Clear()
+        fontStatus.Text = "Scanning the Roblox cache for fonts..."
+        fontProgress.Value = 0
+        Try
+            fontEntries = Await Task.Run(Function() RobloxSupplementalCacheExtractor.ScanFonts(
+                Sub(value)
+                    Me.BeginInvoke(New Action(Sub()
+                                                  If value.Total > 0 Then fontProgress.Value = Math.Min(100, CInt(CLng(value.Current) * 100L \ value.Total))
+                                                  fontStatus.Text = $"Scanning fonts... {value.Found:N0} found"
+                                              End Sub))
+                End Sub))
+            fontList.Items.AddRange(fontEntries.Cast(Of Object)().ToArray())
+            fontStatus.Text = $"Found {fontEntries.Count:N0} cached TTF and OTF files."
+        Catch ex As Exception
+            fontStatus.Text = "Font scan failed."
+            CallError(ex.Message)
+        Finally
+            SetSupplementalBusy(fontScanButton, fontExportButton, fontExportAllButton, fontList, False, fontEntries.Count)
+            fontProgress.Value = 0
+        End Try
+    End Sub
+
+    Private Async Sub MetadataScanButton_Click(sender As Object, e As EventArgs) Handles metadataScanButton.Click
+        SetSupplementalBusy(metadataScanButton, metadataExportButton, metadataExportAllButton, metadataList, True)
+        metadataEntries.Clear()
+        metadataList.Items.Clear()
+        metadataPreview.Clear()
+        metadataStatus.Text = "Scanning the Roblox cache for JSON, XML, and playlists..."
+        metadataProgress.Value = 0
+        Try
+            metadataEntries = Await Task.Run(Function() RobloxSupplementalCacheExtractor.ScanMetadata(
+                Sub(value)
+                    Me.BeginInvoke(New Action(Sub()
+                                                  If value.Total > 0 Then metadataProgress.Value = Math.Min(100, CInt(CLng(value.Current) * 100L \ value.Total))
+                                                  metadataStatus.Text = $"Scanning metadata... {value.Found:N0} found"
+                                              End Sub))
+                End Sub))
+            metadataList.Items.AddRange(metadataEntries.Cast(Of Object)().ToArray())
+            metadataStatus.Text = $"Found {metadataEntries.Count:N0} JSON, XML, and HLS metadata files."
+        Catch ex As Exception
+            metadataStatus.Text = "Metadata scan failed."
+            CallError(ex.Message)
+        Finally
+            SetSupplementalBusy(metadataScanButton, metadataExportButton, metadataExportAllButton, metadataList, False, metadataEntries.Count)
+            metadataProgress.Value = 0
+        End Try
+    End Sub
+
+    Private Sub SetSupplementalBusy(scanButton As System.Windows.Forms.Button, exportButton As System.Windows.Forms.Button, exportAllButton As System.Windows.Forms.Button, list As ListBox, busy As Boolean, Optional itemCount As Integer = 0)
+        scanButton.Enabled = Not busy
+        list.Enabled = Not busy
+        exportButton.Enabled = Not busy AndAlso list.SelectedItem IsNot Nothing
+        exportAllButton.Enabled = Not busy AndAlso itemCount > 0
+    End Sub
+
+    Private Async Sub ThumbnailList_SelectedIndexChanged(sender As Object, e As EventArgs) Handles thumbnailList.SelectedIndexChanged
+        Dim entry = TryCast(thumbnailList.SelectedItem, SupplementalCacheEntry)
+        thumbnailExportButton.Enabled = entry IsNot Nothing AndAlso thumbnailScanButton.Enabled
+        If entry Is Nothing Then Return
+        thumbnailPreviewLoadVersion += 1
+        Dim version = thumbnailPreviewLoadVersion
+        thumbnailStatus.Text = $"Loading {entry.TypeLabel}..."
+        Try
+            Dim image = Await Task.Run(Function() LoadImageFromPayload(RobloxSupplementalCacheExtractor.ReadPayload(entry)))
+            If version <> thumbnailPreviewLoadVersion OrElse Not Object.ReferenceEquals(thumbnailList.SelectedItem, entry) Then
+                image.Dispose()
+                Return
+            End If
+            Dim oldImage = thumbnailPreview.Image
+            thumbnailPreview.Image = image
+            If oldImage IsNot Nothing Then oldImage.Dispose()
+            thumbnailStatus.Text = $"Previewing {entry.DisplayName} ({image.Width} x {image.Height})."
+        Catch ex As Exception
+            If version = thumbnailPreviewLoadVersion Then
+                thumbnailStatus.Text = "Thumbnail preview failed."
+                CallError(ex.Message)
+            End If
+        End Try
+    End Sub
+
+    Private Sub FontList_SelectedIndexChanged(sender As Object, e As EventArgs) Handles fontList.SelectedIndexChanged
+        fontExportButton.Enabled = fontList.SelectedItem IsNot Nothing AndAlso fontScanButton.Enabled
+    End Sub
+
+    Private Async Sub MetadataList_SelectedIndexChanged(sender As Object, e As EventArgs) Handles metadataList.SelectedIndexChanged
+        Dim entry = TryCast(metadataList.SelectedItem, SupplementalCacheEntry)
+        metadataExportButton.Enabled = entry IsNot Nothing AndAlso metadataScanButton.Enabled
+        If entry Is Nothing Then Return
+        Try
+            Dim payload = Await Task.Run(Function() RobloxSupplementalCacheExtractor.ReadPayload(entry))
+            metadataPreview.Text = Encoding.UTF8.GetString(payload)
+            metadataStatus.Text = $"Previewing {entry.TypeLabel} directly from the Roblox cache."
+        Catch ex As Exception
+            metadataPreview.Text = String.Empty
+            metadataStatus.Text = "Metadata preview failed."
+            CallError(ex.Message)
+        End Try
+    End Sub
+
+    Private Async Function ExportSupplementalSelected(entry As SupplementalCacheEntry, status As Label) As Task
+        If entry Is Nothing Then Return
+        Using dialog As New SaveFileDialog With {
+            .Filter = $"{entry.TypeLabel} (*{entry.Extension})|*{entry.Extension}|All files (*.*)|*.*",
+            .DefaultExt = entry.Extension.TrimStart("."c),
+            .AddExtension = True,
+            .FileName = entry.ExportBaseName & entry.Extension
+        }
+            If dialog.ShowDialog(Me) <> DialogResult.OK Then Return
+            status.Text = $"Exporting {entry.TypeLabel}..."
+            Try
+                Await Task.Run(Sub() RobloxSupplementalCacheExtractor.Export(entry, dialog.FileName))
+                status.Text = $"Exported {Path.GetFileName(dialog.FileName)}"
+            Catch ex As Exception
+                status.Text = "Export failed."
+                CallError(ex.Message)
+            End Try
+        End Using
+    End Function
+
+    Private Async Function ExportSupplementalAll(entries As List(Of SupplementalCacheEntry), status As Label, description As String) As Task
+        If entries.Count = 0 Then Return
+        Using dialog As New FolderBrowserDialog With {.Description = description, .ShowNewFolderButton = True}
+            If dialog.ShowDialog(Me) <> DialogResult.OK Then Return
+            status.Text = $"Exporting {entries.Count:N0} files..."
+            Try
+                Dim summary = Await Task.Run(Function() RobloxSupplementalCacheExtractor.ExportMany(entries, dialog.SelectedPath,
+                    Sub(current, total)
+                        If current Mod 25 = 0 OrElse current = total Then Me.BeginInvoke(New Action(Sub() status.Text = $"Exporting {current:N0} of {total:N0}..."))
+                    End Sub))
+                status.Text = $"Exported {summary.Exported:N0}; reused {summary.Reused:N0}; failed {summary.Failed:N0}."
+            Catch ex As Exception
+                status.Text = "Bulk export failed."
+                CallError(ex.Message)
+            End Try
+        End Using
+    End Function
+
+    Private Async Sub ThumbnailExportButton_Click(sender As Object, e As EventArgs) Handles thumbnailExportButton.Click
+        Await ExportSupplementalSelected(TryCast(thumbnailList.SelectedItem, SupplementalCacheEntry), thumbnailStatus)
+    End Sub
+
+    Private Async Sub ThumbnailExportAllButton_Click(sender As Object, e As EventArgs) Handles thumbnailExportAllButton.Click
+        Await ExportSupplementalAll(thumbnailEntries, thumbnailStatus, "Choose a folder for cached Roblox thumbnails")
+    End Sub
+
+    Private Async Sub FontExportButton_Click(sender As Object, e As EventArgs) Handles fontExportButton.Click
+        Await ExportSupplementalSelected(TryCast(fontList.SelectedItem, SupplementalCacheEntry), fontStatus)
+    End Sub
+
+    Private Async Sub FontExportAllButton_Click(sender As Object, e As EventArgs) Handles fontExportAllButton.Click
+        Await ExportSupplementalAll(fontEntries, fontStatus, "Choose a folder for cached Roblox fonts")
+    End Sub
+
+    Private Async Sub MetadataExportButton_Click(sender As Object, e As EventArgs) Handles metadataExportButton.Click
+        Await ExportSupplementalSelected(TryCast(metadataList.SelectedItem, SupplementalCacheEntry), metadataStatus)
+    End Sub
+
+    Private Async Sub MetadataExportAllButton_Click(sender As Object, e As EventArgs) Handles metadataExportAllButton.Click
+        Await ExportSupplementalAll(metadataEntries, metadataStatus, "Choose a folder for cached Roblox metadata")
+    End Sub
     Private Function CheckForRoblox()
         If My.Computer.FileSystem.DirectoryExists($"{tempDirectory}\Roblox") Then
             Return True
@@ -107,6 +309,260 @@ Public Class MainForm
     End Sub
 
 
+    Private Sub CacheAssetFilterChanged(sender As Object, e As EventArgs) Handles cacheAssetFilter.SelectedIndexChanged
+        RefreshCacheAssetList()
+    End Sub
+
+    Private Sub CacheAssetList_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cacheAssetList.SelectedIndexChanged
+        cacheAssetExportButton.Enabled = cacheAssetList.SelectedItem IsNot Nothing AndAlso cacheAssetScanButton.Enabled
+    End Sub
+    Private Sub RefreshCacheAssetList()
+        If cacheAssetList Is Nothing Then Return
+        Dim selectedFilter = If(cacheAssetFilter Is Nothing, 0, cacheAssetFilter.SelectedIndex)
+        Dim visible = cacheAssetEntries.Where(
+            Function(entry)
+                If selectedFilter = 1 Then Return entry.FileType = RobloxCacheFileType.RbxmBinary OrElse entry.FileType = RobloxCacheFileType.RbxmXml
+                If selectedFilter = 2 Then Return entry.FileType = RobloxCacheFileType.Ktx1 OrElse entry.FileType = RobloxCacheFileType.Ktx2
+                Return True
+            End Function).Cast(Of Object)().ToArray()
+        cacheAssetList.BeginUpdate()
+        Try
+            cacheAssetList.Items.Clear()
+            cacheAssetList.Items.AddRange(visible)
+        Finally
+            cacheAssetList.EndUpdate()
+        End Try
+        cacheAssetExportButton.Enabled = False
+    End Sub
+
+    Private Sub SetCacheAssetBusy(busy As Boolean)
+        cacheAssetScanButton.Enabled = Not busy
+        cacheAssetFilter.Enabled = Not busy
+        cacheAssetList.Enabled = Not busy
+        cacheAssetExportButton.Enabled = Not busy AndAlso cacheAssetList.SelectedItem IsNot Nothing
+        cacheAssetExportAllButton.Enabled = Not busy AndAlso cacheAssetEntries.Count > 0
+        If Not busy Then cacheAssetProgress.Value = 0
+    End Sub
+
+    Private Async Sub CacheAssetScanButton_Click(sender As Object, e As EventArgs) Handles cacheAssetScanButton.Click
+        SetCacheAssetBusy(True)
+        cacheAssetEntries.Clear()
+        cacheAssetList.Items.Clear()
+        cacheAssetStatus.Text = "Scanning models and textures..."
+        Try
+            cacheAssetEntries = Await Task.Run(
+                Function()
+                    Return RobloxCacheAssetExtractor.Scan(
+                        Sub(value)
+                            Me.BeginInvoke(New Action(Sub()
+                                                          If value.Total > 0 Then cacheAssetProgress.Value = Math.Min(100, CInt(CLng(value.Current) * 100L \ value.Total))
+                                                          cacheAssetStatus.Text = $"Scanning... {value.Found:N0} files found"
+                                                      End Sub))
+                        End Sub,
+                        RobloxCacheFileType.RbxmBinary, RobloxCacheFileType.RbxmXml,
+                        RobloxCacheFileType.Ktx1, RobloxCacheFileType.Ktx2)
+                End Function)
+            RefreshCacheAssetList()
+            Dim rbxmCount = cacheAssetEntries.Where(Function(entry) entry.FileType = RobloxCacheFileType.RbxmBinary OrElse entry.FileType = RobloxCacheFileType.RbxmXml).Count()
+            Dim ktxCount = cacheAssetEntries.Count - rbxmCount
+            cacheAssetStatus.Text = $"Found {rbxmCount:N0} RBXM and {ktxCount:N0} KTX files."
+        Catch ex As Exception
+            cacheAssetStatus.Text = "Cache scan failed."
+            CallError($"RBXM/KTX scan failed: {ex.Message}")
+        Finally
+            SetCacheAssetBusy(False)
+        End Try
+    End Sub
+
+    Private Async Sub CacheAssetExportButton_Click(sender As Object, e As EventArgs) Handles cacheAssetExportButton.Click
+        Dim entry = TryCast(cacheAssetList.SelectedItem, RobloxCacheAssetEntry)
+        If entry Is Nothing Then Return
+        Using dialog As New SaveFileDialog With {
+            .Title = $"Export {entry.TypeLabel}",
+            .Filter = $"{entry.TypeLabel} (*{entry.Extension})|*{entry.Extension}|All files (*.*)|*.*",
+            .FileName = entry.Hash & entry.Extension,
+            .DefaultExt = entry.Extension.TrimStart("."c),
+            .AddExtension = True
+        }
+            If dialog.ShowDialog(Me) <> DialogResult.OK Then Return
+            SetCacheAssetBusy(True)
+            cacheAssetProgress.Style = ProgressBarStyle.Marquee
+            cacheAssetStatus.Text = $"Exporting {entry.TypeLabel}..."
+            Try
+                Await Task.Run(Sub() RobloxCacheAssetExtractor.Export(entry, dialog.FileName))
+                cacheAssetStatus.Text = $"Exported {Path.GetFileName(dialog.FileName)}"
+            Catch ex As Exception
+                cacheAssetStatus.Text = "Export failed."
+                CallError($"Asset export failed: {ex.Message}")
+            Finally
+                cacheAssetProgress.Style = ProgressBarStyle.Blocks
+                SetCacheAssetBusy(False)
+            End Try
+        End Using
+    End Sub
+
+    Private Async Sub CacheAssetExportAllButton_Click(sender As Object, e As EventArgs) Handles cacheAssetExportAllButton.Click
+        If cacheAssetEntries.Count = 0 Then Return
+        Using dialog As New FolderBrowserDialog With {.Description = "Choose a folder for RBXM and KTX files", .UseDescriptionForTitle = True}
+            If dialog.ShowDialog(Me) <> DialogResult.OK Then Return
+            SetCacheAssetBusy(True)
+            cacheAssetStatus.Text = $"Exporting {cacheAssetEntries.Count:N0} files..."
+            Try
+                Dim summary = Await Task.Run(
+                    Function()
+                        Return RobloxCacheAssetExtractor.ExportMany(
+                            cacheAssetEntries, dialog.SelectedPath,
+                            Sub(current, total)
+                                If current Mod 25 = 0 OrElse current = total Then
+                                    Me.BeginInvoke(New Action(Sub()
+                                                                  If total > 0 Then cacheAssetProgress.Value = Math.Min(100, CInt(CLng(current) * 100L \ total))
+                                                                  cacheAssetStatus.Text = $"Exporting {current:N0} of {total:N0}..."
+                                                              End Sub))
+                                End If
+                            End Sub, True)
+                    End Function)
+                cacheAssetStatus.Text = $"Exported {summary.Exported:N0}; reused {summary.Reused:N0}; failed {summary.Failed:N0}."
+            Catch ex As Exception
+                cacheAssetStatus.Text = "Bulk export failed."
+                CallError($"RBXM/KTX export failed: {ex.Message}")
+            Finally
+                SetCacheAssetBusy(False)
+            End Try
+        End Using
+    End Sub
+
+
+    Private Sub MeshList_SelectedIndexChanged(sender As Object, e As EventArgs) Handles meshList.SelectedIndexChanged
+        meshExportButton.Enabled = meshList.SelectedItem IsNot Nothing AndAlso meshScanButton.Enabled
+    End Sub
+    Private Sub SetMeshBusy(busy As Boolean)
+        meshScanButton.Enabled = Not busy
+        meshExportButton.Enabled = Not busy AndAlso meshList.SelectedItem IsNot Nothing
+        meshExportAllButton.Enabled = Not busy AndAlso meshEntries.Any(Function(item) item.CanExport)
+        meshList.Enabled = Not busy
+        If Not busy Then meshProgress.Value = 0
+    End Sub
+
+    Private Async Sub MeshScanButton_Click(sender As Object, e As EventArgs) Handles meshScanButton.Click
+        SetMeshBusy(True)
+        meshList.Items.Clear()
+        meshEntries.Clear()
+        meshStatus.Text = "Scanning the Roblox cache..."
+        Try
+            Dim progress = New Progress(Of MeshScanProgress)(
+                Sub(value)
+                    If value.Total > 0 Then meshProgress.Value = Math.Min(100, CInt(value.Current * 100L \ value.Total))
+                    meshStatus.Text = $"Scanning... {value.Current:N0} of {value.Total:N0} entries ({value.Found:N0} meshes found)"
+                End Sub)
+            meshEntries = Await Task.Run(Function() RobloxMeshExtractor.Scan(progress))
+            meshList.BeginUpdate()
+            For Each entry In meshEntries
+                meshList.Items.Add(entry)
+            Next
+            meshList.EndUpdate()
+            Dim ready = meshEntries.Where(Function(item) item.CanExport).Count()
+            meshStatus.Text = $"Found {meshEntries.Count:N0} meshes; {ready:N0} can be exported to OBJ."
+        Catch ex As Exception
+            meshStatus.Text = "Mesh scan failed."
+            CallError($"Mesh scan failed: {ex.Message}")
+        Finally
+            SetMeshBusy(False)
+        End Try
+    End Sub
+
+    Private Async Sub MeshList_DoubleClick(sender As Object, e As EventArgs) Handles meshList.DoubleClick
+        Dim entry = TryCast(meshList.SelectedItem, MeshCacheEntry)
+        If entry Is Nothing Then Return
+        If Not entry.CanExport Then
+            CallError($"Mesh version {entry.Version} cannot be previewed yet.")
+            Return
+        End If
+
+        SetMeshBusy(True)
+        meshProgress.Style = ProgressBarStyle.Marquee
+        meshStatus.Text = $"Loading preview for {entry.Hash.Substring(0, 12)}..."
+        Try
+            Dim data = Await Task.Run(Function() RobloxMeshExtractor.LoadPreview(entry))
+            Dim preview As New MeshPreviewForm(entry, data)
+            preview.Show(Me)
+            meshStatus.Text = $"Previewing {data.Positions.Length:N0} vertices and {data.Indices.Length \ 3:N0} triangles."
+        Catch ex As Exception
+            meshStatus.Text = "Mesh preview failed."
+            CallError($"Mesh preview failed: {ex.Message}")
+        Finally
+            meshProgress.Style = ProgressBarStyle.Blocks
+            SetMeshBusy(False)
+        End Try
+    End Sub
+    Private Async Sub MeshExportButton_Click(sender As Object, e As EventArgs) Handles meshExportButton.Click
+        Dim entry = TryCast(meshList.SelectedItem, MeshCacheEntry)
+        If entry Is Nothing Then Return
+        If Not entry.CanExport Then
+            CallError($"Mesh version {entry.Version} is not supported yet.")
+            Return
+        End If
+        Using dialog As New SaveFileDialog With {
+            .Title = "Export Roblox mesh as OBJ",
+            .Filter = "Wavefront OBJ (*.obj)|*.obj",
+            .FileName = $"{entry.Hash}.obj",
+            .AddExtension = True,
+            .DefaultExt = "obj"
+        }
+            If dialog.ShowDialog(Me) <> DialogResult.OK Then Return
+            SetMeshBusy(True)
+            meshProgress.Style = ProgressBarStyle.Marquee
+            meshStatus.Text = $"Exporting {entry.Hash.Substring(0, 12)}..."
+            Try
+                Dim result = Await Task.Run(Function() RobloxMeshExtractor.Export(entry, dialog.FileName))
+                meshStatus.Text = $"Exported {result.VertexCount:N0} vertices and {result.FaceCount:N0} faces."
+            Catch ex As Exception
+                meshStatus.Text = "Mesh export failed."
+                CallError($"Mesh export failed: {ex.Message}")
+            Finally
+                meshProgress.Style = ProgressBarStyle.Blocks
+                SetMeshBusy(False)
+            End Try
+        End Using
+    End Sub
+
+    Private Async Sub MeshExportAllButton_Click(sender As Object, e As EventArgs) Handles meshExportAllButton.Click
+        Dim exportable = meshEntries.Where(Function(item) item.CanExport).ToList()
+        If exportable.Count = 0 Then Return
+        Using dialog As New FolderBrowserDialog With {.Description = "Choose a folder for the exported OBJ files", .UseDescriptionForTitle = True}
+            If dialog.ShowDialog(Me) <> DialogResult.OK Then Return
+            SetMeshBusy(True)
+            meshStatus.Text = $"Exporting {exportable.Count:N0} meshes..."
+            Try
+                Dim progress As IProgress(Of Integer) = New Progress(Of Integer)(
+                    Sub(current)
+                        meshProgress.Value = Math.Min(100, CInt(current * 100L \ exportable.Count))
+                        meshStatus.Text = $"Exporting mesh {current:N0} of {exportable.Count:N0}..."
+                    End Sub)
+                Dim summary = Await Task.Run(
+                    Function()
+                        Dim exported = 0
+                        Dim failed = 0
+                        For i = 0 To exportable.Count - 1
+                            Dim entry = exportable(i)
+                            Try
+                                RobloxMeshExtractor.Export(entry, Path.Combine(dialog.SelectedPath, entry.Hash & ".obj"))
+                                exported += 1
+                            Catch
+                                failed += 1
+                            End Try
+                            progress.Report(i + 1)
+                        Next
+                        Return (Exported:=exported, Failed:=failed)
+                    End Function)
+                meshStatus.Text = $"Exported {summary.Exported:N0} meshes; {summary.Failed:N0} failed."
+            Catch ex As Exception
+                meshStatus.Text = "Bulk mesh export failed."
+                CallError($"Bulk mesh export failed: {ex.Message}")
+            Finally
+                SetMeshBusy(False)
+            End Try
+        End Using
+    End Sub
     Public Sub DownloadUpdate()
 
         Dim updateUrl As String = "https://rbxaudioextractor-update-server.netlify.app/RBXAssetExtractor/bin/Release/net8.0-windows/publish/win-x64/RBXAssetExtractor.exe"
@@ -216,15 +672,16 @@ del %0
 
     Dim DisableTimer019 = False
 
-    Private Sub LoadFullGame()
+    Private Sub LoadFullGame(Optional audioOnly As Boolean = True)
         If CheckForRoblox() Then
             If ProgressBar1.Value = 0 Then
-                Dim result = MessageBox.Show("It is highly recommended you clear cache before each game considering audio files from previous sessions will remain and it may take a long time to process. Do you still want to continue?", "Do you still want to continue?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                Dim assetLabel = If(audioOnly, "audio", "image")
+                Dim result = MessageBox.Show($"Cached {assetLabel} files from previous sessions may still be present. Continue scanning the Roblox cache?", "Scan Roblox cache?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
 
                 If result = DialogResult.Yes Then
 
                     Try
-                        LoadHTTP0.RunWorkerAsync()
+                        LoadHTTP0.RunWorkerAsync(audioOnly)
                     Catch ex As Exception
                         CallError("Two processes cannot run at the same time please wait for the original process to stop.")
                     End Try
@@ -246,359 +703,99 @@ del %0
         LoadFullGame()
     End Sub
 
-    Private Sub UpdateTaskLBR(Text)
-        Me.Invoke(Sub()
-                      TaskLBR.Text = Text
-                  End Sub)
-    End Sub
-
-    Private Function TryAndLoadImg(Img)
+    Private Sub LoadOptimizedFullGameAudio()
+        Me.Invoke(New Action(Sub()
+                                 HTTPLISTBOX.Items.Clear()
+                                 selectedFullAudioEntry = Nothing
+                                 TaskLBR.Text = "Scanning Roblox audio cache"
+                                 fullAudioStatus.Text = "Scanning the Roblox cache for audio..."
+                                 TaskLBR.Visible = True
+                                 ProgressBar1.Value = 0
+                             End Sub))
         Try
-
-            Dim selectedFile = Img
-            PreVeiwImgBox.Image = Image.FromFile(selectedFile)
-            SelFile = selectedFile
-            Dim image0 As Image = Image.FromFile(SelFile)
-            Dim width As Integer = image0.Width
-            Dim height As Integer = image0.Height
-            Dim fileInfo As New FileInfo(SelFile)
-            Dim fileSize As Long = fileInfo.Length
-            ImgStats.Text = $"Dimensions: {width} x {height}" & vbCrLf &
-                                 $"File Size: {FormatBytes(fileSize)}"
-
+            fullAudioEntries = RobloxCacheAssetExtractor.Scan(
+                Sub(value)
+                    Me.BeginInvoke(New Action(Sub()
+                                                  If value.Total > 0 Then ProgressBar1.Value = Math.Min(99, CInt(CLng(value.Current) * 100L \ value.Total))
+                                                  fullAudioStatus.Text = $"Scanning audio... {value.Found:N0} found"
+                                              End Sub))
+                End Sub, RobloxCacheFileType.Ogg, RobloxCacheFileType.Mp3)
+            Dim listItems = fullAudioEntries.Cast(Of Object)().ToArray()
+            Me.Invoke(New Action(Sub()
+                                     HTTPLISTBOX.BeginUpdate()
+                                     Try
+                                         HTTPLISTBOX.Items.Clear()
+                                         HTTPLISTBOX.Items.AddRange(listItems)
+                                     Finally
+                                         HTTPLISTBOX.EndUpdate()
+                                     End Try
+                                     fullAudioStatus.Text = $"Found {fullAudioEntries.Count:N0} audio files. Select one to stream it."
+                                     output_log.Items.Add($"Audio scan complete: {fullAudioEntries.Count:N0} cache references found; no temporary files created.")
+                                     ProgressBar1.Value = 0
+                                     StatusLBR.Text = "0%"
+                                     TaskLBR.Visible = False
+                                 End Sub))
         Catch ex As Exception
-            Return False
+            Me.Invoke(New Action(Sub()
+                                     fullAudioStatus.Text = "Audio scan failed."
+                                     ProgressBar1.Value = 0
+                                     StatusLBR.Text = "0%"
+                                     TaskLBR.Visible = False
+                                     CallError($"Error reading Roblox audio cache: {ex.Message}")
+                                 End Sub))
         End Try
-        Return True
-    End Function
-
-    Private Function DetectAndSave(bytes As Byte(), hash As String, oggDir As String, imageDir As String) As String
-        Dim oggHeader = Encoding.ASCII.GetBytes("OggS")
-        Dim pngHeader = New Byte() {&H89, &H50, &H4E, &H47, &HD, &HA, &H1A, &HA}
-        Dim jpgHeader = New Byte() {&HFF, &HD8}
-        Dim bmpHeader = Encoding.ASCII.GetBytes("BM")
-        Dim riffHeader = Encoding.ASCII.GetBytes("RIFF")
-        Dim webpSignature = Encoding.ASCII.GetBytes("WEBP")
-
-        Dim index As Integer
-
-        index = FindHeaderIndex(bytes, oggHeader)
-        If index >= 0 Then
-            Me.Invoke(Sub()
-                          output_log.Items.Add($"Saving entry: {hash & Path.Combine(oggDir, hash & ".ogg")}")
-                      End Sub)
-
-            System.IO.File.WriteAllBytes(Path.Combine(oggDir, hash & ".ogg"), bytes.Skip(index).ToArray())
-            Return "ogg"
-        End If
-
-        index = FindHeaderIndex(bytes, pngHeader)
-        If index >= 0 Then
-            Me.Invoke(Sub()
-                          output_log.Items.Add($"Saving entry: {hash & Path.Combine(oggDir, hash & ".png")}")
-                      End Sub)
-
-            System.IO.File.WriteAllBytes(Path.Combine(imageDir, hash & ".png"), bytes.Skip(index).ToArray())
-            Return "png"
-        End If
-
-        index = FindHeaderIndex(bytes, jpgHeader)
-        If index >= 0 Then
-            System.IO.File.WriteAllBytes(Path.Combine(imageDir, hash & ".jpg"), bytes.Skip(index).ToArray())
-            Me.Invoke(Sub()
-                          output_log.Items.Add($"Saving entry: {hash & Path.Combine(oggDir, hash & ".jpg")}")
-                      End Sub)
-
-            If Not TryAndLoadImg(Path.Combine(imageDir, hash & ".jpg")) Then
-                Me.Invoke(Sub()
-                              output_log.Items.Add($"SAVE FAILURE FILE IS CORRUPTED")
-                          End Sub)
-
-                My.Computer.FileSystem.DeleteFile(Path.Combine(imageDir, hash & ".jpg"))
-            End If
-
-            Return "jpg"
-        End If
-
-        index = FindHeaderIndex(bytes, bmpHeader)
-        If index >= 0 Then
-            System.IO.File.WriteAllBytes(Path.Combine(imageDir, hash & ".bmp"), bytes.Skip(index).ToArray())
-            Me.Invoke(Sub()
-                          output_log.Items.Add($"Saving entry: {hash & Path.Combine(oggDir, hash & ".bmp")}")
-                      End Sub)
-
-            If Not TryAndLoadImg(Path.Combine(imageDir, hash & ".bmp")) Then
-                Me.Invoke(Sub()
-                              output_log.Items.Add($"SAVE FAILURE FILE IS CORRUPTED")
-                          End Sub)
-
-                My.Computer.FileSystem.DeleteFile(Path.Combine(imageDir, hash & ".bmp"))
-            End If
-
-
-            Return "bmp"
-        End If
-
-        index = FindHeaderIndex(bytes, riffHeader)
-        If index >= 0 AndAlso bytes.Length > index + 12 Then
-            If bytes.Skip(index + 8).Take(4).SequenceEqual(webpSignature) Then
-                Me.Invoke(Sub()
-                              output_log.Items.Add($"Saving entry: {hash & Path.Combine(oggDir, hash & ".webp")}")
-                          End Sub)
-
-                System.IO.File.WriteAllBytes(Path.Combine(imageDir, hash & ".webp"), bytes.Skip(index).ToArray())
-
-                Return "webp"
-            End If
-        End If
-
-        Return "unknown"
-    End Function
-
-    Private Function FindHeaderIndex(data As Byte(), header As Byte()) As Integer
-        For i As Integer = 0 To data.Length - header.Length
-            If data.AsSpan(i, header.Length).SequenceEqual(header) Then
-                Return i
-            End If
-        Next
-        Return -1
-    End Function
-
-
+    End Sub
+    Private Sub LoadOptimizedFullGameImages()
+        Me.Invoke(New Action(Sub()
+                                 LoadImgListBox.Items.Clear()
+                                 selectedFullImageEntry = Nothing
+                                 TaskLBR.Text = "Scanning Roblox image cache"
+                                 fullImageStatus.Text = "Scanning the Roblox cache for images..."
+                                 TaskLBR.Visible = True
+                                 ProgressBar1.Value = 0
+                             End Sub))
+        Try
+            fullImageEntries = RobloxCacheAssetExtractor.Scan(
+                Sub(value)
+                    Me.BeginInvoke(New Action(Sub()
+                                                  If value.Total > 0 Then ProgressBar1.Value = Math.Min(99, CInt(CLng(value.Current) * 100L \ value.Total))
+                                                  fullImageStatus.Text = $"Scanning images... {value.Found:N0} found"
+                                              End Sub))
+                End Sub,
+                RobloxCacheFileType.Png, RobloxCacheFileType.Jpeg, RobloxCacheFileType.Bmp, RobloxCacheFileType.WebP)
+            Dim listItems = fullImageEntries.Cast(Of Object)().ToArray()
+            Me.Invoke(New Action(Sub()
+                                     LoadImgListBox.BeginUpdate()
+                                     Try
+                                         LoadImgListBox.Items.Clear()
+                                         LoadImgListBox.Items.AddRange(listItems)
+                                     Finally
+                                         LoadImgListBox.EndUpdate()
+                                     End Try
+                                     fullImageStatus.Text = $"Found {fullImageEntries.Count:N0} images. Select one to preview it."
+                                     output_log.Items.Add($"Image scan complete: {fullImageEntries.Count:N0} cache references found; no temporary files created.")
+                                     ProgressBar1.Value = 0
+                                     StatusLBR.Text = "0%"
+                                     TaskLBR.Visible = False
+                                 End Sub))
+        Catch ex As Exception
+            Me.Invoke(New Action(Sub()
+                                     fullImageStatus.Text = "Image scan failed."
+                                     ProgressBar1.Value = 0
+                                     StatusLBR.Text = "0%"
+                                     TaskLBR.Visible = False
+                                     CallError($"Error reading Roblox image cache: {ex.Message}")
+                                 End Sub))
+        End Try
+    End Sub
     Private Sub LoadHTTP_DoWork_1(sender As Object, e As DoWorkEventArgs) Handles LoadHTTP0.DoWork
-
-        'The old code was a complete disaster it utilized like a bunch of background workers and then progress bars to check to see if the background workers are done
-        'just created a buggy mess of code that was bound to failure
-        'so I basically just moved all of the bullshit all into one background worker
-        'that was the only proper fix to this disaster I don't know why my dumbass coded it like that but it's fixed now in v1.1.2
-
-
-        'Updated to include the new Roblox system (.db file) as of 7/21/2025
-
-
-
-
-        Me.Invoke(Sub()
-                      HTTPLISTBOX.DisplayMember = "DisplayText"
-                      HTTPLISTBOX.ValueMember = "FilePath"
-
-                      LoadImgListBox.DisplayMember = "DisplayText"
-                      LoadImgListBox.ValueMember = "FilePath"
-                  End Sub)
-
-
-        Dim tempDirectory = Path.GetTempPath
-
-        If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBXAudioExtractorIMG") Then
-            My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBXAudioExtractorIMG")
+        If Not TypeOf e.Argument Is Boolean Then Return
+        If CBool(e.Argument) Then
+            LoadOptimizedFullGameAudio()
+        Else
+            LoadOptimizedFullGameImages()
         End If
-
-        If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBXAudioExtractorOBJ") Then
-            My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBXAudioExtractorOBJ")
-        End If
-
-        If Not My.Computer.FileSystem.FileExists(tempDirectory & "\RBX_SOUND_RIPPER_HTTP") Then
-            My.Computer.FileSystem.CreateDirectory(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
-        End If
-
-
-
-
-
-
-        Me.Invoke(Sub()
-                      TaskLBR.Visible = True
-                  End Sub)
-
-        Stage = 1
-        UpdateTaskLBR("Task 1/4")
-
-        RemoveAllFileInDir1(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
-        UpdateTaskLBR("Task 2/4")
-        RemoveAllFileInDir1(tempDirectory & "\RBXAudioExtractorIMG")
-
-
-        Dim directories As String() = CType(e.Argument, String())
-
-
-
-
-        UpdateTaskLBR("Task 3/4")
-
-
-        Dim dbPath As String = $"C:\Users\{Environment.UserName}\AppData\Local\Roblox\rbx-storage.db"
-        Dim primaryCacheDir As String = $"C:\Users\{Environment.UserName}\AppData\Local\Roblox\rbx-storage\"
-        Dim tempHttpDir As String = $"C:\Users\denve\AppData\Local\Temp\Roblox\http\"
-
-        Dim oggDir As String = Path.Combine(tempDirectory & "\RBX_SOUND_RIPPER_HTTP")
-        Dim imageDir As String = Path.Combine(tempDirectory & "\RBXAudioExtractorIMG")
-
-
-        If Not System.IO.File.Exists(dbPath) Then
-            Me.Invoke(Sub()
-                          CallError("DB file not found. Try launching a Roblox game and ensure you're using the desktop version of the app.")
-                      End Sub)
-
-            Return
-        End If
-
-        Try
-            Using conn As New SQLiteConnection($"Data Source={dbPath};Read Only=True;")
-                conn.Open()
-
-                Using cmd As New SQLiteCommand("SELECT id, content FROM files", conn)
-                    Using reader As SQLiteDataReader = cmd.ExecuteReader()
-                        Dim rows As New List(Of (String, Byte()))
-                        While reader.Read()
-                            If TypeOf reader("id") Is Byte() Then
-                                Dim idBytes As Byte() = DirectCast(reader("id"), Byte())
-                                Dim hash As String = BitConverter.ToString(idBytes).Replace("-", "").ToLowerInvariant()
-                                Dim contentBytes As Byte() = Nothing
-
-                                If Not reader.IsDBNull(1) Then
-                                    contentBytes = DirectCast(reader("content"), Byte())
-                                Else
-                                    Dim subfolder As String = hash.Substring(0, 2)
-                                    Dim fallback1 As String = Path.Combine(primaryCacheDir, subfolder, hash)
-                                    Dim fallback2 As String = Path.Combine(tempHttpDir, hash)
-
-                                    If System.IO.File.Exists(fallback1) Then
-                                        contentBytes = System.IO.File.ReadAllBytes(fallback1)
-                                    ElseIf System.IO.File.Exists(fallback2) Then
-                                        contentBytes = System.IO.File.ReadAllBytes(fallback2)
-                                    End If
-                                End If
-
-                                If contentBytes IsNot Nothing Then
-                                    rows.Add((hash, contentBytes))
-                                End If
-                            End If
-                        End While
-
-                        Dim total As Integer = rows.Count
-                        Dim current As Integer = 0
-
-                        For Each entry In rows
-                            Try
-                                Dim hash = entry.Item1
-                                Dim bytes = entry.Item2
-
-                                Dim ext = DetectAndSave(bytes, hash, oggDir, imageDir)
-                                current += 1
-                                Dim percent = CInt((current / total) * 100)
-
-                                Me.Invoke(Sub()
-                                              ProgressBar1.Value = Math.Min(percent, 100)
-                                          End Sub)
-                            Catch ex As Exception
-
-                            End Try
-
-                        Next
-                    End Using
-                End Using
-            End Using
-        Catch ex As Exception
-            Me.Invoke(Sub()
-                          CallError($"Error reading DB: {ex.Message}")
-                      End Sub)
-
-        End Try
-
-
-
-
-        Stage = 3
-
-
-
-        Me.Invoke(Sub()
-                      ProgressBar1.Value = 99
-                  End Sub)
-
-        '   ProgressBar1.Value = 0
-
-        Me.Invoke(Sub()
-                      HTTPLISTBOX.Items.Clear()
-                      LoadImgListBox.Items.Clear()
-                  End Sub)
-
-
-        Dim musicFiles = Directory.GetFiles(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", "*.ogg")
-        UpdateTaskLBR("Task 4/4")
-
-
-        Dim sortedMusicFiles = musicFiles.Select(Function(file)
-                                                     Dim track As New Track(file)
-                                                     Return New With {
-                                                 .FilePath = file,
-                                                 .Track = track,
-                                                 .Duration = track.Duration
-                                             }
-                                                 End Function).
-                                         OrderByDescending(Function(x) x.Duration).ToList()
-
-
-        For Each fileData In sortedMusicFiles
-            Dim InfoLoaded = True
-
-            Dim title = fileData.Track.Title
-            Dim Album = fileData.Track.Album
-            Dim Artist = fileData.Track.Artist
-            Dim Duration = TimeSpan.FromSeconds(fileData.Duration).ToString("mm\:ss")
-
-            If String.IsNullOrEmpty(Album) Then
-                InfoLoaded = False
-            End If
-
-            Try
-                Me.Invoke(Sub()
-                              If InfoLoaded Then
-                                  HTTPLISTBOX.Items.Insert(0, New With {
-                              .DisplayText = $"{title} | Artists: {Artist} | Album: {Album} | Duration: {Duration}",
-                              .FilePath = fileData.FilePath
-                          })
-                              Else
-                                  HTTPLISTBOX.Items.Add(New With {
-                              .DisplayText = $"{Duration} - {Path.GetFileName(fileData.FilePath)}",
-                              .FilePath = fileData.FilePath
-                          })
-                              End If
-                          End Sub)
-            Catch ex As Exception
-                Me.Invoke(Sub()
-                              CallError($"Error reading file: {fileData.FilePath} - {ex.Message}")
-                          End Sub)
-            End Try
-        Next
-
-
-        Dim imageExtensions = New String() {"*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif", "*.webp"}
-        Dim allImageFiles As New List(Of String)
-
-        For Each ext In imageExtensions
-            allImageFiles.AddRange(Directory.GetFiles(tempDirectory & "\RBXAudioExtractorIMG", ext))
-        Next
-
-        For Each file In allImageFiles
-            Me.Invoke(Sub()
-                          LoadImgListBox.Items.Add(New With {
-                      .DisplayText = Path.GetFileName(file),
-                      .FilePath = file
-                  })
-                      End Sub)
-        Next
-
-
-        Stage = 0
-        Me.Invoke(Sub()
-                      ProgressBar1.Value = 0
-                      TaskLBR.Visible = False
-                  End Sub)
-
-
     End Sub
-
     Private Sub LoadHTTP0_ProgressChanged(sender As Object, e As ProgressChangedEventArgs) Handles LoadHTTP0.ProgressChanged
         ProgressBar1.Value = e.ProgressPercentage
     End Sub
@@ -726,6 +923,65 @@ del %0
         End Try
     End Sub
 
+    Private Sub StartRobloxCacheClear()
+        Dim clearResult = MessageBox.Show(
+            "This will delete Roblox's local asset cache, including rbx-storage.db. Continue?",
+            "Clear Roblox asset cache?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+        If clearResult <> DialogResult.Yes Then Return
+
+        Dim forceClose = MessageBox.Show(
+            "Do you want RBX Asset Extractor to force-close all running Roblox processes first?",
+            "Force-close Roblox?", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        If forceClose = DialogResult.Yes Then
+            Dim finalConfirmation = MessageBox.Show(
+                "WARNING: This will immediately close Roblox Player, Roblox Studio, and every other process whose name begins with 'Roblox'. Unsaved work in Studio may be lost." & vbCrLf & vbCrLf &
+                "Force-close them and continue clearing the cache?",
+                "Roblox Studio will be closed", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation,
+                MessageBoxDefaultButton.Button2)
+            If finalConfirmation <> DialogResult.Yes Then Return
+
+            Dim result = ForceCloseRobloxProcesses()
+            output_log.Items.Add($"Roblox process close complete: {result.Killed} closed, {result.Failed} failed.")
+            If result.Failed > 0 Then
+                MessageBox.Show($"{result.Failed} Roblox process(es) could not be closed. Cache clearing will still be attempted.",
+                                "Some processes could not be closed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End If
+        End If
+
+        If ClearCache.IsBusy Then
+            CallError("A cache-clear operation is already running.")
+            Return
+        End If
+        fullAudioStatus.Text = "Clearing the Roblox asset cache..."
+        fullImageStatus.Text = "Clearing the Roblox asset cache..."
+        ClearCache.RunWorkerAsync()
+    End Sub
+
+    Private Function ForceCloseRobloxProcesses() As (Killed As Integer, Failed As Integer)
+        Dim killed = 0
+        Dim failed = 0
+        For Each proc As System.Diagnostics.Process In System.Diagnostics.Process.GetProcesses()
+            Try
+                Dim processName = proc.ProcessName
+                If Not processName.StartsWith("Roblox", StringComparison.OrdinalIgnoreCase) Then Continue For
+                Dim processId = proc.Id
+                Try
+                    proc.Kill(True)
+                    proc.WaitForExit(5000)
+                    killed += 1
+                    UpdateLog($"Closed Roblox process: {processName} (PID {processId})")
+                Catch ex As Exception
+                    failed += 1
+                    UpdateLog($"Failed to close Roblox process {processName} (PID {processId}): {ex.Message}")
+                End Try
+            Catch
+                ' A process may exit while its name is being inspected.
+            Finally
+                proc.Dispose()
+            End Try
+        Next
+        Return (killed, failed)
+    End Function
     Public Sub CallError(Err1)
 
         Try
@@ -863,22 +1119,29 @@ del %0
         Next
     End Sub
 
-    Public Sub SaveFile()
-        Dim saveFileDialog As New SaveFileDialog
-
-        saveFileDialog.Filter = "OGG Files (*.ogg)|*.ogg"
-
-        If saveFileDialog.ShowDialog = DialogResult.OK Then
-
-            Dim filePath = saveFileDialog.FileName
-
+    Public Async Sub SaveFile()
+        Dim isCachedAudio = selectedFullAudioEntry IsNot Nothing
+        Using saveFileDialog As New SaveFileDialog With {
+            .Filter = If(isCachedAudio, $"{selectedFullAudioEntry.TypeLabel} (*{selectedFullAudioEntry.Extension})|*{selectedFullAudioEntry.Extension}", "OGG Files (*.ogg)|*.ogg"),
+            .DefaultExt = If(isCachedAudio, selectedFullAudioEntry.Extension.TrimStart("."c), "ogg"),
+            .AddExtension = True,
+            .FileName = If(isCachedAudio, selectedFullAudioEntry.Hash & selectedFullAudioEntry.Extension, String.Empty)
+        }
+            If saveFileDialog.ShowDialog() <> DialogResult.OK Then Return
             Try
-                My.Computer.FileSystem.CopyFile(SelFile, filePath)
+                If isCachedAudio Then
+                    Dim entry = selectedFullAudioEntry
+                    Await Task.Run(Sub() RobloxCacheAssetExtractor.Export(entry, saveFileDialog.FileName))
+                    fullAudioStatus.Text = $"Exported {Path.GetFileName(saveFileDialog.FileName)}"
+                ElseIf Not String.IsNullOrEmpty(SelFile) AndAlso System.IO.File.Exists(SelFile) Then
+                    My.Computer.FileSystem.CopyFile(SelFile, saveFileDialog.FileName, overwrite:=True)
+                Else
+                    CallError("No audio file is selected.")
+                End If
             Catch ex As Exception
                 CallError(ex.Message)
             End Try
-
-        End If
+        End Using
     End Sub
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Download_BTN.Click
         SaveFile()
@@ -930,6 +1193,7 @@ del %0
         If Sounds_Listbox.SelectedItem IsNot Nothing Then
 
             Try
+                selectedFullAudioEntry = Nothing
                 Dim selectedFile = Sounds_Listbox.SelectedItem.FilePath
                 SelFile = selectedFile
                 PlayOggFile(SelFile)
@@ -983,24 +1247,12 @@ del %0
 
 
 
-    Private Sub ListBox1_SelectedIndexChanged_1(sender As Object, e As EventArgs) Handles HTTPLISTBOX.SelectedIndexChanged
-        If HTTPLISTBOX.SelectedItem IsNot Nothing Then
-
-            Try
-                Dim selectedFile = HTTPLISTBOX.SelectedItem.FilePath
-                SelFile = selectedFile
-
-                If My.Computer.FileSystem.FileExists(SelFile) Then
-                    PlayOggFile(SelFile)
-                Else
-                    CallError("File Not Found")
-                End If
-
-            Catch ex As Exception
-                CallError(ex.Message)
-            End Try
-
-        End If
+    Private Async Sub ListBox1_SelectedIndexChanged_1(sender As Object, e As EventArgs) Handles HTTPLISTBOX.SelectedIndexChanged
+        Dim entry = TryCast(HTTPLISTBOX.SelectedItem, RobloxCacheAssetEntry)
+        If entry Is Nothing Then Return
+        selectedFullAudioEntry = entry
+        SelFile = Nothing
+        Await PlayCachedOggAsync(entry)
     End Sub
 
     Private Sub DOWNLOADHTTP_BTN_Click(sender As Object, e As EventArgs) Handles DOWNLOADHTTP_BTN.Click
@@ -1011,19 +1263,7 @@ del %0
 
 
     Private Sub ClearHTTPTEMP_BTN_Click(sender As Object, e As EventArgs) Handles ClearHTTPTEMP_BTN.Click
-
-        If CheckForRoblox() Then
-            Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios / images your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
-            Dim tempDirectory = Path.GetTempPath
-            If result = DialogResult.Yes Then
-                'EnableButtons(False)
-                Try
-                    ClearCache.RunWorkerAsync()
-                Catch ex As Exception
-                    CallError("cannot run two processes at the same time")
-                End Try
-            End If
-        End If
+        StartRobloxCacheClear()
     End Sub
 
     Private Sub ListboxAutoScrool_Tick(sender As Object, e As EventArgs) Handles ListboxAutoScrool.Tick
@@ -1039,14 +1279,30 @@ del %0
         StatusLBR.Text = $"{ProgressBar1.Value}%"
     End Sub
 
-    Private Sub DownloadAllHTTP_BTN_Click(sender As Object, e As EventArgs) Handles DownloadAllHTTP_BTN.Click, DownloadALL_BTN.Click
-        Using folderDialog As New FolderBrowserDialog
-            folderDialog.Description = "Select a folder"
-            folderDialog.ShowNewFolderButton = True
-
-            If folderDialog.ShowDialog = DialogResult.OK Then
-                CloneDirectory(tempDirectory & "\RBX_SOUND_RIPPER_HTTP", folderDialog.SelectedPath)
-            End If
+    Private Async Sub DownloadAllHTTP_BTN_Click(sender As Object, e As EventArgs) Handles DownloadAllHTTP_BTN.Click
+        If fullAudioEntries.Count = 0 Then Return
+        Using folderDialog As New FolderBrowserDialog With {.Description = "Select a folder for the cached audio files", .ShowNewFolderButton = True}
+            If folderDialog.ShowDialog() <> DialogResult.OK Then Return
+            DownloadAllHTTP_BTN.Enabled = False
+            fullAudioStatus.Text = $"Exporting {fullAudioEntries.Count:N0} audio files..."
+            Try
+                Dim summary = Await Task.Run(
+                    Function()
+                        Return RobloxCacheAssetExtractor.ExportMany(
+                            fullAudioEntries, folderDialog.SelectedPath,
+                            Sub(current, total)
+                                If current Mod 25 = 0 OrElse current = total Then
+                                    Me.BeginInvoke(New Action(Sub() fullAudioStatus.Text = $"Exporting audio {current:N0} of {total:N0}..."))
+                                End If
+                            End Sub)
+                    End Function)
+                fullAudioStatus.Text = $"Exported {summary.Exported:N0}; reused {summary.Reused:N0}; failed {summary.Failed:N0}."
+            Catch ex As Exception
+                fullAudioStatus.Text = "Audio export failed."
+                CallError(ex.Message)
+            Finally
+                DownloadAllHTTP_BTN.Enabled = True
+            End Try
         End Using
     End Sub
 
@@ -1163,32 +1419,39 @@ del %0
     Private Sub RemoveFilesInDir_ProgressChanged(sender As Object, e As ProgressChangedEventArgs)
         ProgressBar1.Value = e.ProgressPercentage
     End Sub
-    Private Sub DownloadImgBtn_Click(sender As Object, e As EventArgs) Handles DownloadImgBtn.Click
-        Dim saveDialog As New SaveFileDialog()
-
-        If SaveAlAsPngCheck.Checked Then
-            saveDialog.Filter = "PNG Files (*.png)|*.png"
-            saveDialog.DefaultExt = "png"
-        Else
-            Dim ext As String = Path.GetExtension(SelFile)
-            saveDialog.Filter = $"{ext.ToUpper().Trim("."c)} Files (*{ext})|*{ext}"
-            saveDialog.DefaultExt = ext.TrimStart("."c)
-        End If
-
-        If saveDialog.ShowDialog() = DialogResult.OK Then
+    Private Async Sub DownloadImgBtn_Click(sender As Object, e As EventArgs) Handles DownloadImgBtn.Click
+        Dim entry = selectedFullImageEntry
+        If entry Is Nothing Then Return
+        Using saveDialog As New SaveFileDialog()
+            If SaveAlAsPngCheck.Checked Then
+                saveDialog.Filter = "PNG Files (*.png)|*.png"
+                saveDialog.DefaultExt = "png"
+                saveDialog.FileName = entry.Hash & ".png"
+            Else
+                saveDialog.Filter = $"{entry.TypeLabel} (*{entry.Extension})|*{entry.Extension}"
+                saveDialog.DefaultExt = entry.Extension.TrimStart("."c)
+                saveDialog.FileName = entry.Hash & entry.Extension
+            End If
+            saveDialog.AddExtension = True
+            If saveDialog.ShowDialog() <> DialogResult.OK Then Return
             Try
                 If SaveAlAsPngCheck.Checked Then
-                    Using image As New MagickImage(SelFile)
-                        image.Format = MagickFormat.Png
-                        image.Write(saveDialog.FileName)
-                    End Using
+                    Await Task.Run(
+                        Sub()
+                            Dim payload = RobloxCacheAssetExtractor.ReadPayload(entry)
+                            Using image As New MagickImage(payload)
+                                image.Format = MagickFormat.Png
+                                image.Write(saveDialog.FileName)
+                            End Using
+                        End Sub)
                 Else
-                    My.Computer.FileSystem.CopyFile(SelFile, saveDialog.FileName, overwrite:=True)
+                    Await Task.Run(Sub() RobloxCacheAssetExtractor.Export(entry, saveDialog.FileName))
                 End If
+                fullImageStatus.Text = $"Exported {Path.GetFileName(saveDialog.FileName)}"
             Catch ex As Exception
-                CallError(ex)
+                CallError(ex.Message)
             End Try
-        End If
+        End Using
     End Sub
 
     Private Function FormatBytes(bytes As Long) As String
@@ -1203,57 +1466,77 @@ del %0
         End If
     End Function
 
-    Public Function LoadWebPToImage(filePath As String) As Image
-        Try
-            Using magickImage As New MagickImage(filePath)
-                Using ms As New MemoryStream()
-                    magickImage.Format = MagickFormat.Bmp
-                    magickImage.Write(ms)
-                    ms.Position = 0
-                    Return System.Drawing.Image.FromStream(ms)
+    Private Function LoadImageFromPayload(payload As Byte()) As Image
+        Using magickImage As New MagickImage(payload)
+            Using stream As New MemoryStream()
+                magickImage.Format = MagickFormat.Bmp
+                magickImage.Write(stream)
+                stream.Position = 0
+                Using decoded = System.Drawing.Image.FromStream(stream)
+                    Return New Bitmap(decoded)
                 End Using
             End Using
-        Catch ex As Exception
-            MessageBox.Show("Failed to load image: " & ex.Message)
-            Return Nothing
-        End Try
+        End Using
     End Function
 
-    Private Sub LoadImgListBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LoadImgListBox.SelectedIndexChanged
-        If LoadImgListBox.SelectedItem IsNot Nothing Then
-
-            Try
-
-                Dim img = LoadWebPToImage(LoadImgListBox.SelectedItem.FilePath)
-                PreVeiwImgBox.Image = img
-                SelFile = LoadImgListBox.SelectedItem.FilePath
-                Dim image0 As Image = img
-                Dim width As Integer = image0.Width
-                Dim height As Integer = image0.Height
-                Dim fileInfo As New FileInfo(LoadImgListBox.SelectedItem.FilePath)
-                Dim fileSize As Long = FileInfo.Length
-                ImgStats.Text = $"Dimensions: {width} x {height}" & vbCrLf &
-                                     $"File Size: {FormatBytes(fileSize)}"
-
-            Catch ex As Exception
-                CallError($"File Not Found {ex}")
-            End Try
-
-        End If
+    Private Async Sub LoadImgListBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LoadImgListBox.SelectedIndexChanged
+        Dim entry = TryCast(LoadImgListBox.SelectedItem, RobloxCacheAssetEntry)
+        If entry Is Nothing Then Return
+        selectedFullImageEntry = entry
+        imagePreviewLoadVersion += 1
+        Dim requestedVersion = imagePreviewLoadVersion
+        fullImageStatus.Text = $"Loading {entry.Hash.Substring(0, 12)}..."
+        Try
+            Dim image = Await Task.Run(
+                Function()
+                    Dim payload = RobloxCacheAssetExtractor.ReadPayload(entry)
+                    Return LoadImageFromPayload(payload)
+                End Function)
+            If requestedVersion <> imagePreviewLoadVersion OrElse Not Object.ReferenceEquals(selectedFullImageEntry, entry) Then
+                image.Dispose()
+                Return
+            End If
+            Dim oldImage = PreVeiwImgBox.Image
+            PreVeiwImgBox.Image = image
+            If oldImage IsNot Nothing Then oldImage.Dispose()
+            ImgStats.Text = $"Dimensions: {image.Width} x {image.Height}" & vbCrLf & $"File Size: {FormatBytes(entry.Size)}"
+            fullImageStatus.Text = $"Previewing {entry.Hash.Substring(0, 12)}... directly from the Roblox cache"
+        Catch ex As Exception
+            If requestedVersion = imagePreviewLoadVersion Then
+                fullImageStatus.Text = "Image preview failed."
+                CallError(ex.Message)
+            End If
+        End Try
     End Sub
 
     Private Sub LoadImgBtn_Click(sender As Object, e As EventArgs) Handles LoadImgBtn.Click
-        LoadFullGame()
+        LoadFullGame(False)
     End Sub
 
-    Private Sub SaveAllBtn_Click(sender As Object, e As EventArgs) Handles SaveAllBtn.Click
-        Using folderDialog As New FolderBrowserDialog
-            folderDialog.Description = "Select a folder"
-            folderDialog.ShowNewFolderButton = True
-
-            If folderDialog.ShowDialog = DialogResult.OK Then
-                CloneDirectory(tempDirectory & "\RBXAudioExtractorIMG", folderDialog.SelectedPath)
-            End If
+    Private Async Sub SaveAllBtn_Click(sender As Object, e As EventArgs) Handles SaveAllBtn.Click
+        If fullImageEntries.Count = 0 Then Return
+        Using folderDialog As New FolderBrowserDialog With {.Description = "Select a folder for the images", .ShowNewFolderButton = True}
+            If folderDialog.ShowDialog() <> DialogResult.OK Then Return
+            SaveAllBtn.Enabled = False
+            fullImageStatus.Text = $"Exporting {fullImageEntries.Count:N0} images..."
+            Try
+                Dim summary = Await Task.Run(
+                    Function()
+                        Return RobloxCacheAssetExtractor.ExportMany(
+                            fullImageEntries, folderDialog.SelectedPath,
+                            Sub(current, total)
+                                If current Mod 25 = 0 OrElse current = total Then
+                                    Me.BeginInvoke(New Action(Sub() fullImageStatus.Text = $"Exporting images {current:N0} of {total:N0}..."))
+                                End If
+                            End Sub)
+                    End Function)
+                fullImageStatus.Text = $"Exported {summary.Exported:N0}; reused {summary.Reused:N0}; failed {summary.Failed:N0}."
+            Catch ex As Exception
+                fullImageStatus.Text = "Image export failed."
+                CallError(ex.Message)
+            Finally
+                SaveAllBtn.Enabled = True
+            End Try
         End Using
     End Sub
 
@@ -1273,22 +1556,10 @@ del %0
     End Sub
 
     Private Sub Button1_Click_2(sender As Object, e As EventArgs) Handles ImgClearTmp.Click
-
-        If CheckForRoblox() Then
-            Dim result = MessageBox.Show("Are you sure you want to clear the temp directory? You will you will lose access to all of the audios / images your Roblox client has saved", "You sure?", MessageBoxButtons.YesNo)
-            Dim tempDirectory = Path.GetTempPath
-            If result = DialogResult.Yes Then
-                'EnableButtons(False)
-                Try
-                    ClearCache.RunWorkerAsync()
-                Catch ex As Exception
-                    CallError("cannot run two processes at the same time")
-                End Try
-            End If
-        End If
+        StartRobloxCacheClear()
     End Sub
 
-    Private Sub Label4_Click(sender As Object, e As EventArgs) Handles Label4.Click
+    Private Sub Label4_Click(sender As Object, e As EventArgs)
 
     End Sub
 
@@ -1367,12 +1638,25 @@ del %0
                       End Sub)
 
             Me.Invoke(Sub()
+                          StopPlayback()
                           HTTPLISTBOX.Items.Clear()
+                          fullAudioEntries.Clear()
+                          fullImageEntries.Clear()
+                          selectedFullAudioEntry = Nothing
+                          selectedFullImageEntry = Nothing
+                          imagePreviewLoadVersion += 1
+                          Dim oldPreview = PreVeiwImgBox.Image
+                          PreVeiwImgBox.Image = Nothing
+                          If oldPreview IsNot Nothing Then oldPreview.Dispose()
                           LoadImgListBox.Items.Clear()
+                          fullAudioStatus.Text = "Roblox asset cache cleared. Load again to rescan."
+                          fullImageStatus.Text = "Roblox asset cache cleared. Load again to rescan."
                       End Sub)
 
         Catch ex As Exception
             Me.Invoke(Sub()
+                          fullAudioStatus.Text = "Cache clear failed."
+                          fullImageStatus.Text = "Cache clear failed."
                           CallError("ERROR Roblox is currently using the database file please close Roblox before continuing | If Roblox is closed and you are receiving this error it is most likely because you have already cleared the cache")
                       End Sub)
 
@@ -1422,6 +1706,65 @@ del %0
     Private isStopping As Boolean = False
 
 
+    Private Async Function PlayCachedOggAsync(entry As RobloxCacheAssetEntry) As Task
+        Try
+            fullAudioStatus.Text = $"Loading {entry.Hash.Substring(0, 12)}..."
+            Dim payload = Await Task.Run(Function() RobloxCacheAssetExtractor.ReadPayload(entry))
+            If Not Object.ReferenceEquals(selectedFullAudioEntry, entry) Then Return
+            PlayCachedAudioPayload(payload, entry.FileType)
+            fullAudioStatus.Text = $"Streaming {entry.Hash.Substring(0, 12)}... from the Roblox cache"
+        Catch ex As Exception
+            fullAudioStatus.Text = "Audio playback failed."
+            CallError(ex.Message)
+        End Try
+    End Function
+
+    Private Sub PlayCachedAudioPayload(payload As Byte(), fileType As RobloxCacheFileType)
+        If fileType = RobloxCacheFileType.Mp3 Then
+            StopPlayback()
+            Try
+                Dim stream As New MemoryStream(payload, False)
+                outputDevice = New WaveOutEvent()
+                audioReader = New Mp3FileReader(stream)
+                outputDevice.Init(audioReader)
+                outputDevice.Volume = CSng(VolumeControl1.Volume) / 100.0F
+                outputDevice.Play()
+                AddHandler outputDevice.PlaybackStopped, AddressOf OnPlaybackStopped
+                trackBarTimeline.Maximum = Math.Max(1, CInt(audioReader.TotalTime.TotalSeconds))
+                lblTotalTime.Text = FormatTime(audioReader.TotalTime)
+                playbackTimer.Start()
+                ChangeVol.Start()
+                KeepPlayback0.Stop()
+                Playing = True
+                SoundPlayerPlayBtn.BackgroundImage = My.Resources.RedPlayButton
+            Catch ex As Exception
+                output_log.Items.Add("Error playing cached MP3: " & ex.Message)
+            End Try
+        Else
+            PlayOggPayload(payload)
+        End If
+    End Sub
+    Private Sub PlayOggPayload(payload As Byte())
+        StopPlayback()
+        Try
+            Dim stream As New MemoryStream(payload, False)
+            outputDevice = New WaveOutEvent()
+            audioReader = New VorbisWaveReader(stream, True)
+            outputDevice.Init(audioReader)
+            outputDevice.Volume = CSng(VolumeControl1.Volume) / 100.0F
+            outputDevice.Play()
+            AddHandler outputDevice.PlaybackStopped, AddressOf OnPlaybackStopped
+            trackBarTimeline.Maximum = Math.Max(1, CInt(audioReader.TotalTime.TotalSeconds))
+            lblTotalTime.Text = FormatTime(audioReader.TotalTime)
+            playbackTimer.Start()
+            ChangeVol.Start()
+            KeepPlayback0.Stop()
+            Playing = True
+            SoundPlayerPlayBtn.BackgroundImage = My.Resources.RedPlayButton
+        Catch ex As Exception
+            output_log.Items.Add("Error playing cached audio: " & ex.Message)
+        End Try
+    End Sub
     Private Sub PlayOggFile(filePath As String)
         StopPlayback()
 
@@ -1523,11 +1866,12 @@ del %0
         End If
     End Sub
 
-    Private Sub SoundPlayerPlayBtn_Click(sender As Object, e As EventArgs) Handles SoundPlayerPlayBtn.Click
+    Private Async Sub SoundPlayerPlayBtn_Click(sender As Object, e As EventArgs) Handles SoundPlayerPlayBtn.Click
         If Playing Then
             StopPlayback()
-        Else
-
+        ElseIf selectedFullAudioEntry IsNot Nothing Then
+            Await PlayCachedOggAsync(selectedFullAudioEntry)
+        ElseIf Not String.IsNullOrEmpty(SelFile) Then
             PlayOggFile(SelFile)
         End If
     End Sub
@@ -1542,4 +1886,6 @@ del %0
             outputDevice.Volume = CSng(VolumeControl1.Volume) / 100.0F
         End If
     End Sub
+
+
 End Class

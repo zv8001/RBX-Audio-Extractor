@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
@@ -34,13 +34,12 @@ Partial Class MainForm
         FolderBrowserDialog1 = New FolderBrowserDialog()
         TabControl1 = New TabControl()
         TabPage3 = New TabPage()
+        Label4 = New Label()
+        Label3 = New Label()
         Label9 = New Label()
         PictureBox2 = New PictureBox()
-        Label7 = New Label()
-        Label4 = New Label()
         Label5 = New Label()
         Label1 = New Label()
-        Label3 = New Label()
         LinkLabel2 = New LinkLabel()
         LinkLabel1 = New LinkLabel()
         Label2 = New Label()
@@ -48,12 +47,14 @@ Partial Class MainForm
         Panel1 = New Panel()
         Sounds_Listbox = New ListBox()
         TabPage4 = New TabPage()
+        fullAudioStatus = New Label()
         LoadHttpBtn = New Button()
         ClearHTTPTEMP_BTN = New Button()
         DownloadAllHTTP_BTN = New Button()
         DOWNLOADHTTP_BTN = New Button()
         HTTPLISTBOX = New ListBox()
         TabPage5 = New TabPage()
+        fullImageStatus = New Label()
         SaveAlAsPngCheck = New CheckBox()
         ImgClearTmp = New Button()
         ImgStats = New Label()
@@ -62,6 +63,44 @@ Partial Class MainForm
         LoadImgBtn = New Button()
         LoadImgListBox = New ListBox()
         PreVeiwImgBox = New PictureBox()
+        meshTab = New TabPage()
+        meshStatus = New Label()
+        meshList = New ListBox()
+        meshProgress = New ProgressBar()
+        meshScanButton = New Button()
+        meshExportButton = New Button()
+        meshExportAllButton = New Button()
+        cacheAssetTab = New TabPage()
+        cacheAssetStatus = New Label()
+        cacheAssetFilter = New ComboBox()
+        cacheAssetList = New ListBox()
+        cacheAssetProgress = New ProgressBar()
+        cacheAssetScanButton = New Button()
+        cacheAssetExportButton = New Button()
+        cacheAssetExportAllButton = New Button()
+        thumbnailTab = New TabPage()
+        thumbnailStatus = New Label()
+        thumbnailList = New ListBox()
+        thumbnailPreview = New PictureBox()
+        thumbnailProgress = New ProgressBar()
+        thumbnailScanButton = New Button()
+        thumbnailExportButton = New Button()
+        thumbnailExportAllButton = New Button()
+        fontTab = New TabPage()
+        fontStatus = New Label()
+        fontList = New ListBox()
+        fontProgress = New ProgressBar()
+        fontScanButton = New Button()
+        fontExportButton = New Button()
+        fontExportAllButton = New Button()
+        metadataTab = New TabPage()
+        metadataStatus = New Label()
+        metadataList = New ListBox()
+        metadataPreview = New TextBox()
+        metadataProgress = New ProgressBar()
+        metadataScanButton = New Button()
+        metadataExportButton = New Button()
+        metadataExportAllButton = New Button()
         TabPage1 = New TabPage()
         SaveLogBtn = New Button()
         AutoScrollCHK = New CheckBox()
@@ -102,6 +141,12 @@ Partial Class MainForm
         TabPage4.SuspendLayout()
         TabPage5.SuspendLayout()
         CType(PreVeiwImgBox, ComponentModel.ISupportInitialize).BeginInit()
+        meshTab.SuspendLayout()
+        cacheAssetTab.SuspendLayout()
+        thumbnailTab.SuspendLayout()
+        CType(thumbnailPreview, ComponentModel.ISupportInitialize).BeginInit()
+        fontTab.SuspendLayout()
+        metadataTab.SuspendLayout()
         TabPage1.SuspendLayout()
         Panel2.SuspendLayout()
         CType(LoadingGif, ComponentModel.ISupportInitialize).BeginInit()
@@ -120,10 +165,11 @@ Partial Class MainForm
         output_log.ForeColor = Color.Lime
         output_log.FormattingEnabled = True
         output_log.HorizontalScrollbar = True
-        output_log.ItemHeight = 12
+        output_log.ItemHeight = 15
         output_log.Location = New Point(0, 0)
+        output_log.Margin = New Padding(3, 4, 3, 4)
         output_log.Name = "output_log"
-        output_log.Size = New Size(431, 316)
+        output_log.Size = New Size(486, 424)
         output_log.TabIndex = 1
         ' 
         ' LoadParButton
@@ -133,11 +179,12 @@ Partial Class MainForm
         LoadParButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         LoadParButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         LoadParButton.FlatStyle = FlatStyle.Flat
-        LoadParButton.Font = New Font("Segoe UI", 12.0F)
+        LoadParButton.Font = New Font("Segoe UI", 12F)
         LoadParButton.ForeColor = Color.White
-        LoadParButton.Location = New Point(6, 311)
+        LoadParButton.Location = New Point(7, 415)
+        LoadParButton.Margin = New Padding(3, 4, 3, 4)
         LoadParButton.Name = "LoadParButton"
-        LoadParButton.Size = New Size(75, 35)
+        LoadParButton.Size = New Size(86, 47)
         LoadParButton.TabIndex = 2
         LoadParButton.Text = "Load"
         LoadParButton.UseVisualStyleBackColor = False
@@ -150,11 +197,12 @@ Partial Class MainForm
         Download_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         Download_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         Download_BTN.FlatStyle = FlatStyle.Flat
-        Download_BTN.Font = New Font("Segoe UI", 12.0F)
+        Download_BTN.Font = New Font("Segoe UI", 12F)
         Download_BTN.ForeColor = Color.White
-        Download_BTN.Location = New Point(87, 311)
+        Download_BTN.Location = New Point(99, 415)
+        Download_BTN.Margin = New Padding(3, 4, 3, 4)
         Download_BTN.Name = "Download_BTN"
-        Download_BTN.Size = New Size(105, 35)
+        Download_BTN.Size = New Size(120, 47)
         Download_BTN.TabIndex = 3
         Download_BTN.Text = "Download"
         Download_BTN.UseVisualStyleBackColor = False
@@ -166,11 +214,12 @@ Partial Class MainForm
         ClearTMP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         ClearTMP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         ClearTMP_BTN.FlatStyle = FlatStyle.Flat
-        ClearTMP_BTN.Font = New Font("Segoe UI", 12.0F)
+        ClearTMP_BTN.Font = New Font("Segoe UI", 12F)
         ClearTMP_BTN.ForeColor = Color.White
-        ClearTMP_BTN.Location = New Point(318, 311)
+        ClearTMP_BTN.Location = New Point(363, 415)
+        ClearTMP_BTN.Margin = New Padding(3, 4, 3, 4)
         ClearTMP_BTN.Name = "ClearTMP_BTN"
-        ClearTMP_BTN.Size = New Size(107, 35)
+        ClearTMP_BTN.Size = New Size(122, 47)
         ClearTMP_BTN.TabIndex = 5
         ClearTMP_BTN.Text = "Clear Cache"
         ClearTMP_BTN.UseVisualStyleBackColor = False
@@ -183,11 +232,12 @@ Partial Class MainForm
         DownloadALL_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DownloadALL_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DownloadALL_BTN.FlatStyle = FlatStyle.Flat
-        DownloadALL_BTN.Font = New Font("Segoe UI", 12.0F)
+        DownloadALL_BTN.Font = New Font("Segoe UI", 12F)
         DownloadALL_BTN.ForeColor = Color.White
-        DownloadALL_BTN.Location = New Point(198, 311)
+        DownloadALL_BTN.Location = New Point(226, 415)
+        DownloadALL_BTN.Margin = New Padding(3, 4, 3, 4)
         DownloadALL_BTN.Name = "DownloadALL_BTN"
-        DownloadALL_BTN.Size = New Size(114, 35)
+        DownloadALL_BTN.Size = New Size(130, 47)
         DownloadALL_BTN.TabIndex = 7
         DownloadALL_BTN.Text = "Download All"
         DownloadALL_BTN.UseVisualStyleBackColor = False
@@ -198,41 +248,69 @@ Partial Class MainForm
         TabControl1.Controls.Add(TabPage2)
         TabControl1.Controls.Add(TabPage4)
         TabControl1.Controls.Add(TabPage5)
+        TabControl1.Controls.Add(meshTab)
+        TabControl1.Controls.Add(cacheAssetTab)
+        TabControl1.Controls.Add(thumbnailTab)
+        TabControl1.Controls.Add(fontTab)
+        TabControl1.Controls.Add(metadataTab)
         TabControl1.Controls.Add(TabPage1)
-        TabControl1.Location = New Point(12, 45)
+        TabControl1.Location = New Point(14, 60)
+        TabControl1.Margin = New Padding(3, 4, 3, 4)
         TabControl1.Name = "TabControl1"
         TabControl1.SelectedIndex = 0
         TabControl1.ShowToolTips = True
-        TabControl1.Size = New Size(439, 381)
+        TabControl1.Size = New Size(502, 508)
         TabControl1.TabIndex = 9
         ' 
         ' TabPage3
         ' 
         TabPage3.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        TabPage3.Controls.Add(Label4)
+        TabPage3.Controls.Add(Label3)
         TabPage3.Controls.Add(Label9)
         TabPage3.Controls.Add(PictureBox2)
-        TabPage3.Controls.Add(Label7)
-        TabPage3.Controls.Add(Label4)
         TabPage3.Controls.Add(Label5)
         TabPage3.Controls.Add(Label1)
-        TabPage3.Controls.Add(Label3)
         TabPage3.Controls.Add(LinkLabel2)
         TabPage3.Controls.Add(LinkLabel1)
         TabPage3.Controls.Add(Label2)
-        TabPage3.Location = New Point(4, 24)
+        TabPage3.Location = New Point(4, 29)
+        TabPage3.Margin = New Padding(3, 4, 3, 4)
         TabPage3.Name = "TabPage3"
-        TabPage3.Size = New Size(431, 353)
+        TabPage3.Size = New Size(494, 475)
         TabPage3.TabIndex = 2
         TabPage3.Text = "About"
+        ' 
+        ' Label4
+        ' 
+        Label4.Font = New Font("MS UI Gothic", 10.2F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label4.ForeColor = Color.IndianRed
+        Label4.Location = New Point(27, 190)
+        Label4.Name = "Label4"
+        Label4.Size = New Size(441, 122)
+        Label4.TabIndex = 14
+        Label4.Text = resources.GetString("Label4.Text")
+        Label4.TextAlign = ContentAlignment.MiddleCenter
+        ' 
+        ' Label3
+        ' 
+        Label3.Font = New Font("MS UI Gothic", 19.8000011F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label3.ForeColor = Color.IndianRed
+        Label3.Location = New Point(27, 129)
+        Label3.Name = "Label3"
+        Label3.Size = New Size(441, 77)
+        Label3.TabIndex = 13
+        Label3.Text = "V 2.0.0 OVERHAUL IS HERE"
+        Label3.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' Label9
         ' 
         Label9.AutoSize = True
         Label9.Font = New Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label9.ForeColor = Color.Gray
-        Label9.Location = New Point(82, 60)
+        Label9.Location = New Point(7, 110)
         Label9.Name = "Label9"
-        Label9.Size = New Size(157, 13)
+        Label9.Size = New Size(191, 19)
         Label9.TabIndex = 12
         Label9.Text = "pfp credit: @MIGHTBEMOD | "
         ' 
@@ -240,41 +318,20 @@ Partial Class MainForm
         ' 
         PictureBox2.BackgroundImage = My.Resources.Resources.Untitled_2_01
         PictureBox2.BackgroundImageLayout = ImageLayout.Stretch
-        PictureBox2.Location = New Point(6, 3)
+        PictureBox2.Location = New Point(7, 4)
+        PictureBox2.Margin = New Padding(3, 4, 3, 4)
         PictureBox2.Name = "PictureBox2"
-        PictureBox2.Size = New Size(70, 70)
+        PictureBox2.Size = New Size(87, 93)
         PictureBox2.TabIndex = 11
         PictureBox2.TabStop = False
-        ' 
-        ' Label7
-        ' 
-        Label7.Font = New Font("MS UI Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label7.ForeColor = Color.White
-        Label7.Location = New Point(25, 234)
-        Label7.Name = "Label7"
-        Label7.Size = New Size(386, 23)
-        Label7.TabIndex = 10
-        Label7.Text = "Credits to fearedfusionx for a bit of help on the UI and the icon"
-        Label7.TextAlign = ContentAlignment.MiddleCenter
-        ' 
-        ' Label4
-        ' 
-        Label4.Font = New Font("MS UI Gothic", 12.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label4.ForeColor = Color.White
-        Label4.Location = New Point(25, 257)
-        Label4.Name = "Label4"
-        Label4.Size = New Size(386, 43)
-        Label4.TabIndex = 9
-        Label4.Text = "THIS PROGRAM IS FOR EDUCATIONAL PURPOSES"
-        Label4.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' Label5
         ' 
         Label5.Font = New Font("MS UI Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label5.ForeColor = Color.White
-        Label5.Location = New Point(25, 176)
+        Label5.Location = New Point(27, 328)
         Label5.Name = "Label5"
-        Label5.Size = New Size(386, 58)
+        Label5.Size = New Size(441, 77)
         Label5.TabIndex = 4
         Label5.Text = resources.GetString("Label5.Text")
         Label5.TextAlign = ContentAlignment.MiddleCenter
@@ -282,33 +339,22 @@ Partial Class MainForm
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Font = New Font("MS UI Gothic", 26.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label1.Font = New Font("MS UI Gothic", 22.2F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label1.ForeColor = Color.White
-        Label1.Location = New Point(82, 3)
+        Label1.Location = New Point(94, 4)
         Label1.Name = "Label1"
-        Label1.Size = New Size(342, 35)
+        Label1.Size = New Size(363, 37)
         Label1.TabIndex = 0
         Label1.Text = "| RBX Asset Extractor"
         Label1.TextAlign = ContentAlignment.MiddleCenter
-        ' 
-        ' Label3
-        ' 
-        Label3.Font = New Font("MS UI Gothic", 15.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label3.ForeColor = Color.White
-        Label3.Location = New Point(23, 85)
-        Label3.Name = "Label3"
-        Label3.Size = New Size(386, 91)
-        Label3.TabIndex = 2
-        Label3.Text = "The original idea was suggested by fusion after he told me a way you could extract audios from the Roblox client."
-        Label3.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' LinkLabel2
         ' 
         LinkLabel2.AutoSize = True
         LinkLabel2.LinkColor = Color.White
-        LinkLabel2.Location = New Point(5, 327)
+        LinkLabel2.Location = New Point(6, 436)
         LinkLabel2.Name = "LinkLabel2"
-        LinkLabel2.Size = New Size(263, 15)
+        LinkLabel2.Size = New Size(328, 20)
         LinkLabel2.TabIndex = 8
         LinkLabel2.TabStop = True
         LinkLabel2.Text = "https://github.com/zv8001/RBX-Audio-Extractor"
@@ -317,9 +363,9 @@ Partial Class MainForm
         ' 
         LinkLabel1.AutoSize = True
         LinkLabel1.LinkColor = Color.White
-        LinkLabel1.Location = New Point(5, 311)
+        LinkLabel1.Location = New Point(6, 415)
         LinkLabel1.Name = "LinkLabel1"
-        LinkLabel1.Size = New Size(103, 15)
+        LinkLabel1.Size = New Size(127, 20)
         LinkLabel1.TabIndex = 6
         LinkLabel1.TabStop = True
         LinkLabel1.Text = "http://zv800.com/"
@@ -330,11 +376,11 @@ Partial Class MainForm
         Label2.AutoSize = True
         Label2.Font = New Font("MS UI Gothic", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label2.ForeColor = Color.White
-        Label2.Location = New Point(99, 38)
+        Label2.Location = New Point(94, 48)
         Label2.Name = "Label2"
-        Label2.Size = New Size(245, 15)
+        Label2.Size = New Size(268, 38)
         Label2.TabIndex = 1
-        Label2.Text = "Made by VexTheProtogen and Fusion"
+        Label2.Text = "Made by VexTheProtogen " & vbCrLf & "That one gay furry programer :3"
         Label2.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' TabPage2
@@ -347,18 +393,20 @@ Partial Class MainForm
         TabPage2.Controls.Add(LoadParButton)
         TabPage2.Controls.Add(ClearTMP_BTN)
         TabPage2.ForeColor = Color.Black
-        TabPage2.Location = New Point(4, 24)
+        TabPage2.Location = New Point(4, 29)
+        TabPage2.Margin = New Padding(3, 4, 3, 4)
         TabPage2.Name = "TabPage2"
-        TabPage2.Padding = New Padding(3)
-        TabPage2.Size = New Size(431, 353)
+        TabPage2.Padding = New Padding(3, 4, 3, 4)
+        TabPage2.Size = New Size(494, 475)
         TabPage2.TabIndex = 1
-        TabPage2.Text = "Partial Game Audio"
+        TabPage2.Text = "(Music) Partial Game Audio"
         ' 
         ' Panel1
         ' 
-        Panel1.Location = New Point(149, 358)
+        Panel1.Location = New Point(170, 477)
+        Panel1.Margin = New Padding(3, 4, 3, 4)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(200, 100)
+        Panel1.Size = New Size(229, 133)
         Panel1.TabIndex = 10
         ' 
         ' Sounds_Listbox
@@ -369,25 +417,38 @@ Partial Class MainForm
         Sounds_Listbox.ForeColor = Color.White
         Sounds_Listbox.FormattingEnabled = True
         Sounds_Listbox.HorizontalScrollbar = True
-        Sounds_Listbox.ItemHeight = 20
-        Sounds_Listbox.Location = New Point(6, 6)
+        Sounds_Listbox.ItemHeight = 25
+        Sounds_Listbox.Location = New Point(7, 8)
+        Sounds_Listbox.Margin = New Padding(3, 4, 3, 4)
         Sounds_Listbox.Name = "Sounds_Listbox"
-        Sounds_Listbox.Size = New Size(419, 302)
+        Sounds_Listbox.Size = New Size(479, 402)
         Sounds_Listbox.TabIndex = 0
         ' 
         ' TabPage4
         ' 
         TabPage4.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        TabPage4.Controls.Add(fullAudioStatus)
         TabPage4.Controls.Add(LoadHttpBtn)
         TabPage4.Controls.Add(ClearHTTPTEMP_BTN)
         TabPage4.Controls.Add(DownloadAllHTTP_BTN)
         TabPage4.Controls.Add(DOWNLOADHTTP_BTN)
         TabPage4.Controls.Add(HTTPLISTBOX)
-        TabPage4.Location = New Point(4, 24)
+        TabPage4.Location = New Point(4, 29)
+        TabPage4.Margin = New Padding(3, 4, 3, 4)
         TabPage4.Name = "TabPage4"
-        TabPage4.Size = New Size(431, 353)
+        TabPage4.Size = New Size(494, 475)
         TabPage4.TabIndex = 3
         TabPage4.Text = "Full Game Audio"
+        ' 
+        ' fullAudioStatus
+        ' 
+        fullAudioStatus.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        fullAudioStatus.ForeColor = Color.White
+        fullAudioStatus.Location = New Point(7, 7)
+        fullAudioStatus.Name = "fullAudioStatus"
+        fullAudioStatus.Size = New Size(479, 23)
+        fullAudioStatus.TabIndex = 8
+        fullAudioStatus.Text = "Load the Roblox cache to find full-game audio."
         ' 
         ' LoadHttpBtn
         ' 
@@ -396,11 +457,12 @@ Partial Class MainForm
         LoadHttpBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         LoadHttpBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         LoadHttpBtn.FlatStyle = FlatStyle.Flat
-        LoadHttpBtn.Font = New Font("Segoe UI", 12.0F)
+        LoadHttpBtn.Font = New Font("Segoe UI", 12F)
         LoadHttpBtn.ForeColor = Color.White
-        LoadHttpBtn.Location = New Point(6, 311)
+        LoadHttpBtn.Location = New Point(7, 415)
+        LoadHttpBtn.Margin = New Padding(3, 4, 3, 4)
         LoadHttpBtn.Name = "LoadHttpBtn"
-        LoadHttpBtn.Size = New Size(75, 35)
+        LoadHttpBtn.Size = New Size(86, 47)
         LoadHttpBtn.TabIndex = 7
         LoadHttpBtn.Text = "Load"
         LoadHttpBtn.UseVisualStyleBackColor = False
@@ -412,13 +474,14 @@ Partial Class MainForm
         ClearHTTPTEMP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         ClearHTTPTEMP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         ClearHTTPTEMP_BTN.FlatStyle = FlatStyle.Flat
-        ClearHTTPTEMP_BTN.Font = New Font("Segoe UI", 12.0F)
+        ClearHTTPTEMP_BTN.Font = New Font("Segoe UI", 12F)
         ClearHTTPTEMP_BTN.ForeColor = Color.White
-        ClearHTTPTEMP_BTN.Location = New Point(318, 311)
-        ClearHTTPTEMP_BTN.MaximumSize = New Size(107, 35)
-        ClearHTTPTEMP_BTN.MinimumSize = New Size(107, 35)
+        ClearHTTPTEMP_BTN.Location = New Point(363, 415)
+        ClearHTTPTEMP_BTN.Margin = New Padding(3, 4, 3, 4)
+        ClearHTTPTEMP_BTN.MaximumSize = New Size(122, 47)
+        ClearHTTPTEMP_BTN.MinimumSize = New Size(122, 47)
         ClearHTTPTEMP_BTN.Name = "ClearHTTPTEMP_BTN"
-        ClearHTTPTEMP_BTN.Size = New Size(107, 35)
+        ClearHTTPTEMP_BTN.Size = New Size(122, 47)
         ClearHTTPTEMP_BTN.TabIndex = 6
         ClearHTTPTEMP_BTN.Text = "Clear Cache"
         ClearHTTPTEMP_BTN.UseVisualStyleBackColor = False
@@ -430,11 +493,12 @@ Partial Class MainForm
         DownloadAllHTTP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DownloadAllHTTP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DownloadAllHTTP_BTN.FlatStyle = FlatStyle.Flat
-        DownloadAllHTTP_BTN.Font = New Font("Segoe UI", 12.0F)
+        DownloadAllHTTP_BTN.Font = New Font("Segoe UI", 12F)
         DownloadAllHTTP_BTN.ForeColor = Color.White
-        DownloadAllHTTP_BTN.Location = New Point(198, 311)
+        DownloadAllHTTP_BTN.Location = New Point(226, 415)
+        DownloadAllHTTP_BTN.Margin = New Padding(3, 4, 3, 4)
         DownloadAllHTTP_BTN.Name = "DownloadAllHTTP_BTN"
-        DownloadAllHTTP_BTN.Size = New Size(114, 35)
+        DownloadAllHTTP_BTN.Size = New Size(130, 47)
         DownloadAllHTTP_BTN.TabIndex = 5
         DownloadAllHTTP_BTN.Text = "Download All"
         DownloadAllHTTP_BTN.UseVisualStyleBackColor = False
@@ -446,11 +510,12 @@ Partial Class MainForm
         DOWNLOADHTTP_BTN.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DOWNLOADHTTP_BTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DOWNLOADHTTP_BTN.FlatStyle = FlatStyle.Flat
-        DOWNLOADHTTP_BTN.Font = New Font("Segoe UI", 12.0F)
+        DOWNLOADHTTP_BTN.Font = New Font("Segoe UI", 12F)
         DOWNLOADHTTP_BTN.ForeColor = Color.White
-        DOWNLOADHTTP_BTN.Location = New Point(87, 311)
+        DOWNLOADHTTP_BTN.Location = New Point(99, 415)
+        DOWNLOADHTTP_BTN.Margin = New Padding(3, 4, 3, 4)
         DOWNLOADHTTP_BTN.Name = "DOWNLOADHTTP_BTN"
-        DOWNLOADHTTP_BTN.Size = New Size(105, 35)
+        DOWNLOADHTTP_BTN.Size = New Size(120, 47)
         DOWNLOADHTTP_BTN.TabIndex = 4
         DOWNLOADHTTP_BTN.Text = "Download"
         DOWNLOADHTTP_BTN.UseVisualStyleBackColor = False
@@ -462,15 +527,17 @@ Partial Class MainForm
         HTTPLISTBOX.Font = New Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         HTTPLISTBOX.ForeColor = Color.White
         HTTPLISTBOX.FormattingEnabled = True
-        HTTPLISTBOX.ItemHeight = 20
-        HTTPLISTBOX.Location = New Point(6, 6)
+        HTTPLISTBOX.ItemHeight = 25
+        HTTPLISTBOX.Location = New Point(7, 34)
+        HTTPLISTBOX.Margin = New Padding(3, 4, 3, 4)
         HTTPLISTBOX.Name = "HTTPLISTBOX"
-        HTTPLISTBOX.Size = New Size(419, 302)
+        HTTPLISTBOX.Size = New Size(479, 352)
         HTTPLISTBOX.TabIndex = 0
         ' 
         ' TabPage5
         ' 
         TabPage5.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        TabPage5.Controls.Add(fullImageStatus)
         TabPage5.Controls.Add(SaveAlAsPngCheck)
         TabPage5.Controls.Add(ImgClearTmp)
         TabPage5.Controls.Add(ImgStats)
@@ -479,20 +546,32 @@ Partial Class MainForm
         TabPage5.Controls.Add(LoadImgBtn)
         TabPage5.Controls.Add(LoadImgListBox)
         TabPage5.Controls.Add(PreVeiwImgBox)
-        TabPage5.Location = New Point(4, 24)
+        TabPage5.Location = New Point(4, 29)
+        TabPage5.Margin = New Padding(3, 4, 3, 4)
         TabPage5.Name = "TabPage5"
-        TabPage5.Size = New Size(431, 353)
+        TabPage5.Size = New Size(494, 475)
         TabPage5.TabIndex = 4
         TabPage5.Text = "Full Game Images"
+        ' 
+        ' fullImageStatus
+        ' 
+        fullImageStatus.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        fullImageStatus.ForeColor = Color.White
+        fullImageStatus.Location = New Point(3, 4)
+        fullImageStatus.Name = "fullImageStatus"
+        fullImageStatus.Size = New Size(486, 23)
+        fullImageStatus.TabIndex = 14
+        fullImageStatus.Text = "Load the Roblox cache to find full-game images."
         ' 
         ' SaveAlAsPngCheck
         ' 
         SaveAlAsPngCheck.AutoSize = True
         SaveAlAsPngCheck.Font = New Font("Segoe UI", 6.25F)
         SaveAlAsPngCheck.ForeColor = Color.White
-        SaveAlAsPngCheck.Location = New Point(329, 197)
+        SaveAlAsPngCheck.Location = New Point(376, 263)
+        SaveAlAsPngCheck.Margin = New Padding(3, 4, 3, 4)
         SaveAlAsPngCheck.Name = "SaveAlAsPngCheck"
-        SaveAlAsPngCheck.Size = New Size(99, 16)
+        SaveAlAsPngCheck.Size = New Size(121, 17)
         SaveAlAsPngCheck.TabIndex = 13
         SaveAlAsPngCheck.Text = "SaveAlwaysAsPNG"
         SaveAlAsPngCheck.UseVisualStyleBackColor = True
@@ -504,11 +583,12 @@ Partial Class MainForm
         ImgClearTmp.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         ImgClearTmp.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         ImgClearTmp.FlatStyle = FlatStyle.Flat
-        ImgClearTmp.Font = New Font("Segoe UI", 12.0F)
+        ImgClearTmp.Font = New Font("Segoe UI", 12F)
         ImgClearTmp.ForeColor = Color.White
-        ImgClearTmp.Location = New Point(194, 219)
+        ImgClearTmp.Location = New Point(222, 292)
+        ImgClearTmp.Margin = New Padding(3, 4, 3, 4)
         ImgClearTmp.Name = "ImgClearTmp"
-        ImgClearTmp.Size = New Size(234, 36)
+        ImgClearTmp.Size = New Size(267, 48)
         ImgClearTmp.TabIndex = 12
         ImgClearTmp.Text = "Clear Cache"
         ImgClearTmp.UseVisualStyleBackColor = False
@@ -517,9 +597,9 @@ Partial Class MainForm
         ' 
         ImgStats.AutoSize = True
         ImgStats.ForeColor = Color.White
-        ImgStats.Location = New Point(194, 184)
+        ImgStats.Location = New Point(222, 245)
         ImgStats.Name = "ImgStats"
-        ImgStats.Size = New Size(100, 15)
+        ImgStats.Size = New Size(130, 20)
         ImgStats.TabIndex = 11
         ImgStats.Text = "Image size: 0x0 px"
         ' 
@@ -530,11 +610,12 @@ Partial Class MainForm
         SaveAllBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         SaveAllBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         SaveAllBtn.FlatStyle = FlatStyle.Flat
-        SaveAllBtn.Font = New Font("Segoe UI", 12.0F)
+        SaveAllBtn.Font = New Font("Segoe UI", 12F)
         SaveAllBtn.ForeColor = Color.White
-        SaveAllBtn.Location = New Point(194, 302)
+        SaveAllBtn.Location = New Point(222, 403)
+        SaveAllBtn.Margin = New Padding(3, 4, 3, 4)
         SaveAllBtn.Name = "SaveAllBtn"
-        SaveAllBtn.Size = New Size(234, 35)
+        SaveAllBtn.Size = New Size(267, 47)
         SaveAllBtn.TabIndex = 10
         SaveAllBtn.Text = "Save All"
         SaveAllBtn.UseVisualStyleBackColor = False
@@ -546,11 +627,12 @@ Partial Class MainForm
         DownloadImgBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         DownloadImgBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         DownloadImgBtn.FlatStyle = FlatStyle.Flat
-        DownloadImgBtn.Font = New Font("Segoe UI", 12.0F)
+        DownloadImgBtn.Font = New Font("Segoe UI", 12F)
         DownloadImgBtn.ForeColor = Color.White
-        DownloadImgBtn.Location = New Point(275, 261)
+        DownloadImgBtn.Location = New Point(314, 348)
+        DownloadImgBtn.Margin = New Padding(3, 4, 3, 4)
         DownloadImgBtn.Name = "DownloadImgBtn"
-        DownloadImgBtn.Size = New Size(153, 35)
+        DownloadImgBtn.Size = New Size(175, 47)
         DownloadImgBtn.TabIndex = 9
         DownloadImgBtn.Text = "Download"
         DownloadImgBtn.UseVisualStyleBackColor = False
@@ -562,11 +644,12 @@ Partial Class MainForm
         LoadImgBtn.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         LoadImgBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         LoadImgBtn.FlatStyle = FlatStyle.Flat
-        LoadImgBtn.Font = New Font("Segoe UI", 12.0F)
+        LoadImgBtn.Font = New Font("Segoe UI", 12F)
         LoadImgBtn.ForeColor = Color.White
-        LoadImgBtn.Location = New Point(194, 261)
+        LoadImgBtn.Location = New Point(222, 348)
+        LoadImgBtn.Margin = New Padding(3, 4, 3, 4)
         LoadImgBtn.Name = "LoadImgBtn"
-        LoadImgBtn.Size = New Size(75, 35)
+        LoadImgBtn.Size = New Size(86, 47)
         LoadImgBtn.TabIndex = 8
         LoadImgBtn.Text = "Load"
         LoadImgBtn.UseVisualStyleBackColor = False
@@ -577,21 +660,542 @@ Partial Class MainForm
         LoadImgListBox.ForeColor = Color.White
         LoadImgListBox.FormattingEnabled = True
         LoadImgListBox.HorizontalScrollbar = True
-        LoadImgListBox.ItemHeight = 15
-        LoadImgListBox.Location = New Point(3, 3)
+        LoadImgListBox.Location = New Point(3, 30)
+        LoadImgListBox.Margin = New Padding(3, 4, 3, 4)
         LoadImgListBox.Name = "LoadImgListBox"
-        LoadImgListBox.Size = New Size(185, 334)
+        LoadImgListBox.Size = New Size(211, 404)
         LoadImgListBox.TabIndex = 1
         ' 
         ' PreVeiwImgBox
         ' 
         PreVeiwImgBox.BackColor = Color.FromArgb(CByte(20), CByte(20), CByte(20))
-        PreVeiwImgBox.Location = New Point(194, 3)
+        PreVeiwImgBox.Location = New Point(222, 30)
+        PreVeiwImgBox.Margin = New Padding(3, 4, 3, 4)
         PreVeiwImgBox.Name = "PreVeiwImgBox"
-        PreVeiwImgBox.Size = New Size(234, 178)
+        PreVeiwImgBox.Size = New Size(267, 211)
         PreVeiwImgBox.SizeMode = PictureBoxSizeMode.Zoom
         PreVeiwImgBox.TabIndex = 0
         PreVeiwImgBox.TabStop = False
+        ' 
+        ' meshTab
+        ' 
+        meshTab.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        meshTab.Controls.Add(meshStatus)
+        meshTab.Controls.Add(meshList)
+        meshTab.Controls.Add(meshProgress)
+        meshTab.Controls.Add(meshScanButton)
+        meshTab.Controls.Add(meshExportButton)
+        meshTab.Controls.Add(meshExportAllButton)
+        meshTab.Location = New Point(4, 29)
+        meshTab.Name = "meshTab"
+        meshTab.Padding = New Padding(7, 8, 7, 8)
+        meshTab.Size = New Size(494, 475)
+        meshTab.TabIndex = 5
+        meshTab.Text = "Meshes"
+        ' 
+        ' meshStatus
+        ' 
+        meshStatus.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        meshStatus.ForeColor = Color.White
+        meshStatus.Location = New Point(7, 8)
+        meshStatus.Name = "meshStatus"
+        meshStatus.Size = New Size(479, 23)
+        meshStatus.TabIndex = 0
+        meshStatus.Text = "Scan the Roblox cache to find meshes."
+        ' 
+        ' meshList
+        ' 
+        meshList.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        meshList.BackColor = Color.FromArgb(CByte(20), CByte(20), CByte(20))
+        meshList.BorderStyle = BorderStyle.FixedSingle
+        meshList.Font = New Font("Segoe UI", 9F)
+        meshList.ForeColor = Color.White
+        meshList.FormattingEnabled = True
+        meshList.HorizontalScrollbar = True
+        meshList.Location = New Point(7, 35)
+        meshList.Name = "meshList"
+        meshList.Size = New Size(479, 322)
+        meshList.TabIndex = 1
+        ' 
+        ' meshProgress
+        ' 
+        meshProgress.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        meshProgress.Location = New Point(7, 364)
+        meshProgress.Name = "meshProgress"
+        meshProgress.Size = New Size(479, 27)
+        meshProgress.TabIndex = 2
+        ' 
+        ' meshScanButton
+        ' 
+        meshScanButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        meshScanButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        meshScanButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        meshScanButton.FlatStyle = FlatStyle.Flat
+        meshScanButton.Font = New Font("Segoe UI", 10F)
+        meshScanButton.ForeColor = Color.White
+        meshScanButton.Location = New Point(7, 399)
+        meshScanButton.Name = "meshScanButton"
+        meshScanButton.Size = New Size(120, 63)
+        meshScanButton.TabIndex = 3
+        meshScanButton.Text = "Scan Cache"
+        meshScanButton.UseVisualStyleBackColor = False
+        ' 
+        ' meshExportButton
+        ' 
+        meshExportButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        meshExportButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        meshExportButton.Enabled = False
+        meshExportButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        meshExportButton.FlatStyle = FlatStyle.Flat
+        meshExportButton.Font = New Font("Segoe UI", 10F)
+        meshExportButton.ForeColor = Color.White
+        meshExportButton.Location = New Point(134, 399)
+        meshExportButton.Name = "meshExportButton"
+        meshExportButton.Size = New Size(166, 63)
+        meshExportButton.TabIndex = 4
+        meshExportButton.Text = "Export Selected"
+        meshExportButton.UseVisualStyleBackColor = False
+        ' 
+        ' meshExportAllButton
+        ' 
+        meshExportAllButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        meshExportAllButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        meshExportAllButton.Enabled = False
+        meshExportAllButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        meshExportAllButton.FlatStyle = FlatStyle.Flat
+        meshExportAllButton.Font = New Font("Segoe UI", 10F)
+        meshExportAllButton.ForeColor = Color.White
+        meshExportAllButton.Location = New Point(307, 399)
+        meshExportAllButton.Name = "meshExportAllButton"
+        meshExportAllButton.Size = New Size(179, 63)
+        meshExportAllButton.TabIndex = 5
+        meshExportAllButton.Text = "Export All"
+        meshExportAllButton.UseVisualStyleBackColor = False
+        ' 
+        ' cacheAssetTab
+        ' 
+        cacheAssetTab.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        cacheAssetTab.Controls.Add(cacheAssetStatus)
+        cacheAssetTab.Controls.Add(cacheAssetFilter)
+        cacheAssetTab.Controls.Add(cacheAssetList)
+        cacheAssetTab.Controls.Add(cacheAssetProgress)
+        cacheAssetTab.Controls.Add(cacheAssetScanButton)
+        cacheAssetTab.Controls.Add(cacheAssetExportButton)
+        cacheAssetTab.Controls.Add(cacheAssetExportAllButton)
+        cacheAssetTab.Location = New Point(4, 29)
+        cacheAssetTab.Name = "cacheAssetTab"
+        cacheAssetTab.Padding = New Padding(7, 8, 7, 8)
+        cacheAssetTab.Size = New Size(494, 475)
+        cacheAssetTab.TabIndex = 6
+        cacheAssetTab.Text = "RBXM & KTX"
+        ' 
+        ' cacheAssetStatus
+        ' 
+        cacheAssetStatus.ForeColor = Color.White
+        cacheAssetStatus.Location = New Point(7, 8)
+        cacheAssetStatus.Name = "cacheAssetStatus"
+        cacheAssetStatus.Size = New Size(335, 23)
+        cacheAssetStatus.TabIndex = 0
+        cacheAssetStatus.Text = "Scan the Roblox cache for models and textures."
+        ' 
+        ' cacheAssetFilter
+        ' 
+        cacheAssetFilter.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        cacheAssetFilter.BackColor = Color.FromArgb(CByte(20), CByte(20), CByte(20))
+        cacheAssetFilter.DropDownStyle = ComboBoxStyle.DropDownList
+        cacheAssetFilter.ForeColor = Color.White
+        cacheAssetFilter.FormattingEnabled = True
+        cacheAssetFilter.Items.AddRange(New Object() {"All files", "RBXM only", "KTX only"})
+        cacheAssetFilter.Location = New Point(348, 4)
+        cacheAssetFilter.Name = "cacheAssetFilter"
+        cacheAssetFilter.Size = New Size(138, 28)
+        cacheAssetFilter.TabIndex = 1
+        ' 
+        ' cacheAssetList
+        ' 
+        cacheAssetList.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        cacheAssetList.BackColor = Color.FromArgb(CByte(20), CByte(20), CByte(20))
+        cacheAssetList.BorderStyle = BorderStyle.FixedSingle
+        cacheAssetList.Font = New Font("Segoe UI", 9F)
+        cacheAssetList.ForeColor = Color.White
+        cacheAssetList.FormattingEnabled = True
+        cacheAssetList.HorizontalScrollbar = True
+        cacheAssetList.Location = New Point(7, 35)
+        cacheAssetList.Name = "cacheAssetList"
+        cacheAssetList.Size = New Size(479, 322)
+        cacheAssetList.TabIndex = 2
+        ' 
+        ' cacheAssetProgress
+        ' 
+        cacheAssetProgress.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        cacheAssetProgress.Location = New Point(7, 364)
+        cacheAssetProgress.Name = "cacheAssetProgress"
+        cacheAssetProgress.Size = New Size(479, 27)
+        cacheAssetProgress.TabIndex = 3
+        ' 
+        ' cacheAssetScanButton
+        ' 
+        cacheAssetScanButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        cacheAssetScanButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        cacheAssetScanButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        cacheAssetScanButton.FlatStyle = FlatStyle.Flat
+        cacheAssetScanButton.Font = New Font("Segoe UI", 10F)
+        cacheAssetScanButton.ForeColor = Color.White
+        cacheAssetScanButton.Location = New Point(7, 399)
+        cacheAssetScanButton.Name = "cacheAssetScanButton"
+        cacheAssetScanButton.Size = New Size(120, 63)
+        cacheAssetScanButton.TabIndex = 4
+        cacheAssetScanButton.Text = "Scan Cache"
+        cacheAssetScanButton.UseVisualStyleBackColor = False
+        ' 
+        ' cacheAssetExportButton
+        ' 
+        cacheAssetExportButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        cacheAssetExportButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        cacheAssetExportButton.Enabled = False
+        cacheAssetExportButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        cacheAssetExportButton.FlatStyle = FlatStyle.Flat
+        cacheAssetExportButton.Font = New Font("Segoe UI", 10F)
+        cacheAssetExportButton.ForeColor = Color.White
+        cacheAssetExportButton.Location = New Point(134, 399)
+        cacheAssetExportButton.Name = "cacheAssetExportButton"
+        cacheAssetExportButton.Size = New Size(166, 63)
+        cacheAssetExportButton.TabIndex = 5
+        cacheAssetExportButton.Text = "Export Selected"
+        cacheAssetExportButton.UseVisualStyleBackColor = False
+        ' 
+        ' cacheAssetExportAllButton
+        ' 
+        cacheAssetExportAllButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        cacheAssetExportAllButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        cacheAssetExportAllButton.Enabled = False
+        cacheAssetExportAllButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        cacheAssetExportAllButton.FlatStyle = FlatStyle.Flat
+        cacheAssetExportAllButton.Font = New Font("Segoe UI", 10F)
+        cacheAssetExportAllButton.ForeColor = Color.White
+        cacheAssetExportAllButton.Location = New Point(307, 399)
+        cacheAssetExportAllButton.Name = "cacheAssetExportAllButton"
+        cacheAssetExportAllButton.Size = New Size(179, 63)
+        cacheAssetExportAllButton.TabIndex = 6
+        cacheAssetExportAllButton.Text = "Export All"
+        cacheAssetExportAllButton.UseVisualStyleBackColor = False
+        ' 
+        ' thumbnailTab
+        ' 
+        thumbnailTab.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        thumbnailTab.Controls.Add(thumbnailStatus)
+        thumbnailTab.Controls.Add(thumbnailList)
+        thumbnailTab.Controls.Add(thumbnailPreview)
+        thumbnailTab.Controls.Add(thumbnailProgress)
+        thumbnailTab.Controls.Add(thumbnailScanButton)
+        thumbnailTab.Controls.Add(thumbnailExportButton)
+        thumbnailTab.Controls.Add(thumbnailExportAllButton)
+        thumbnailTab.Location = New Point(4, 29)
+        thumbnailTab.Name = "thumbnailTab"
+        thumbnailTab.Padding = New Padding(7, 8, 7, 8)
+        thumbnailTab.Size = New Size(494, 475)
+        thumbnailTab.TabIndex = 7
+        thumbnailTab.Text = "Thumbnails"
+        ' 
+        ' thumbnailStatus
+        ' 
+        thumbnailStatus.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        thumbnailStatus.ForeColor = Color.White
+        thumbnailStatus.Location = New Point(7, 8)
+        thumbnailStatus.Name = "thumbnailStatus"
+        thumbnailStatus.Size = New Size(479, 23)
+        thumbnailStatus.TabIndex = 0
+        thumbnailStatus.Text = "Scan for cached avatar, headshot, and thumbnail images."
+        ' 
+        ' thumbnailList
+        ' 
+        thumbnailList.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left
+        thumbnailList.BackColor = Color.FromArgb(CByte(20), CByte(20), CByte(20))
+        thumbnailList.BorderStyle = BorderStyle.FixedSingle
+        thumbnailList.Font = New Font("Segoe UI", 8.5F)
+        thumbnailList.ForeColor = Color.White
+        thumbnailList.FormattingEnabled = True
+        thumbnailList.HorizontalScrollbar = True
+        thumbnailList.ItemHeight = 19
+        thumbnailList.Location = New Point(7, 35)
+        thumbnailList.Name = "thumbnailList"
+        thumbnailList.Size = New Size(230, 306)
+        thumbnailList.TabIndex = 1
+        ' 
+        ' thumbnailPreview
+        ' 
+        thumbnailPreview.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        thumbnailPreview.BackColor = Color.FromArgb(CByte(20), CByte(20), CByte(20))
+        thumbnailPreview.BorderStyle = BorderStyle.FixedSingle
+        thumbnailPreview.Location = New Point(244, 35)
+        thumbnailPreview.Name = "thumbnailPreview"
+        thumbnailPreview.Size = New Size(242, 322)
+        thumbnailPreview.SizeMode = PictureBoxSizeMode.Zoom
+        thumbnailPreview.TabIndex = 2
+        thumbnailPreview.TabStop = False
+        ' 
+        ' thumbnailProgress
+        ' 
+        thumbnailProgress.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        thumbnailProgress.Location = New Point(7, 364)
+        thumbnailProgress.Name = "thumbnailProgress"
+        thumbnailProgress.Size = New Size(479, 27)
+        thumbnailProgress.TabIndex = 3
+        ' 
+        ' thumbnailScanButton
+        ' 
+        thumbnailScanButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        thumbnailScanButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        thumbnailScanButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        thumbnailScanButton.FlatStyle = FlatStyle.Flat
+        thumbnailScanButton.Font = New Font("Segoe UI", 10F)
+        thumbnailScanButton.ForeColor = Color.White
+        thumbnailScanButton.Location = New Point(7, 399)
+        thumbnailScanButton.Name = "thumbnailScanButton"
+        thumbnailScanButton.Size = New Size(120, 63)
+        thumbnailScanButton.TabIndex = 4
+        thumbnailScanButton.Text = "Scan Cache"
+        thumbnailScanButton.UseVisualStyleBackColor = False
+        ' 
+        ' thumbnailExportButton
+        ' 
+        thumbnailExportButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        thumbnailExportButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        thumbnailExportButton.Enabled = False
+        thumbnailExportButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        thumbnailExportButton.FlatStyle = FlatStyle.Flat
+        thumbnailExportButton.Font = New Font("Segoe UI", 10F)
+        thumbnailExportButton.ForeColor = Color.White
+        thumbnailExportButton.Location = New Point(134, 399)
+        thumbnailExportButton.Name = "thumbnailExportButton"
+        thumbnailExportButton.Size = New Size(166, 63)
+        thumbnailExportButton.TabIndex = 5
+        thumbnailExportButton.Text = "Export Selected"
+        thumbnailExportButton.UseVisualStyleBackColor = False
+        ' 
+        ' thumbnailExportAllButton
+        ' 
+        thumbnailExportAllButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        thumbnailExportAllButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        thumbnailExportAllButton.Enabled = False
+        thumbnailExportAllButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        thumbnailExportAllButton.FlatStyle = FlatStyle.Flat
+        thumbnailExportAllButton.Font = New Font("Segoe UI", 10F)
+        thumbnailExportAllButton.ForeColor = Color.White
+        thumbnailExportAllButton.Location = New Point(307, 399)
+        thumbnailExportAllButton.Name = "thumbnailExportAllButton"
+        thumbnailExportAllButton.Size = New Size(179, 63)
+        thumbnailExportAllButton.TabIndex = 6
+        thumbnailExportAllButton.Text = "Export All"
+        thumbnailExportAllButton.UseVisualStyleBackColor = False
+        ' 
+        ' fontTab
+        ' 
+        fontTab.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        fontTab.Controls.Add(fontStatus)
+        fontTab.Controls.Add(fontList)
+        fontTab.Controls.Add(fontProgress)
+        fontTab.Controls.Add(fontScanButton)
+        fontTab.Controls.Add(fontExportButton)
+        fontTab.Controls.Add(fontExportAllButton)
+        fontTab.Location = New Point(4, 29)
+        fontTab.Name = "fontTab"
+        fontTab.Padding = New Padding(7, 8, 7, 8)
+        fontTab.Size = New Size(494, 475)
+        fontTab.TabIndex = 8
+        fontTab.Text = "Fonts"
+        ' 
+        ' fontStatus
+        ' 
+        fontStatus.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        fontStatus.ForeColor = Color.White
+        fontStatus.Location = New Point(7, 8)
+        fontStatus.Name = "fontStatus"
+        fontStatus.Size = New Size(479, 23)
+        fontStatus.TabIndex = 0
+        fontStatus.Text = "Scan the Roblox cache for TTF and OTF fonts."
+        ' 
+        ' fontList
+        ' 
+        fontList.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        fontList.BackColor = Color.FromArgb(CByte(20), CByte(20), CByte(20))
+        fontList.BorderStyle = BorderStyle.FixedSingle
+        fontList.Font = New Font("Segoe UI", 9F)
+        fontList.ForeColor = Color.White
+        fontList.FormattingEnabled = True
+        fontList.HorizontalScrollbar = True
+        fontList.Location = New Point(7, 35)
+        fontList.Name = "fontList"
+        fontList.Size = New Size(479, 322)
+        fontList.TabIndex = 1
+        ' 
+        ' fontProgress
+        ' 
+        fontProgress.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        fontProgress.Location = New Point(7, 364)
+        fontProgress.Name = "fontProgress"
+        fontProgress.Size = New Size(479, 27)
+        fontProgress.TabIndex = 2
+        ' 
+        ' fontScanButton
+        ' 
+        fontScanButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        fontScanButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        fontScanButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        fontScanButton.FlatStyle = FlatStyle.Flat
+        fontScanButton.Font = New Font("Segoe UI", 10F)
+        fontScanButton.ForeColor = Color.White
+        fontScanButton.Location = New Point(7, 399)
+        fontScanButton.Name = "fontScanButton"
+        fontScanButton.Size = New Size(120, 63)
+        fontScanButton.TabIndex = 3
+        fontScanButton.Text = "Scan Cache"
+        fontScanButton.UseVisualStyleBackColor = False
+        ' 
+        ' fontExportButton
+        ' 
+        fontExportButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        fontExportButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        fontExportButton.Enabled = False
+        fontExportButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        fontExportButton.FlatStyle = FlatStyle.Flat
+        fontExportButton.Font = New Font("Segoe UI", 10F)
+        fontExportButton.ForeColor = Color.White
+        fontExportButton.Location = New Point(134, 399)
+        fontExportButton.Name = "fontExportButton"
+        fontExportButton.Size = New Size(166, 63)
+        fontExportButton.TabIndex = 4
+        fontExportButton.Text = "Export Selected"
+        fontExportButton.UseVisualStyleBackColor = False
+        ' 
+        ' fontExportAllButton
+        ' 
+        fontExportAllButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        fontExportAllButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        fontExportAllButton.Enabled = False
+        fontExportAllButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        fontExportAllButton.FlatStyle = FlatStyle.Flat
+        fontExportAllButton.Font = New Font("Segoe UI", 10F)
+        fontExportAllButton.ForeColor = Color.White
+        fontExportAllButton.Location = New Point(307, 399)
+        fontExportAllButton.Name = "fontExportAllButton"
+        fontExportAllButton.Size = New Size(179, 63)
+        fontExportAllButton.TabIndex = 5
+        fontExportAllButton.Text = "Export All"
+        fontExportAllButton.UseVisualStyleBackColor = False
+        ' 
+        ' metadataTab
+        ' 
+        metadataTab.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        metadataTab.Controls.Add(metadataStatus)
+        metadataTab.Controls.Add(metadataList)
+        metadataTab.Controls.Add(metadataPreview)
+        metadataTab.Controls.Add(metadataProgress)
+        metadataTab.Controls.Add(metadataScanButton)
+        metadataTab.Controls.Add(metadataExportButton)
+        metadataTab.Controls.Add(metadataExportAllButton)
+        metadataTab.Location = New Point(4, 29)
+        metadataTab.Name = "metadataTab"
+        metadataTab.Padding = New Padding(7, 8, 7, 8)
+        metadataTab.Size = New Size(494, 475)
+        metadataTab.TabIndex = 9
+        metadataTab.Text = "Metadata"
+        ' 
+        ' metadataStatus
+        ' 
+        metadataStatus.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
+        metadataStatus.ForeColor = Color.White
+        metadataStatus.Location = New Point(7, 8)
+        metadataStatus.Name = "metadataStatus"
+        metadataStatus.Size = New Size(479, 23)
+        metadataStatus.TabIndex = 0
+        metadataStatus.Text = "Scan for cached JSON, XML, and HLS playlists."
+        ' 
+        ' metadataList
+        ' 
+        metadataList.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left
+        metadataList.BackColor = Color.FromArgb(CByte(20), CByte(20), CByte(20))
+        metadataList.BorderStyle = BorderStyle.FixedSingle
+        metadataList.Font = New Font("Segoe UI", 8.5F)
+        metadataList.ForeColor = Color.White
+        metadataList.FormattingEnabled = True
+        metadataList.HorizontalScrollbar = True
+        metadataList.ItemHeight = 19
+        metadataList.Location = New Point(7, 35)
+        metadataList.Name = "metadataList"
+        metadataList.Size = New Size(220, 306)
+        metadataList.TabIndex = 1
+        ' 
+        ' metadataPreview
+        ' 
+        metadataPreview.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        metadataPreview.BackColor = Color.FromArgb(CByte(20), CByte(20), CByte(20))
+        metadataPreview.BorderStyle = BorderStyle.FixedSingle
+        metadataPreview.Font = New Font("Consolas", 8F)
+        metadataPreview.ForeColor = Color.White
+        metadataPreview.Location = New Point(234, 35)
+        metadataPreview.Multiline = True
+        metadataPreview.Name = "metadataPreview"
+        metadataPreview.ReadOnly = True
+        metadataPreview.ScrollBars = ScrollBars.Both
+        metadataPreview.Size = New Size(252, 322)
+        metadataPreview.TabIndex = 2
+        metadataPreview.WordWrap = False
+        ' 
+        ' metadataProgress
+        ' 
+        metadataProgress.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        metadataProgress.Location = New Point(7, 364)
+        metadataProgress.Name = "metadataProgress"
+        metadataProgress.Size = New Size(479, 27)
+        metadataProgress.TabIndex = 3
+        ' 
+        ' metadataScanButton
+        ' 
+        metadataScanButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        metadataScanButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        metadataScanButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        metadataScanButton.FlatStyle = FlatStyle.Flat
+        metadataScanButton.Font = New Font("Segoe UI", 10F)
+        metadataScanButton.ForeColor = Color.White
+        metadataScanButton.Location = New Point(7, 399)
+        metadataScanButton.Name = "metadataScanButton"
+        metadataScanButton.Size = New Size(120, 63)
+        metadataScanButton.TabIndex = 4
+        metadataScanButton.Text = "Scan Cache"
+        metadataScanButton.UseVisualStyleBackColor = False
+        ' 
+        ' metadataExportButton
+        ' 
+        metadataExportButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        metadataExportButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        metadataExportButton.Enabled = False
+        metadataExportButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        metadataExportButton.FlatStyle = FlatStyle.Flat
+        metadataExportButton.Font = New Font("Segoe UI", 10F)
+        metadataExportButton.ForeColor = Color.White
+        metadataExportButton.Location = New Point(134, 399)
+        metadataExportButton.Name = "metadataExportButton"
+        metadataExportButton.Size = New Size(166, 63)
+        metadataExportButton.TabIndex = 5
+        metadataExportButton.Text = "Export Selected"
+        metadataExportButton.UseVisualStyleBackColor = False
+        ' 
+        ' metadataExportAllButton
+        ' 
+        metadataExportAllButton.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        metadataExportAllButton.BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
+        metadataExportAllButton.Enabled = False
+        metadataExportAllButton.FlatAppearance.BorderColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        metadataExportAllButton.FlatStyle = FlatStyle.Flat
+        metadataExportAllButton.Font = New Font("Segoe UI", 10F)
+        metadataExportAllButton.ForeColor = Color.White
+        metadataExportAllButton.Location = New Point(307, 399)
+        metadataExportAllButton.Name = "metadataExportAllButton"
+        metadataExportAllButton.Size = New Size(179, 63)
+        metadataExportAllButton.TabIndex = 6
+        metadataExportAllButton.Text = "Export All"
+        metadataExportAllButton.UseVisualStyleBackColor = False
         ' 
         ' TabPage1
         ' 
@@ -600,10 +1204,11 @@ Partial Class MainForm
         TabPage1.Controls.Add(SaveLogBtn)
         TabPage1.Controls.Add(AutoScrollCHK)
         TabPage1.Controls.Add(output_log)
-        TabPage1.Location = New Point(4, 24)
+        TabPage1.Location = New Point(4, 29)
+        TabPage1.Margin = New Padding(3, 4, 3, 4)
         TabPage1.Name = "TabPage1"
-        TabPage1.Padding = New Padding(3)
-        TabPage1.Size = New Size(431, 353)
+        TabPage1.Padding = New Padding(3, 4, 3, 4)
+        TabPage1.Size = New Size(494, 475)
         TabPage1.TabIndex = 0
         TabPage1.Text = "Log"
         ' 
@@ -613,11 +1218,12 @@ Partial Class MainForm
         SaveLogBtn.FlatAppearance.BorderColor = Color.Silver
         SaveLogBtn.FlatAppearance.BorderSize = 2
         SaveLogBtn.FlatStyle = FlatStyle.Popup
-        SaveLogBtn.Font = New Font("Segoe UI", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        SaveLogBtn.Font = New Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         SaveLogBtn.ForeColor = Color.White
-        SaveLogBtn.Location = New Point(350, 322)
+        SaveLogBtn.Location = New Point(400, 429)
+        SaveLogBtn.Margin = New Padding(3, 4, 3, 4)
         SaveLogBtn.Name = "SaveLogBtn"
-        SaveLogBtn.Size = New Size(75, 24)
+        SaveLogBtn.Size = New Size(86, 32)
         SaveLogBtn.TabIndex = 3
         SaveLogBtn.Text = "Save Log"
         SaveLogBtn.UseVisualStyleBackColor = False
@@ -629,9 +1235,10 @@ Partial Class MainForm
         AutoScrollCHK.CheckState = CheckState.Checked
         AutoScrollCHK.Font = New Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         AutoScrollCHK.ForeColor = Color.White
-        AutoScrollCHK.Location = New Point(6, 323)
+        AutoScrollCHK.Location = New Point(7, 431)
+        AutoScrollCHK.Margin = New Padding(3, 4, 3, 4)
         AutoScrollCHK.Name = "AutoScrollCHK"
-        AutoScrollCHK.Size = New Size(88, 21)
+        AutoScrollCHK.Size = New Size(111, 27)
         AutoScrollCHK.TabIndex = 2
         AutoScrollCHK.Text = "auto scroll"
         AutoScrollCHK.UseVisualStyleBackColor = True
@@ -639,11 +1246,11 @@ Partial Class MainForm
         ' VText_LBR
         ' 
         VText_LBR.BackColor = Color.Transparent
-        VText_LBR.Font = New Font("MS UI Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        VText_LBR.Font = New Font("MS UI Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         VText_LBR.ForeColor = Color.White
-        VText_LBR.Location = New Point(44, 20)
+        VText_LBR.Location = New Point(50, 27)
         VText_LBR.Name = "VText_LBR"
-        VText_LBR.Size = New Size(241, 14)
+        VText_LBR.Size = New Size(275, 19)
         VText_LBR.TabIndex = 5
         VText_LBR.Text = "Currently running version:" & vbCrLf
         ' 
@@ -660,11 +1267,11 @@ Partial Class MainForm
         ' 
         StatusLBR.AutoSize = True
         StatusLBR.BackColor = Color.Transparent
-        StatusLBR.Font = New Font("Segoe UI", 12.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        StatusLBR.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         StatusLBR.ForeColor = Color.White
-        StatusLBR.Location = New Point(12, 520)
+        StatusLBR.Location = New Point(14, 693)
         StatusLBR.Name = "StatusLBR"
-        StatusLBR.Size = New Size(33, 21)
+        StatusLBR.Size = New Size(41, 28)
         StatusLBR.TabIndex = 10
         StatusLBR.Text = "0%"
         StatusLBR.TextAlign = ContentAlignment.MiddleLeft
@@ -679,16 +1286,18 @@ Partial Class MainForm
         Panel2.Controls.Add(CloseBTN)
         Panel2.Controls.Add(VText_LBR)
         Panel2.Location = New Point(-3, -1)
+        Panel2.Margin = New Padding(3, 4, 3, 4)
         Panel2.Name = "Panel2"
-        Panel2.Size = New Size(476, 40)
+        Panel2.Size = New Size(544, 53)
         Panel2.TabIndex = 11
         ' 
         ' LoadingGif
         ' 
         LoadingGif.Image = My.Resources.Resources.Rolling_1x_1_0s_200px_200px
-        LoadingGif.Location = New Point(357, 6)
+        LoadingGif.Location = New Point(408, 8)
+        LoadingGif.Margin = New Padding(3, 4, 3, 4)
         LoadingGif.Name = "LoadingGif"
-        LoadingGif.Size = New Size(28, 28)
+        LoadingGif.Size = New Size(32, 37)
         LoadingGif.SizeMode = PictureBoxSizeMode.Zoom
         LoadingGif.TabIndex = 6
         LoadingGif.TabStop = False
@@ -696,9 +1305,10 @@ Partial Class MainForm
         ' PictureBox1
         ' 
         PictureBox1.Image = My.Resources.Resources.RobloxRippper
-        PictureBox1.Location = New Point(3, 3)
+        PictureBox1.Location = New Point(3, 4)
+        PictureBox1.Margin = New Padding(3, 4, 3, 4)
         PictureBox1.Name = "PictureBox1"
-        PictureBox1.Size = New Size(33, 31)
+        PictureBox1.Size = New Size(38, 41)
         PictureBox1.SizeMode = PictureBoxSizeMode.StretchImage
         PictureBox1.TabIndex = 3
         PictureBox1.TabStop = False
@@ -708,11 +1318,11 @@ Partial Class MainForm
         Label6.AutoSize = True
         Label6.Font = New Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Label6.ForeColor = Color.White
-        Label6.Location = New Point(42, 3)
+        Label6.Location = New Point(48, 4)
         Label6.Name = "Label6"
-        Label6.Size = New Size(270, 17)
+        Label6.Size = New Size(308, 23)
         Label6.TabIndex = 2
-        Label6.Text = "RBX Asset Extractor (made by zv800 / Vex)"
+        Label6.Text = "RBX Asset Extractor (made by Vex :3)"
         Label6.TextAlign = ContentAlignment.TopCenter
         ' 
         ' Button2
@@ -721,11 +1331,12 @@ Partial Class MainForm
         Button2.FlatAppearance.BorderSize = 0
         Button2.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(37), CByte(45), CByte(86))
         Button2.FlatStyle = FlatStyle.Flat
-        Button2.Font = New Font("Franklin Gothic Medium", 18.0F, FontStyle.Bold)
+        Button2.Font = New Font("Franklin Gothic Medium", 18F, FontStyle.Bold)
         Button2.ForeColor = Color.White
-        Button2.Location = New Point(391, 0)
+        Button2.Location = New Point(447, 0)
+        Button2.Margin = New Padding(3, 4, 3, 4)
         Button2.Name = "Button2"
-        Button2.Size = New Size(37, 40)
+        Button2.Size = New Size(42, 53)
         Button2.TabIndex = 1
         Button2.Text = "-"
         Button2.UseVisualStyleBackColor = True
@@ -736,11 +1347,12 @@ Partial Class MainForm
         CloseBTN.FlatAppearance.BorderSize = 0
         CloseBTN.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(208), CByte(1), CByte(27))
         CloseBTN.FlatStyle = FlatStyle.Flat
-        CloseBTN.Font = New Font("Franklin Gothic Medium", 18.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        CloseBTN.Font = New Font("Franklin Gothic Medium", 18F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         CloseBTN.ForeColor = Color.White
-        CloseBTN.Location = New Point(429, 0)
+        CloseBTN.Location = New Point(490, 0)
+        CloseBTN.Margin = New Padding(3, 4, 3, 4)
         CloseBTN.Name = "CloseBTN"
-        CloseBTN.Size = New Size(37, 40)
+        CloseBTN.Size = New Size(42, 53)
         CloseBTN.TabIndex = 0
         CloseBTN.Text = "X"
         CloseBTN.TextAlign = ContentAlignment.MiddleRight
@@ -756,9 +1368,10 @@ Partial Class MainForm
         ' 
         AlwaysOnTopCHK.AutoSize = True
         AlwaysOnTopCHK.ForeColor = Color.White
-        AlwaysOnTopCHK.Location = New Point(12, 432)
+        AlwaysOnTopCHK.Location = New Point(14, 576)
+        AlwaysOnTopCHK.Margin = New Padding(3, 4, 3, 4)
         AlwaysOnTopCHK.Name = "AlwaysOnTopCHK"
-        AlwaysOnTopCHK.Size = New Size(105, 19)
+        AlwaysOnTopCHK.Size = New Size(129, 24)
         AlwaysOnTopCHK.TabIndex = 12
         AlwaysOnTopCHK.Text = "Always On Top"
         AlwaysOnTopCHK.UseVisualStyleBackColor = True
@@ -786,10 +1399,11 @@ Partial Class MainForm
         ProgressBar1.FontWeight = MetroFramework.MetroProgressBarWeight.Light
         ProgressBar1.ForeColor = Color.Red
         ProgressBar1.HideProgressText = True
-        ProgressBar1.Location = New Point(52, 522)
+        ProgressBar1.Location = New Point(59, 696)
+        ProgressBar1.Margin = New Padding(3, 4, 3, 4)
         ProgressBar1.Name = "ProgressBar1"
         ProgressBar1.ProgressBarStyle = ProgressBarStyle.Continuous
-        ProgressBar1.Size = New Size(399, 19)
+        ProgressBar1.Size = New Size(456, 25)
         ProgressBar1.Style = MetroFramework.MetroColorStyle.Blue
         ProgressBar1.StyleManager = Nothing
         ProgressBar1.TabIndex = 13
@@ -800,11 +1414,11 @@ Partial Class MainForm
         ' 
         TaskLBR.AutoSize = True
         TaskLBR.BackColor = Color.Transparent
-        TaskLBR.Font = New Font("MS UI Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TaskLBR.Font = New Font("MS UI Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         TaskLBR.ForeColor = Color.White
-        TaskLBR.Location = New Point(362, 435)
+        TaskLBR.Location = New Point(161, 580)
         TaskLBR.Name = "TaskLBR"
-        TaskLBR.Size = New Size(60, 12)
+        TaskLBR.Size = New Size(76, 15)
         TaskLBR.TabIndex = 7
         TaskLBR.Text = "Task 0 / 4"
         ' 
@@ -813,12 +1427,13 @@ Partial Class MainForm
         trackBarTimeline.BackColor = Color.White
         trackBarTimeline.CustomBackground = False
         trackBarTimeline.LargeChange = 5UI
-        trackBarTimeline.Location = New Point(3, 3)
+        trackBarTimeline.Location = New Point(3, 4)
+        trackBarTimeline.Margin = New Padding(3, 4, 3, 4)
         trackBarTimeline.Maximum = 100
         trackBarTimeline.Minimum = 0
         trackBarTimeline.MouseWheelBarPartitions = 10
         trackBarTimeline.Name = "trackBarTimeline"
-        trackBarTimeline.Size = New Size(432, 23)
+        trackBarTimeline.Size = New Size(494, 31)
         trackBarTimeline.SmallChange = 1UI
         trackBarTimeline.Style = MetroFramework.MetroColorStyle.Blue
         trackBarTimeline.StyleManager = Nothing
@@ -832,9 +1447,9 @@ Partial Class MainForm
         lblElapsedTime.AutoSize = True
         lblElapsedTime.Font = New Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         lblElapsedTime.ForeColor = Color.White
-        lblElapsedTime.Location = New Point(10, 26)
+        lblElapsedTime.Location = New Point(11, 35)
         lblElapsedTime.Name = "lblElapsedTime"
-        lblElapsedTime.Size = New Size(44, 20)
+        lblElapsedTime.Size = New Size(56, 25)
         lblElapsedTime.TabIndex = 15
         lblElapsedTime.Text = "00:00"
         ' 
@@ -843,9 +1458,9 @@ Partial Class MainForm
         lblTotalTime.AutoSize = True
         lblTotalTime.Font = New Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         lblTotalTime.ForeColor = Color.White
-        lblTotalTime.Location = New Point(355, 26)
+        lblTotalTime.Location = New Point(406, 35)
         lblTotalTime.Name = "lblTotalTime"
-        lblTotalTime.Size = New Size(44, 20)
+        lblTotalTime.Size = New Size(56, 25)
         lblTotalTime.TabIndex = 16
         lblTotalTime.Text = "00:00"
         ' 
@@ -859,9 +1474,10 @@ Partial Class MainForm
         SoundPlayerPlayBtn.FlatAppearance.BorderSize = 0
         SoundPlayerPlayBtn.FlatStyle = FlatStyle.Flat
         SoundPlayerPlayBtn.ForeColor = Color.Transparent
-        SoundPlayerPlayBtn.Location = New Point(398, 26)
+        SoundPlayerPlayBtn.Location = New Point(455, 35)
+        SoundPlayerPlayBtn.Margin = New Padding(3, 4, 3, 4)
         SoundPlayerPlayBtn.Name = "SoundPlayerPlayBtn"
-        SoundPlayerPlayBtn.Size = New Size(37, 23)
+        SoundPlayerPlayBtn.Size = New Size(42, 31)
         SoundPlayerPlayBtn.TabIndex = 17
         SoundPlayerPlayBtn.UseVisualStyleBackColor = True
         ' 
@@ -873,19 +1489,20 @@ Partial Class MainForm
         Panel3.Controls.Add(SoundPlayerPlayBtn)
         Panel3.Controls.Add(lblElapsedTime)
         Panel3.Controls.Add(lblTotalTime)
-        Panel3.Location = New Point(12, 457)
+        Panel3.Location = New Point(14, 609)
+        Panel3.Margin = New Padding(3, 4, 3, 4)
         Panel3.Name = "Panel3"
-        Panel3.Size = New Size(439, 59)
+        Panel3.Size = New Size(502, 79)
         Panel3.TabIndex = 18
         ' 
         ' VolumeControl1
         ' 
-        VolumeControl1.Location = New Point(216, 24)
-        VolumeControl1.Margin = New Padding(4, 3, 4, 3)
-        VolumeControl1.MinimumSize = New Size(64, 22)
+        VolumeControl1.Location = New Point(247, 32)
+        VolumeControl1.Margin = New Padding(5, 4, 5, 4)
+        VolumeControl1.MinimumSize = New Size(73, 29)
         VolumeControl1.Mute = False
         VolumeControl1.Name = "VolumeControl1"
-        VolumeControl1.Size = New Size(132, 22)
+        VolumeControl1.Size = New Size(151, 29)
         VolumeControl1.TabIndex = 19
         VolumeControl1.Volume = 100
         ' 
@@ -899,11 +1516,11 @@ Partial Class MainForm
         ' 
         ' MainForm
         ' 
-        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
+        AutoScaleDimensions = New SizeF(8F, 20F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.FromArgb(CByte(27), CByte(30), CByte(36))
         BackgroundImageLayout = ImageLayout.Stretch
-        ClientSize = New Size(463, 549)
+        ClientSize = New Size(529, 732)
         Controls.Add(Panel3)
         Controls.Add(TaskLBR)
         Controls.Add(ProgressBar1)
@@ -914,6 +1531,7 @@ Partial Class MainForm
         DoubleBuffered = True
         FormBorderStyle = FormBorderStyle.None
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(3, 4, 3, 4)
         MaximizeBox = False
         Name = "MainForm"
         StartPosition = FormStartPosition.CenterScreen
@@ -927,6 +1545,13 @@ Partial Class MainForm
         TabPage5.ResumeLayout(False)
         TabPage5.PerformLayout()
         CType(PreVeiwImgBox, ComponentModel.ISupportInitialize).EndInit()
+        meshTab.ResumeLayout(False)
+        cacheAssetTab.ResumeLayout(False)
+        thumbnailTab.ResumeLayout(False)
+        CType(thumbnailPreview, ComponentModel.ISupportInitialize).EndInit()
+        fontTab.ResumeLayout(False)
+        metadataTab.ResumeLayout(False)
+        metadataTab.PerformLayout()
         TabPage1.ResumeLayout(False)
         TabPage1.PerformLayout()
         Panel2.ResumeLayout(False)
@@ -952,7 +1577,6 @@ Partial Class MainForm
     Friend WithEvents TabPage3 As TabPage
     Friend WithEvents CheckFOrButtons As Timer
     Friend WithEvents Label1 As Label
-    Friend WithEvents Label3 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents VText_LBR As Label
     Friend WithEvents Label5 As Label
@@ -978,7 +1602,6 @@ Partial Class MainForm
     Friend WithEvents fadeOutTimer As Timer
     Friend WithEvents LinkLabel2 As LinkLabel
     Friend WithEvents SaveLogBtn As Button
-    Friend WithEvents Label4 As Label
     Friend WithEvents TabPage5 As TabPage
     Friend WithEvents LoadImgListBox As ListBox
     Friend WithEvents PreVeiwImgBox As PictureBox
@@ -990,7 +1613,6 @@ Partial Class MainForm
     Friend WithEvents ImgStats As Label
     Friend WithEvents ImgClearTmp As Button
     Friend WithEvents KeepButtonsOff As Timer
-    Friend WithEvents Label7 As Label
     Friend WithEvents MainLoop As Timer
     Friend WithEvents LoadPartialBackgoundWorker As System.ComponentModel.BackgroundWorker
     Friend WithEvents ClearCache As System.ComponentModel.BackgroundWorker
@@ -1010,5 +1632,47 @@ Partial Class MainForm
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents Label9 As Label
     Friend WithEvents SaveAlAsPngCheck As CheckBox
+    Friend WithEvents Label3 As Label
+    Friend WithEvents Label4 As Label
+    Friend WithEvents fullAudioStatus As Label
+    Friend WithEvents fullImageStatus As Label
+    Friend WithEvents meshTab As TabPage
+    Friend WithEvents meshStatus As Label
+    Friend WithEvents meshList As ListBox
+    Friend WithEvents meshProgress As ProgressBar
+    Friend WithEvents meshScanButton As Button
+    Friend WithEvents meshExportButton As Button
+    Friend WithEvents meshExportAllButton As Button
+    Friend WithEvents cacheAssetTab As TabPage
+    Friend WithEvents cacheAssetStatus As Label
+    Friend WithEvents cacheAssetFilter As ComboBox
+    Friend WithEvents cacheAssetList As ListBox
+    Friend WithEvents cacheAssetProgress As ProgressBar
+    Friend WithEvents cacheAssetScanButton As Button
+    Friend WithEvents cacheAssetExportButton As Button
+    Friend WithEvents cacheAssetExportAllButton As Button
+    Friend WithEvents thumbnailTab As TabPage
+    Friend WithEvents thumbnailStatus As Label
+    Friend WithEvents thumbnailList As ListBox
+    Friend WithEvents thumbnailPreview As PictureBox
+    Friend WithEvents thumbnailProgress As ProgressBar
+    Friend WithEvents thumbnailScanButton As Button
+    Friend WithEvents thumbnailExportButton As Button
+    Friend WithEvents thumbnailExportAllButton As Button
+    Friend WithEvents fontTab As TabPage
+    Friend WithEvents fontStatus As Label
+    Friend WithEvents fontList As ListBox
+    Friend WithEvents fontProgress As ProgressBar
+    Friend WithEvents fontScanButton As Button
+    Friend WithEvents fontExportButton As Button
+    Friend WithEvents fontExportAllButton As Button
+    Friend WithEvents metadataTab As TabPage
+    Friend WithEvents metadataStatus As Label
+    Friend WithEvents metadataList As ListBox
+    Friend WithEvents metadataPreview As TextBox
+    Friend WithEvents metadataProgress As ProgressBar
+    Friend WithEvents metadataScanButton As Button
+    Friend WithEvents metadataExportButton As Button
+    Friend WithEvents metadataExportAllButton As Button
 
 End Class
