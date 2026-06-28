@@ -300,7 +300,7 @@ Partial Class MainForm
         Label3.Name = "Label3"
         Label3.Size = New Size(441, 77)
         Label3.TabIndex = 13
-        Label3.Text = "V 2.0.0 OVERHAUL IS HERE"
+        Label3.Text = "V 2.0.1 HOTFIX"
         Label3.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' Label9

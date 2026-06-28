@@ -1,0 +1,3 @@
+C:\Users\Zack\AppData\Local\Temp\rbx-hotfix-publish\RBXAssetExtractor.pdb
+C:\Users\Zack\AppData\Local\Temp\rbx-hotfix-publish\RBXAssetExtractor.dll.config
+C:\Users\Zack\AppData\Local\Temp\rbx-hotfix-publish\RBXAssetExtractor.exe

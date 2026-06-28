@@ -52,7 +52,7 @@ Public Class MainForm
 
     Dim DisableFade2 As Boolean = False
     Dim DisableFade As Boolean = False
-    Dim V = "2.0.0 OVERHAUL"
+    Dim V = "2.0.1 OVERHUAL (HOTFIX.1)"
     Private WithEvents backgroundWorker As New BackgroundWorker()
     Dim Stage As Integer = 0
     Dim tempDirectory = Path.GetTempPath
@@ -276,24 +276,6 @@ Public Class MainForm
     End Function
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        Try
-            If Not My.Computer.FileSystem.FileExists($"{Application.StartupPath}\sni.dll") Then
-                My.Computer.Network.DownloadFile("https://rbxaudioextractor-update-server.netlify.app/SQL%20dependencies/sni.dll", $"{Application.StartupPath}\sni.dll")
-
-            End If
-
-            If Not My.Computer.FileSystem.FileExists($"{Application.StartupPath}\SQLite.Interop.dll") Then
-                My.Computer.Network.DownloadFile("https://rbxaudioextractor-update-server.netlify.app/SQL%20dependencies/SQLite.Interop.dll", $"{Application.StartupPath}\SQLite.Interop.dll")
-            End If
-
-            If Not My.Computer.FileSystem.FileExists($"{Application.StartupPath}\Magick.Native-Q8-x64.dll") Then
-                My.Computer.Network.DownloadFile("https://rbxaudioextractor-update-server.netlify.app/SQL%20dependencies/Magick.Native-Q8-x64.dll", $"{Application.StartupPath}\Magick.Native-Q8-x64.dll")
-            End If
-        Catch ex As Exception
-            FailedError.ShowDialog()
-            End
-        End Try
 
 
         TaskLBR.Visible = False
@@ -1887,5 +1869,7 @@ del %0
         End If
     End Sub
 
+    Private Sub Panel2_Paint(sender As Object, e As PaintEventArgs) Handles Panel2.Paint
 
+    End Sub
 End Class
