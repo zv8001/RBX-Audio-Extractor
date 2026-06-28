@@ -2,6 +2,12 @@
 
 All notable changes to RBX Asset Extractor are documented in this file.
 
+## [v3.0.2 OVERHAUL MP2] - 2026-06-28
+
+### Fixed
+
+- Fixed borderless maximization so the application respects the active monitor's taskbar and usable work area.
+- Kept the bottom status bar, controls, and page content visible while maximized, including on secondary monitors and non-default taskbar positions.
 ## [v3.0.1 OVERHAUL MP2] - 2026-06-28
 
 ### Changed

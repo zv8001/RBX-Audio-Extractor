@@ -14,11 +14,11 @@ Imports System
 Imports System.Reflection
 <Assembly: System.Reflection.AssemblyCompanyAttribute("RBXAssetExtractor"),  _
  Assembly: System.Reflection.AssemblyConfigurationAttribute("Debug"),  _
- Assembly: System.Reflection.AssemblyFileVersionAttribute("3.0.1.0"),  _
- Assembly: System.Reflection.AssemblyInformationalVersionAttribute("3.0.1-OVERHAUL-MP2+c54c69ec233baa7fc6babd39674ca8db3164193b"),  _
+ Assembly: System.Reflection.AssemblyFileVersionAttribute("3.0.2.0"),  _
+ Assembly: System.Reflection.AssemblyInformationalVersionAttribute("3.0.2-OVERHAUL-MP2+4bfe906a985747aeda90bae39083663b608a6d83"),  _
  Assembly: System.Reflection.AssemblyProductAttribute("RBXAssetExtractor"),  _
  Assembly: System.Reflection.AssemblyTitleAttribute("RBXAssetExtractor"),  _
- Assembly: System.Reflection.AssemblyVersionAttribute("3.0.1.0"),  _
+ Assembly: System.Reflection.AssemblyVersionAttribute("3.0.2.0"),  _
  Assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0"),  _
  Assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")> 
 

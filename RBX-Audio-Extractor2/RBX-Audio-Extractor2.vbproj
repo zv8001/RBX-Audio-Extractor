@@ -4,7 +4,7 @@
     <TargetFramework>net10.0-windows</TargetFramework>
     <RootNamespace>RBXAssetExtractor</RootNamespace>
     <AssemblyName>RBXAssetExtractor</AssemblyName>
-    <Version>3.0.1-OVERHAUL-MP2</Version>
+    <Version>3.0.2-OVERHAUL-MP2</Version>
     <UseWPF>true</UseWPF>
     <OptionStrict>On</OptionStrict>
     <OptionExplicit>On</OptionExplicit>

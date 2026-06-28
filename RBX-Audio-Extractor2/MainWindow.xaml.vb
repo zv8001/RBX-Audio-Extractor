@@ -1,5 +1,7 @@
 Imports System.ComponentModel
 Imports System.IO
+Imports System.Runtime.InteropServices
+Imports System.Windows.Interop
 Imports RBXAssetExtractor.Views
 
 Class MainWindow
@@ -14,6 +16,72 @@ Class MainWindow
     Private ready As Boolean
     Private creatorMessageShown As Boolean
 
+    Private Const WmGetMinMaxInfo As Integer = &H24
+    Private Const MonitorDefaultToNearest As Integer = 2
+
+    Protected Overrides Sub OnSourceInitialized(e As EventArgs)
+        MyBase.OnSourceInitialized(e)
+        Dim source = HwndSource.FromHwnd(New WindowInteropHelper(Me).Handle)
+        If source IsNot Nothing Then source.AddHook(AddressOf WindowProcedure)
+    End Sub
+
+    Private Function WindowProcedure(hwnd As IntPtr, message As Integer, wParam As IntPtr, lParam As IntPtr, ByRef handled As Boolean) As IntPtr
+        If message <> WmGetMinMaxInfo Then Return IntPtr.Zero
+        Dim monitor = MonitorFromWindow(hwnd, MonitorDefaultToNearest)
+        If monitor = IntPtr.Zero Then Return IntPtr.Zero
+
+        Dim monitorInfo As New MonitorInfo With {.Size = Marshal.SizeOf(Of MonitorInfo)()}
+        If Not GetMonitorInfo(monitor, monitorInfo) Then Return IntPtr.Zero
+
+        Dim minMaxInfo = Marshal.PtrToStructure(Of MinMaxInfo)(lParam)
+        minMaxInfo.MaxPosition.X = Math.Abs(monitorInfo.WorkArea.Left - monitorInfo.MonitorArea.Left)
+        minMaxInfo.MaxPosition.Y = Math.Abs(monitorInfo.WorkArea.Top - monitorInfo.MonitorArea.Top)
+        minMaxInfo.MaxSize.X = monitorInfo.WorkArea.Right - monitorInfo.WorkArea.Left
+        minMaxInfo.MaxSize.Y = monitorInfo.WorkArea.Bottom - monitorInfo.WorkArea.Top
+        minMaxInfo.MaxTrackSize = minMaxInfo.MaxSize
+        Marshal.StructureToPtr(minMaxInfo, lParam, fDeleteOld:=True)
+        handled = True
+        Return IntPtr.Zero
+    End Function
+
+    <DllImport("user32.dll")>
+    Private Shared Function MonitorFromWindow(hwnd As IntPtr, flags As Integer) As IntPtr
+    End Function
+
+    <DllImport("user32.dll", CharSet:=CharSet.Auto)>
+    Private Shared Function GetMonitorInfo(monitor As IntPtr, ByRef info As MonitorInfo) As Boolean
+    End Function
+
+    <StructLayout(LayoutKind.Sequential)>
+    Private Structure NativePoint
+        Public X As Integer
+        Public Y As Integer
+    End Structure
+
+    <StructLayout(LayoutKind.Sequential)>
+    Private Structure MinMaxInfo
+        Public Reserved As NativePoint
+        Public MaxSize As NativePoint
+        Public MaxPosition As NativePoint
+        Public MinTrackSize As NativePoint
+        Public MaxTrackSize As NativePoint
+    End Structure
+
+    <StructLayout(LayoutKind.Sequential)>
+    Private Structure NativeRect
+        Public Left As Integer
+        Public Top As Integer
+        Public Right As Integer
+        Public Bottom As Integer
+    End Structure
+
+    <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Auto)>
+    Private Structure MonitorInfo
+        Public Size As Integer
+        Public MonitorArea As NativeRect
+        Public WorkArea As NativeRect
+        Public Flags As Integer
+    End Structure
     Public Sub New()
         InitializeComponent()
         VersionBadgeText.Text = AppServices.CurrentVersion
