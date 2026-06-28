@@ -8,6 +8,12 @@ All notable changes to RBX Asset Extractor are documented in this file.
 
 - Fixed borderless maximization so the application respects the active monitor's taskbar and usable work area.
 - Kept the bottom status bar, controls, and page content visible while maximized, including on secondary monitors and non-default taskbar positions.
+
+### Documentation
+
+- Reworked the README around consumer download, setup, feature, privacy, maintenance, and troubleshooting guidance.
+- Added an up-to-date application screenshot to the repository and README.
+
 ## [v3.0.1 OVERHAUL MP2] - 2026-06-28
 
 ### Changed
@@ -15,6 +21,7 @@ All notable changes to RBX Asset Extractor are documented in this file.
 - Restored automatic startup version checks against the hosted `v.txt`.
 - Added a custom update prompt that can immediately download and install a newer release.
 - Unified startup and About-page update checks around the same updater implementation.
+
 ## [v3.0.0 OVERHAUL MP2] - 2026-06-28
 
 ### WPF migration
