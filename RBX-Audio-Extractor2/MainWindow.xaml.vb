@@ -113,6 +113,7 @@ Class MainWindow
     Private Async Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs)
         If creatorMessageShown Then Return
         creatorMessageShown = True
+        If Await about.CheckForUpdatesAsync(promptToInstall:=True, owner:=Me) Then Return
         Try
             Dim message = Await RemoteContentService.GetCreatorMessageAsync()
             about.SetCreatorMessage(message)

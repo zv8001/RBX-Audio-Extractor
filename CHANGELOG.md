@@ -2,6 +2,13 @@
 
 All notable changes to RBX Asset Extractor are documented in this file.
 
+## [v3.0.1 OVERHAUL MP2] - 2026-06-28
+
+### Changed
+
+- Restored automatic startup version checks against the hosted `v.txt`.
+- Added a custom update prompt that can immediately download and install a newer release.
+- Unified startup and About-page update checks around the same updater implementation.
 ## [v3.0.0 OVERHAUL MP2] - 2026-06-28
 
 ### WPF migration

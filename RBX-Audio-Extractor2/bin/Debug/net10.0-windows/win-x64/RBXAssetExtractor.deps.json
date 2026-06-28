@@ -7,7 +7,7 @@
   "targets": {
     ".NETCoreApp,Version=v10.0": {},
     ".NETCoreApp,Version=v10.0/win-x64": {
-      "RBXAssetExtractor/3.0.0-OVERHAUL-MP2": {
+      "RBXAssetExtractor/3.0.1-OVERHAUL-MP2": {
         "dependencies": {
           "Magick.NET-Q8-x64": "14.14.0",
           "NAudio": "2.2.1",
@@ -1149,7 +1149,7 @@
     }
   },
   "libraries": {
-    "RBXAssetExtractor/3.0.0-OVERHAUL-MP2": {
+    "RBXAssetExtractor/3.0.1-OVERHAUL-MP2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

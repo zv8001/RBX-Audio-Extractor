@@ -16,6 +16,10 @@ Namespace Views
         End Sub
 
         Private Async Sub CheckUpdatesButton_Click(sender As Object, e As RoutedEventArgs)
+            Await CheckForUpdatesAsync(promptToInstall:=False)
+        End Sub
+
+        Public Async Function CheckForUpdatesAsync(promptToInstall As Boolean, Optional owner As Window = Nothing) As Task(Of Boolean)
             AppServices.Report("Checking for updates...", 0, True)
             Try
                 Dim latestText = (Await client.GetStringAsync(BaseUrl & "v.txt")).Trim()
@@ -24,7 +28,13 @@ Namespace Views
                 If latest > current Then
                     DownloadUpdateButton.Visibility = Visibility.Visible
                     AppServices.Report($"Update available: {latestText} (installed {AppServices.CurrentVersion}).", 100)
-                    AppDialog.Show($"Version {latestText} is available.", "Update available", MessageBoxButton.OK, MessageBoxImage.Information)
+                    If promptToInstall Then
+                        Dim result = AppDialog.Show($"Version {latestText} is available. You are using {AppServices.CurrentVersion}.{vbCrLf}{vbCrLf}Download and install it now?",
+                                                    "Update available", MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes, owner)
+                        If result = MessageBoxResult.Yes Then Return Await DownloadUpdateAsync(confirmFirst:=False, owner)
+                    Else
+                        AppDialog.Show($"Version {latestText} is available.", "Update available", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, owner)
+                    End If
                 ElseIf latest < current Then
                     AppServices.Report($"This development build ({AppServices.CurrentVersion}) is newer than the published version ({latestText}).", 100)
                 Else
@@ -32,9 +42,10 @@ Namespace Views
                 End If
             Catch ex As Exception
                 AppServices.Report($"Update check failed: {ex.Message}")
-                AppDialog.Show(ex.Message, "Update check failed", MessageBoxButton.OK, MessageBoxImage.Error)
+                If Not promptToInstall Then AppDialog.Show(ex.Message, "Update check failed", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, owner)
             End Try
-        End Sub
+            Return False
+        End Function
 
         Public Sub SetCreatorMessage(message As String)
             CreatorMessageText.Text = If(String.IsNullOrWhiteSpace(message), "No message from the creator right now.", message)
@@ -51,7 +62,11 @@ Namespace Views
         End Sub
 
         Private Async Sub DownloadUpdateButton_Click(sender As Object, e As RoutedEventArgs)
-            If AppDialog.Show("Download the published executable and replace this application after it closes?", "Install update", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) <> MessageBoxResult.Yes Then Return
+            Await DownloadUpdateAsync(confirmFirst:=True)
+        End Sub
+
+        Private Async Function DownloadUpdateAsync(confirmFirst As Boolean, Optional owner As Window = Nothing) As Task(Of Boolean)
+            If confirmFirst AndAlso AppDialog.Show("Download the published executable and replace this application after it closes?", "Install update", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No, owner) <> MessageBoxResult.Yes Then Return False
             AppServices.Report("Downloading update...", 0, True)
             Try
                 Dim payload = Await client.GetByteArrayAsync(BaseUrl & "RBXAssetExtractor.exe")
@@ -65,11 +80,13 @@ Namespace Views
                 Await File.WriteAllTextAsync(batchPath, script)
                 Process.Start(New ProcessStartInfo(batchPath) With {.UseShellExecute = True, .WindowStyle = ProcessWindowStyle.Hidden})
                 Application.Current.Shutdown()
+                Return True
             Catch ex As Exception
                 AppServices.Report($"Update failed: {ex.Message}")
-                AppDialog.Show(ex.Message, "Update failed", MessageBoxButton.OK, MessageBoxImage.Error)
+                AppDialog.Show(ex.Message, "Update failed", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, owner)
+                Return False
             End Try
-        End Sub
+        End Function
 
         Private Sub OpenGithubButton_Click(sender As Object, e As RoutedEventArgs)
             AppServices.OpenPath("https://github.com/zv8001/RBX-Audio-Extractor")
