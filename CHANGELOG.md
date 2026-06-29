@@ -2,25 +2,33 @@
 
 All notable changes to RBX Asset Extractor are documented in this file.
 
+## [v3.1.3] - 2026-06-29
+
+### Window restoration
+
+- Repaired the WPF layout after returning from a minimized state so the restored window revalidates its minimum bounds and no longer leaves the right or bottom of the interface clipped.
+- Added standard Windows-style maximized title-bar dragging: dragging past the normal movement threshold restores the window beneath the pointer and continues the drag smoothly.
+- Preserved double-click maximize/restore behavior while preventing a simple title-bar click from unexpectedly moving or restoring the window.
+
+### Version
+
+- Bumped the application and updater-visible version to `3.1.3`.
+
 ## [v3.1.2] - 2026-06-29
-
-### Fixed auto update-system
-
-- Fixed a race condition that caused v3.1.1 to be unable to update.
-- Replaced the way the system detects new versions to even further harden the auto update system.
 
 ### Secure auto-updates
 
-- Authenticated updates with a signed manifest (`update.json`) that binds the release version and the executable's SHA-256 under one ECDSA P-256 signature, verified against an embedded public key before anything is installed; updates fail closed when no signing key is configured.
+- Replaced version detection with a signed manifest (`update.json`) that binds the release version and the executable's SHA-256 under one ECDSA P-256 signature, verified against an embedded public key before anything is installed; updates fail closed when no signing key is configured.
 - Added anti-rollback enforcement that refuses any offered version not strictly newer than the installed one, preventing replay of an older, legitimately signed build.
 - Verified the downloaded executable against the hash in the signed manifest, so a compromised download host cannot substitute different bytes.
 - Verified update authenticity entirely in memory and staged the approved build in a freshly created, randomized temporary directory, so a rejected update never touches disk and a predictable-path race is closed.
+- Fixed the install race that left v3.1.1 unable to update, by replacing the updater's fixed post-exit delay with a bounded retry when swapping in the new executable, so the install reliably completes once the old process releases its file instead of relaunching the previous version.
 - Extended the offline signing tool (`tools/UpdateSigner`) and one-click `tools/sign-release.cmd` to read the version from the build and emit the signed manifest, signature, and legacy version/signature files in one step; documented the keypair and release workflow in `tools/README.md`.
+- Added a Debug-only update-host override (`RBX_UPDATE_BASEURL`) so the updater can be pointed at a local or staging server for end-to-end testing; release builds ignore it and always use the production host.
 
 ### Version
 
 - Bumped the application and updater-visible version to `3.1.2`.
-
 
 ## [v3.1.1] - 2026-06-28
 

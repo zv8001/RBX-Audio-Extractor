@@ -5,14 +5,14 @@
         Title="RBX Asset Extractor" Width="1066" Height="647" MinWidth="1066" MinHeight="647"
         Background="{StaticResource CanvasBrush}" Foreground="{StaticResource TextBrush}"
         WindowStyle="None" ResizeMode="CanResize" WindowStartupLocation="CenterScreen"
-        Loaded="MainWindow_Loaded" Closing="MainWindow_Closing">
+        Loaded="MainWindow_Loaded" StateChanged="MainWindow_StateChanged" Closing="MainWindow_Closing">
     <shell:WindowChrome.WindowChrome>
         <shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="6" GlassFrameThickness="0" CornerRadius="0"/>
     </shell:WindowChrome.WindowChrome>
     <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Background="{StaticResource CanvasBrush}">
         <Grid>
             <Grid.RowDefinitions><RowDefinition Height="44"/><RowDefinition Height="*"/><RowDefinition Height="34"/></Grid.RowDefinitions>
-            <Grid Grid.Row="0" Background="{StaticResource SidebarBrush}" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid Grid.Row="0" Background="{StaticResource SidebarBrush}" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" MouseMove="TitleBar_MouseMove" MouseLeftButtonUp="TitleBar_MouseLeftButtonUp">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="46"/><ColumnDefinition Width="46"/><ColumnDefinition Width="46"/></Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
                     <Border Width="25" Height="25" CornerRadius="7" Background="{StaticResource AccentBrush}"><TextBlock Text="R" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>

@@ -576,3 +576,9 @@ C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Debu
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Debug\net10.0-windows\win-x64\AssetRenameDialog.g.vb
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Debug\net10.0-windows\win-x64\FontPreviewWindow.baml
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Debug\net10.0-windows\win-x64\FontPreviewWindow.g.vb
+C:\Users\Zack\AppData\Local\Temp\RBXAssetExtractor-CodexBuild\Debug\net10.0-windows\win-x64\Assets\RobloxRippper.ico
+C:\Users\Zack\AppData\Local\Temp\RBXAssetExtractor-CodexBuild\Debug\net10.0-windows\win-x64\RBXAssetExtractor.exe
+C:\Users\Zack\AppData\Local\Temp\RBXAssetExtractor-CodexBuild\Debug\net10.0-windows\win-x64\RBXAssetExtractor.deps.json
+C:\Users\Zack\AppData\Local\Temp\RBXAssetExtractor-CodexBuild\Debug\net10.0-windows\win-x64\RBXAssetExtractor.runtimeconfig.json
+C:\Users\Zack\AppData\Local\Temp\RBXAssetExtractor-CodexBuild\Debug\net10.0-windows\win-x64\RBXAssetExtractor.dll
+C:\Users\Zack\AppData\Local\Temp\RBXAssetExtractor-CodexBuild\Debug\net10.0-windows\win-x64\RBXAssetExtractor.pdb

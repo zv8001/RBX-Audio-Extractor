@@ -3,6 +3,7 @@ Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Windows.Interop
 Imports System.Windows.Media.Animation
+Imports System.Windows.Threading
 Imports RBXAssetExtractor.Views
 
 Class MainWindow
@@ -16,6 +17,9 @@ Class MainWindow
     Private about As AboutView
     Private ready As Boolean
     Private creatorMessageShown As Boolean
+    Private restoreLayoutPending As Boolean
+    Private titleBarDragPending As Boolean
+    Private titleBarDragStart As Point
 
     Private Const WmGetMinMaxInfo As Integer = &H24
     Private Const MonitorDefaultToNearest As Integer = 2
@@ -208,14 +212,89 @@ Class MainWindow
     Private Sub TitleBar_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs)
         If e.ChangedButton <> MouseButton.Left Then Return
         If e.ClickCount = 2 Then
+            CancelTitleBarDrag(sender)
             ToggleMaximize()
-        Else
-            DragMove()
+            Return
         End If
+
+        titleBarDragStart = e.GetPosition(Me)
+        titleBarDragPending = True
+        DirectCast(sender, UIElement).CaptureMouse()
+    End Sub
+
+    Private Sub TitleBar_MouseMove(sender As Object, e As MouseEventArgs)
+        If Not titleBarDragPending OrElse e.LeftButton <> MouseButtonState.Pressed Then Return
+
+        Dim currentPosition = e.GetPosition(Me)
+        If Math.Abs(currentPosition.X - titleBarDragStart.X) < SystemParameters.MinimumHorizontalDragDistance AndAlso
+           Math.Abs(currentPosition.Y - titleBarDragStart.Y) < SystemParameters.MinimumVerticalDragDistance Then Return
+
+        Dim titleBar = DirectCast(sender, UIElement)
+        titleBarDragPending = False
+        titleBar.ReleaseMouseCapture()
+
+        If WindowState = WindowState.Maximized Then
+            RestoreWindowUnderPointer(currentPosition)
+        End If
+
+        DragMove()
+    End Sub
+
+    Private Sub TitleBar_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs)
+        CancelTitleBarDrag(sender)
+    End Sub
+
+    Private Sub CancelTitleBarDrag(sender As Object)
+        titleBarDragPending = False
+        Dim titleBar = TryCast(sender, UIElement)
+        If titleBar IsNot Nothing AndAlso titleBar.IsMouseCaptured Then titleBar.ReleaseMouseCapture()
+    End Sub
+
+    Private Sub RestoreWindowUnderPointer(pointerPosition As Point)
+        Dim screenPoint = PointToScreen(pointerPosition)
+        Dim visualSource As PresentationSource = PresentationSource.FromVisual(Me)
+        If visualSource IsNot Nothing AndAlso visualSource.CompositionTarget IsNot Nothing Then
+            screenPoint = visualSource.CompositionTarget.TransformFromDevice.Transform(screenPoint)
+        End If
+
+        Dim horizontalRatio = Math.Max(0.0, Math.Min(1.0, pointerPosition.X / Math.Max(1.0, ActualWidth)))
+        WindowState = WindowState.Normal
+        Left = screenPoint.X - (ActualWidth * horizontalRatio)
+        Top = screenPoint.Y - Math.Min(pointerPosition.Y, 24.0)
     End Sub
 
     Private Sub MinimizeButton_Click(sender As Object, e As RoutedEventArgs)
         WindowState = WindowState.Minimized
+    End Sub
+
+    Private Sub MainWindow_StateChanged(sender As Object, e As EventArgs)
+        If WindowState = WindowState.Minimized Then
+            restoreLayoutPending = True
+            Return
+        End If
+        If Not restoreLayoutPending Then Return
+
+        restoreLayoutPending = False
+        Dispatcher.BeginInvoke(
+            DispatcherPriority.Loaded,
+            New Action(AddressOf RepairLayoutAfterRestore))
+    End Sub
+
+    Private Sub RepairLayoutAfterRestore()
+        If WindowState = WindowState.Normal Then
+            Width = Math.Max(MinWidth, Width)
+            Height = Math.Max(MinHeight, Height)
+            FitToWorkingArea()
+        End If
+
+        InvalidateMeasure()
+        InvalidateArrange()
+        PageSurface.InvalidateMeasure()
+        PageSurface.InvalidateArrange()
+        PageHost.InvalidateMeasure()
+        PageHost.InvalidateArrange()
+        UpdateLayout()
+        InvalidateVisual()
     End Sub
 
     Private Sub MaximizeButton_Click(sender As Object, e As RoutedEventArgs)

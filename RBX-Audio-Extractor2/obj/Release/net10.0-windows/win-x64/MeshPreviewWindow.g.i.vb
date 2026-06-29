@@ -90,7 +90,7 @@ Partial Public Class MeshPreviewWindow
             Return
         End If
         _contentLoaded = true
-        Dim resourceLocater As System.Uri = New System.Uri("/RBXAssetExtractor;V3.1.2.0;component/meshpreviewwindow.xaml", System.UriKind.Relative)
+        Dim resourceLocater As System.Uri = New System.Uri("/RBXAssetExtractor;V3.1.3.0;component/meshpreviewwindow.xaml", System.UriKind.Relative)
         
         #ExternalSource("..\..\..\..\MeshPreviewWindow.xaml",1)
         System.Windows.Application.LoadComponent(Me, resourceLocater)
