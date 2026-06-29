@@ -238,7 +238,7 @@ Namespace Views
                 Return
             End If
             _contentLoaded = true
-            Dim resourceLocater As System.Uri = New System.Uri("/RBXAssetExtractor;V3.1.1.0;component/views/extraassetsview.xaml", System.UriKind.Relative)
+            Dim resourceLocater As System.Uri = New System.Uri("/RBXAssetExtractor;V3.1.2.0;component/views/extraassetsview.xaml", System.UriKind.Relative)
             
             #ExternalSource("..\..\..\..\..\Views\ExtraAssetsView.xaml",1)
             System.Windows.Application.LoadComponent(Me, resourceLocater)

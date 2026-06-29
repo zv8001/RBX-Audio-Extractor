@@ -23,7 +23,7 @@ set "RC=%ERRORLEVEL%"
 
 popd
 echo.
-if "%RC%"=="0" echo Done. Upload BOTH the .exe and the new .exe.sig to your update host.
+if "%RC%"=="0" echo Done. Upload the .exe plus update.json, update.json.sig and v.txt (this folder) to the update host.
 if "%RC%"=="0" if defined EXEDIR start "" "%EXEDIR%"
 if not "%RC%"=="0" echo Signing FAILED (exit %RC%).
 pause

@@ -2,13 +2,47 @@ Imports System.Diagnostics
 Imports System.IO
 Imports System.Net.Http
 Imports System.Security
+Imports System.Security.Cryptography
+Imports System.Text
+Imports System.Text.Json
 Imports System.Text.RegularExpressions
 
 Namespace Views
     Public Class AboutView
 
-        Private Const BaseUrl As String = "https://rbxextr.vexthatprotogen.com/"
+        Private Const ProductionBaseUrl As String = "https://rbxextr.vexthatprotogen.com/"
+
+#If DEBUG Then
+        ' Debug builds only: allow pointing the updater at a local/staging host for testing, e.g.
+        '   set RBX_UPDATE_BASEURL=http://localhost:8080/
+        ' Release builds ignore this entirely and always use the production host.
+        Private ReadOnly Property BaseUrl As String
+            Get
+                Dim overrideUrl = Environment.GetEnvironmentVariable("RBX_UPDATE_BASEURL")
+                Return If(String.IsNullOrWhiteSpace(overrideUrl), ProductionBaseUrl, overrideUrl.Trim())
+            End Get
+        End Property
+#Else
+        Private Const BaseUrl As String = ProductionBaseUrl
+#End If
+
         Private ReadOnly client As New HttpClient With {.Timeout = TimeSpan.FromSeconds(20)}
+        Private ReadOnly manifestJsonOptions As New JsonSerializerOptions With {.PropertyNameCaseInsensitive = True}
+
+        ' Downloads and authenticates the signed release manifest. The signature is checked against the
+        ' embedded public key, so the version and executable hash it carries can be trusted.
+        Private Async Function FetchVerifiedManifestAsync() As Task(Of UpdateManifest)
+            Dim manifestBytes = Await client.GetByteArrayAsync(BaseUrl & "update.json")
+            Dim manifestSignature = (Await client.GetStringAsync(BaseUrl & "update.json.sig")).Trim()
+            If Not UpdateVerifier.Verify(manifestBytes, manifestSignature) Then
+                Throw New SecurityException("The update manifest failed signature verification.")
+            End If
+            Dim manifest = JsonSerializer.Deserialize(Of UpdateManifest)(Encoding.UTF8.GetString(manifestBytes), manifestJsonOptions)
+            If manifest Is Nothing OrElse String.IsNullOrWhiteSpace(manifest.Version) OrElse String.IsNullOrWhiteSpace(manifest.Sha256) Then
+                Throw New InvalidDataException("The update manifest is malformed.")
+            End If
+            Return manifest
+        End Function
 
         Public Sub New()
             InitializeComponent()
@@ -27,7 +61,8 @@ Namespace Views
             UpdateStatusText.Text = "Contacting the update service..."
             AppServices.Report("Checking for updates...", 0, True)
             Try
-                Dim latestText = (Await client.GetStringAsync(BaseUrl & "v.txt")).Trim()
+                Dim manifest = Await FetchVerifiedManifestAsync()
+                Dim latestText = manifest.Version
                 Dim current = ParseVersion(AppServices.CurrentVersion)
                 Dim latest = ParseVersion(latestText)
                 LatestVersionText.Text = latestText
@@ -82,13 +117,24 @@ Namespace Views
             UpdateStatusText.Text = "Downloading and preparing the update..."
             AppServices.Report("Downloading update...", 0, True)
             Try
-                Dim payload = Await client.GetByteArrayAsync(BaseUrl & "RBXAssetExtractor.exe")
-                Dim signature = (Await client.GetStringAsync(BaseUrl & "RBXAssetExtractor.exe.sig")).Trim()
+                ' Authenticate the version + hash before downloading anything large.
+                Dim manifest = Await FetchVerifiedManifestAsync()
+                Dim current = ParseVersion(AppServices.CurrentVersion)
+                Dim latest = ParseVersion(manifest.Version)
 
-                ' Authenticity gate: only install a binary signed by our offline key. A compromised
-                ' server can serve arbitrary bytes but cannot forge a signature we will accept.
-                If Not UpdateVerifier.Verify(payload, signature) Then
-                    Throw New SecurityException("The downloaded update failed signature verification and was not installed.")
+                ' Anti-rollback: refuse anything not strictly newer than what is installed. A signed
+                ' manifest proves authenticity, not freshness, so this is what stops replay of an
+                ' older legitimately signed build.
+                If latest <= current Then
+                    Throw New SecurityException($"Refusing update: offered version {manifest.Version} is not newer than the installed version {AppServices.CurrentVersion}. This can indicate a rollback attempt.")
+                End If
+
+                Dim payload = Await client.GetByteArrayAsync(BaseUrl & "RBXAssetExtractor.exe")
+
+                ' Bind the download to the signed manifest: the bytes must hash to the signed value.
+                Dim actualHash = Convert.ToHexString(SHA256.HashData(payload)).ToLowerInvariant()
+                If Not String.Equals(actualHash, manifest.Sha256.Trim(), StringComparison.OrdinalIgnoreCase) Then
+                    Throw New SecurityException("The downloaded executable does not match the signed manifest hash and was not installed.")
                 End If
 
                 Dim currentPath = Environment.ProcessPath
@@ -103,12 +149,22 @@ Namespace Views
                 Await File.WriteAllBytesAsync(tempPath, payload)
 
                 Dim batchPath = Path.Combine(Path.GetTempPath(), "RBXAssetExtractor-update-" & token & ".cmd")
+                ' Replace the running executable once this process releases it. A single fixed delay
+                ' races the old process's exit and fails silently if it loses, so retry the move until
+                ' it succeeds (or a bounded number of attempts elapses) instead of guessing.
                 Dim script = String.Join(vbCrLf, {
                     "@echo off",
+                    "setlocal enabledelayedexpansion",
+                    "set /a tries=0",
+                    ":waitloop",
+                    $"move /y ""{tempPath}"" ""{currentPath}"" >nul 2>&1",
+                    $"if not exist ""{tempPath}"" goto done",
                     ">nul timeout /t 1 /nobreak",
-                    $"move /y ""{tempPath}"" ""{currentPath}"" >nul",
-                    $"rmdir /s /q ""{stagingDir}"" >nul 2>&1",
+                    "set /a tries+=1",
+                    "if !tries! lss 60 goto waitloop",
+                    ":done",
                     $"start """" ""{currentPath}""",
+                    $"rmdir /s /q ""{stagingDir}"" >nul 2>&1",
                     "del ""%~f0"""})
                 Await File.WriteAllTextAsync(batchPath, script)
                 Process.Start(New ProcessStartInfo(batchPath) With {.UseShellExecute = True, .WindowStyle = ProcessWindowStyle.Hidden})

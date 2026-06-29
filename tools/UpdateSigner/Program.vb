@@ -1,10 +1,15 @@
 Imports System
+Imports System.Diagnostics
 Imports System.IO
 Imports System.Security.Cryptography
+Imports System.Text
+Imports System.Text.Json
+Imports System.Text.RegularExpressions
 
 ' Update signing helper. Run from the repository root:
 '   dotnet run --project tools/UpdateSigner -- genkey
-'   dotnet run --project tools/UpdateSigner -- sign <path-to-RBXAssetExtractor.exe>
+'   dotnet run --project tools/UpdateSigner -- sign   <path-to-RBXAssetExtractor.exe>
+'   dotnet run --project tools/UpdateSigner -- verify <path-to-RBXAssetExtractor.exe> <publicKeyBase64>
 Module Program
     Private ReadOnly PrivateKeyFile As String = Path.Combine(Directory.GetCurrentDirectory(), "tools", "update-private-key.txt")
 
@@ -36,7 +41,7 @@ Module Program
     Private Sub PrintUsage()
         Console.WriteLine("Run from the repository root:")
         Console.WriteLine("  dotnet run --project tools/UpdateSigner -- genkey")
-        Console.WriteLine("  dotnet run --project tools/UpdateSigner -- sign <path-to-RBXAssetExtractor.exe>")
+        Console.WriteLine("  dotnet run --project tools/UpdateSigner -- sign   <path-to-RBXAssetExtractor.exe>")
         Console.WriteLine("  dotnet run --project tools/UpdateSigner -- verify <path-to-RBXAssetExtractor.exe> <publicKeyBase64>")
     End Sub
 
@@ -60,38 +65,85 @@ Module Program
         If Not File.Exists(exePath) Then Throw New FileNotFoundException("Executable not found.", exePath)
         If Not File.Exists(PrivateKeyFile) Then Throw New FileNotFoundException($"Private key not found at {PrivateKeyFile}. Run 'genkey' first.")
 
-        Dim privateKey = File.ReadAllText(PrivateKeyFile).Trim()
+        Dim folder = Path.GetDirectoryName(Path.GetFullPath(exePath))
         Dim payload = File.ReadAllBytes(exePath)
+        Dim version = ReadVersion(exePath)
+        Dim hash = Sha256Hex(payload)
+
+        ' The manifest binds version + exe hash; signing it authenticates both as one unit, so a
+        ' server cannot lie about the version or pair a fake version with a different executable.
+        Dim manifestJson = $"{{""version"":""{version}"",""sha256"":""{hash}""}}"
+        Dim manifestBytes = Encoding.UTF8.GetBytes(manifestJson)
 
         Using ec = ECDsa.Create()
             Dim bytesRead As Integer
-            ec.ImportPkcs8PrivateKey(Convert.FromBase64String(privateKey), bytesRead)
-            Dim signature = Convert.ToBase64String(ec.SignData(payload, HashAlgorithmName.SHA256))
-            Dim signaturePath = exePath & ".sig"
-            File.WriteAllText(signaturePath, signature)
+            ec.ImportPkcs8PrivateKey(Convert.FromBase64String(File.ReadAllText(PrivateKeyFile).Trim()), bytesRead)
 
-            Console.WriteLine($"Signature written to: {signaturePath}")
-            Console.WriteLine("Upload both files (same folder) to the update host:")
-            Console.WriteLine("  RBXAssetExtractor.exe")
-            Console.WriteLine("  RBXAssetExtractor.exe.sig")
+            Dim manifestSig = Convert.ToBase64String(ec.SignData(manifestBytes, HashAlgorithmName.SHA256))
+            Dim exeSig = Convert.ToBase64String(ec.SignData(payload, HashAlgorithmName.SHA256))
+
+            File.WriteAllBytes(Path.Combine(folder, "update.json"), manifestBytes)
+            File.WriteAllText(Path.Combine(folder, "update.json.sig"), manifestSig)
+            File.WriteAllText(exePath & ".sig", exeSig)
+            File.WriteAllText(Path.Combine(folder, "v.txt"), version)
         End Using
+
+        Console.WriteLine($"Signed version {version}")
+        Console.WriteLine($"  sha256: {hash}")
+        Console.WriteLine("Wrote into the exe folder:")
+        Console.WriteLine("  update.json                 (signed manifest: version + hash)")
+        Console.WriteLine("  update.json.sig             (manifest signature)")
+        Console.WriteLine("  RBXAssetExtractor.exe.sig   (legacy per-exe signature, for older clients)")
+        Console.WriteLine("  v.txt                       (version string, for older clients)")
+        Console.WriteLine("Upload these together with RBXAssetExtractor.exe to the update host.")
     End Sub
 
-    ' Mirrors UpdateVerifier.Verify in the app: checks <exe> against <exe>.sig using the public key.
+    ' Mirrors the app's install-time check: manifest signature must verify, and the exe's hash must
+    ' match the hash inside the signed manifest.
     Private Sub VerifyFile(exePath As String, publicKeyBase64 As String)
         If Not File.Exists(exePath) Then Throw New FileNotFoundException("Executable not found.", exePath)
-        Dim signaturePath = exePath & ".sig"
-        If Not File.Exists(signaturePath) Then Throw New FileNotFoundException("Signature not found.", signaturePath)
+        Dim folder = Path.GetDirectoryName(Path.GetFullPath(exePath))
+        Dim manifestPath = Path.Combine(folder, "update.json")
+        Dim manifestSigPath = Path.Combine(folder, "update.json.sig")
+        If Not File.Exists(manifestPath) Then Throw New FileNotFoundException("Manifest not found.", manifestPath)
+        If Not File.Exists(manifestSigPath) Then Throw New FileNotFoundException("Manifest signature not found.", manifestSigPath)
 
+        Dim manifestBytes = File.ReadAllBytes(manifestPath)
+        Dim manifestSig = Convert.FromBase64String(File.ReadAllText(manifestSigPath).Trim())
         Dim payload = File.ReadAllBytes(exePath)
-        Dim signature = Convert.FromBase64String(File.ReadAllText(signaturePath).Trim())
 
         Using ec = ECDsa.Create()
             Dim bytesRead As Integer
             ec.ImportSubjectPublicKeyInfo(Convert.FromBase64String(publicKeyBase64), bytesRead)
-            Dim ok = ec.VerifyData(payload, signature, HashAlgorithmName.SHA256)
-            Console.WriteLine(If(ok, "VALID: signature matches the public key.", "INVALID: signature does NOT match — do not ship."))
-            If Not ok Then Environment.Exit(2)
+            If Not ec.VerifyData(manifestBytes, manifestSig, HashAlgorithmName.SHA256) Then
+                Console.WriteLine("INVALID: manifest signature does NOT match the public key - do not ship.")
+                Environment.Exit(2)
+            End If
+        End Using
+
+        Using doc = JsonDocument.Parse(manifestBytes)
+            Dim version = doc.RootElement.GetProperty("version").GetString()
+            Dim expectedHash = doc.RootElement.GetProperty("sha256").GetString()
+            Dim actualHash = Sha256Hex(payload)
+            Console.WriteLine($"manifest version: {version}")
+            If String.Equals(expectedHash, actualHash, StringComparison.OrdinalIgnoreCase) Then
+                Console.WriteLine("VALID: manifest signature OK and exe hash matches.")
+            Else
+                Console.WriteLine($"INVALID: exe hash {actualHash} does not match manifest {expectedHash} - do not ship.")
+                Environment.Exit(2)
+            End If
         End Using
     End Sub
+
+    Private Function Sha256Hex(bytes As Byte()) As String
+        Return Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant()
+    End Function
+
+    Private Function ReadVersion(exePath As String) As String
+        Dim info = FileVersionInfo.GetVersionInfo(exePath)
+        Dim raw = If(String.IsNullOrWhiteSpace(info.ProductVersion), info.FileVersion, info.ProductVersion)
+        Dim match = Regex.Match(If(raw, String.Empty), "\d+(?:\.\d+){1,3}")
+        If Not match.Success Then Throw New InvalidDataException($"Could not read a version number from '{exePath}'.")
+        Return match.Value
+    End Function
 End Module

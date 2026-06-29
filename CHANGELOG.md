@@ -42,9 +42,11 @@ All notable changes to RBX Asset Extractor are documented in this file.
 
 ### Secure auto-updates
 
-- Verified downloaded updates against an embedded ECDSA P-256 public key before installing, so a compromised download host cannot deliver an unsigned or tampered executable; updates fail closed when no signing key is configured.
-- Staged updates in a freshly created, randomized temporary directory to close a predictable-path race during installation.
-- Added an offline signing tool (`tools/UpdateSigner`) with a one-click `tools/sign-release.cmd` that signs a published build, writes its detached `.sig`, and opens the output folder; documented the keypair workflow in `tools/README.md`.
+- Authenticated updates with a signed manifest (`update.json`) that binds the release version and the executable's SHA-256 under one ECDSA P-256 signature, verified against an embedded public key before anything is installed; updates fail closed when no signing key is configured.
+- Added anti-rollback enforcement that refuses any offered version not strictly newer than the installed one, preventing replay of an older, legitimately signed build.
+- Verified the downloaded executable against the hash in the signed manifest, so a compromised download host cannot substitute different bytes.
+- Verified update authenticity entirely in memory and staged the approved build in a freshly created, randomized temporary directory, so a rejected update never touches disk and a predictable-path race is closed.
+- Extended the offline signing tool (`tools/UpdateSigner`) and one-click `tools/sign-release.cmd` to read the version from the build and emit the signed manifest, signature, and legacy version/signature files in one step; documented the keypair and release workflow in `tools/README.md`.
 
 ### Layout corrections
 
