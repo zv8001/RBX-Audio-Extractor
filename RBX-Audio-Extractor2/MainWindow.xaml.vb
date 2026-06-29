@@ -2,6 +2,7 @@ Imports System.ComponentModel
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Windows.Interop
+Imports System.Windows.Media.Animation
 Imports RBXAssetExtractor.Views
 
 Class MainWindow
@@ -109,6 +110,19 @@ Class MainWindow
         PageHost.Content = overview
         ready = True
         AppServices.AddLog("WPF workspace initialized.")
+        RestoreSession()
+    End Sub
+
+    Private Sub RestoreSession()
+        Try
+            audio.RestoreState()
+            images.RestoreState()
+            meshes.RestoreState()
+            cacheFiles.RestoreState()
+            extras.RestoreState()
+        Catch ex As Exception
+            AppServices.AddLog($"Could not restore previous session: {ex.Message}")
+        End Try
     End Sub
 
     Private Sub Navigation_Checked(sender As Object, e As RoutedEventArgs)
@@ -141,15 +155,39 @@ Class MainWindow
     End Sub
 
     Private Sub ShowPage(view As Object, title As String, subtitle As String)
+        If ReferenceEquals(PageHost.Content, view) Then Return
         PageHost.Content = view
         PageTitleText.Text = title
         PageSubtitleText.Text = subtitle
+        AnimatePageTransition()
+    End Sub
+
+    Private Sub AnimatePageTransition()
+        Dim translate = TryCast(PageSurface.RenderTransform, TranslateTransform)
+        If translate Is Nothing Then
+            translate = New TranslateTransform()
+            PageSurface.RenderTransform = translate
+        End If
+
+        PageSurface.BeginAnimation(UIElement.OpacityProperty, Nothing)
+        translate.BeginAnimation(TranslateTransform.YProperty, Nothing)
+        PageSurface.Opacity = 0.3
+        translate.Y = 9
+
+        Dim duration = New Duration(TimeSpan.FromMilliseconds(220))
+        Dim easing As New CubicEase With {.EasingMode = EasingMode.EaseOut}
+        Dim fade As New DoubleAnimation(1.0, duration) With {.EasingFunction = easing}
+        Dim slide As New DoubleAnimation(0.0, duration) With {.EasingFunction = easing}
+
+        PageSurface.BeginAnimation(UIElement.OpacityProperty, fade, HandoffBehavior.SnapshotAndReplace)
+        translate.BeginAnimation(TranslateTransform.YProperty, slide, HandoffBehavior.SnapshotAndReplace)
     End Sub
 
     Private Sub StatusChanged(message As String, progress As Double, indeterminate As Boolean)
         StatusText.Text = message
         WorkProgress.IsIndeterminate = indeterminate
         If Not indeterminate Then WorkProgress.Value = progress
+        SidebarCachePath.Text = AppServices.DatabasePath
         SidebarCacheState.Text = If(File.Exists(AppServices.DatabasePath), "Cache detected", "Cache not found")
     End Sub
 
@@ -163,6 +201,8 @@ Class MainWindow
 
     Private Sub CacheCleared()
         SidebarCacheState.Text = "Cache cleared"
+        ' The persisted scan results now point at a deleted cache; drop them so a restart starts clean.
+        SessionStateStore.ClearAll()
     End Sub
 
     Private Sub TitleBar_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs)
@@ -194,7 +234,33 @@ Class MainWindow
         Topmost = AlwaysOnTopCheckBox.IsChecked.GetValueOrDefault()
     End Sub
 
+    Private scanningAll As Boolean
+
+    Private Async Sub ScanAllButton_Click(sender As Object, e As RoutedEventArgs)
+        If scanningAll Then Return
+        scanningAll = True
+        ScanAllButton.IsEnabled = False
+        Dim originalContent = ScanAllButton.Content
+        ScanAllButton.Content = "Scanning..."
+        Try
+            AppServices.Report("Scanning every workspace...", 0, True)
+            Await audio.StartScanAsync()
+            Await images.StartScanAsync()
+            Await meshes.StartScanAsync()
+            Await cacheFiles.StartScanAsync()
+            Await extras.ScanAllAsync()
+            AppServices.Report("Scan all complete. Every workspace is populated.", 100)
+        Catch ex As Exception
+            AppServices.Report($"Scan all failed: {ex.Message}")
+        Finally
+            ScanAllButton.Content = originalContent
+            ScanAllButton.IsEnabled = True
+            scanningAll = False
+        End Try
+    End Sub
+
     Private Async Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs)
+        FitToWorkingArea()
         If creatorMessageShown Then Return
         creatorMessageShown = True
         If Await about.CheckForUpdatesAsync(promptToInstall:=True, owner:=Me) Then Return
@@ -210,6 +276,13 @@ Class MainWindow
             AppServices.AddLog($"Creator message failed: {ex.Message}")
         End Try
     End Sub
+    Private Sub FitToWorkingArea()
+        Dim workingArea = SystemParameters.WorkArea
+        Const edgeAllowance As Double = 32
+        Width = Math.Max(MinWidth, Math.Min(Width, workingArea.Width - edgeAllowance))
+        Height = Math.Max(MinHeight, Math.Min(Height, workingArea.Height - edgeAllowance))
+    End Sub
+
     Private Sub MainWindow_Closing(sender As Object, e As CancelEventArgs)
         If audio IsNot Nothing Then audio.StopPlayback()
         RemoveHandler AppServices.StatusChanged, AddressOf StatusChanged

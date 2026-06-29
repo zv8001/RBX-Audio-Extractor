@@ -25,15 +25,52 @@ Public Module AppServices
         End Get
     End Property
 
-    Public ReadOnly Property RobloxLocalPath As String
+    Private settingsLoaded As Boolean
+    Private databaseOverride As String
+
+    Private Sub EnsureSettingsLoaded()
+        If settingsLoaded Then Return
+        settingsLoaded = True
+        Try
+            databaseOverride = AppSettings.Current.DatabasePathOverride
+        Catch
+            databaseOverride = Nothing
+        End Try
+    End Sub
+
+    ''' <summary>The Roblox install's default LocalAppData\Roblox folder.</summary>
+    Public ReadOnly Property DefaultRobloxLocalPath As String
         Get
             Return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Roblox")
         End Get
     End Property
 
+    Public ReadOnly Property DefaultDatabasePath As String
+        Get
+            Return Path.Combine(DefaultRobloxLocalPath, "rbx-storage.db")
+        End Get
+    End Property
+
+    ''' <summary>True when the scanners are pointed at a user-chosen database instead of the default.</summary>
+    Public ReadOnly Property IsUsingCustomDatabase As Boolean
+        Get
+            EnsureSettingsLoaded()
+            Return Not String.IsNullOrWhiteSpace(databaseOverride)
+        End Get
+    End Property
+
+    ''' <summary>Folder containing the active database; external payloads are resolved relative to it.</summary>
+    Public ReadOnly Property RobloxLocalPath As String
+        Get
+            If Not IsUsingCustomDatabase Then Return DefaultRobloxLocalPath
+            Return If(Path.GetDirectoryName(databaseOverride), DefaultRobloxLocalPath)
+        End Get
+    End Property
+
     Public ReadOnly Property DatabasePath As String
         Get
-            Return Path.Combine(RobloxLocalPath, "rbx-storage.db")
+            If Not IsUsingCustomDatabase Then Return DefaultDatabasePath
+            Return databaseOverride
         End Get
     End Property
 
@@ -42,6 +79,19 @@ Public Module AppServices
             Return Path.Combine(RobloxLocalPath, "rbx-storage")
         End Get
     End Property
+
+    ''' <summary>Point all scanners at a different rbx-storage.db. Persisted across sessions.</summary>
+    Public Sub SetDatabasePathOverride(path As String)
+        EnsureSettingsLoaded()
+        databaseOverride = If(String.IsNullOrWhiteSpace(path), Nothing, path)
+        AppSettings.Current.DatabasePathOverride = databaseOverride
+        AppSettings.Save()
+    End Sub
+
+    ''' <summary>Restore the default Roblox database path.</summary>
+    Public Sub ResetDatabasePathOverride()
+        SetDatabasePathOverride(Nothing)
+    End Sub
 
     Public Sub Report(message As String, Optional progress As Double = 0, Optional indeterminate As Boolean = False)
         Dispatch(Sub()
@@ -83,6 +133,57 @@ Public Module AppServices
         If value < 1024L * 1024L Then Return $"{value / 1024.0:N1} KB"
         If value < 1024L * 1024L * 1024L Then Return $"{value / (1024.0 * 1024.0):N1} MB"
         Return $"{value / (1024.0 * 1024.0 * 1024.0):N2} GB"
+    End Function
+
+    Private ReadOnly fitColumnDefinitions As New Dictionary(Of ListView, (Column As GridViewColumn, Weight As Double)())()
+
+    Public Sub FitGridViewColumns(list As ListView, ParamArray definitions As (Column As GridViewColumn, Weight As Double)())
+        If list Is Nothing OrElse definitions Is Nothing OrElse definitions.Length = 0 OrElse list.ActualWidth <= 0 Then Return
+        ' Remember the layout so we can refit when the vertical scrollbar appears/disappears (which
+        ' changes the viewport width without raising the ListView's own SizeChanged).
+        If Not fitColumnDefinitions.ContainsKey(list) Then WireScrollBarRefit(list)
+        fitColumnDefinitions(list) = definitions
+        ' Only reserve room for the vertical scrollbar when it is actually showing; otherwise the
+        ' reserved space renders as an empty trailing GridView header segment.
+        Dim scrollBarReserve = If(IsVerticalScrollBarVisible(list), SystemParameters.VerticalScrollBarWidth, 0.0)
+        Dim available = Math.Max(0, list.ActualWidth - scrollBarReserve - 2)
+        Dim totalWeight = definitions.Sum(Function(item) Math.Max(0, item.Weight))
+        If available <= 0 OrElse totalWeight <= 0 Then Return
+        For Each definition In definitions
+            definition.Column.Width = Math.Max(34, available * Math.Max(0, definition.Weight) / totalWeight)
+        Next
+    End Sub
+
+    Private Sub WireScrollBarRefit(list As ListView)
+        ' ScrollViewer.ScrollChanged bubbles up from the ListView's template; ViewportWidthChange is
+        ' non-zero exactly when the vertical scrollbar toggles, which is when we must refit.
+        list.AddHandler(ScrollViewer.ScrollChangedEvent, New ScrollChangedEventHandler(AddressOf OnListScrollChanged))
+    End Sub
+
+    Private Sub OnListScrollChanged(sender As Object, e As ScrollChangedEventArgs)
+        If e.ViewportWidthChange = 0 Then Return
+        Dim list = TryCast(sender, ListView)
+        If list Is Nothing Then Return
+        Dim definitions As (Column As GridViewColumn, Weight As Double)() = Nothing
+        If fitColumnDefinitions.TryGetValue(list, definitions) Then FitGridViewColumns(list, definitions)
+    End Sub
+
+    Private Function IsVerticalScrollBarVisible(root As DependencyObject) As Boolean
+        Dim viewer = FindVisualChild(Of ScrollViewer)(root)
+        Return viewer IsNot Nothing AndAlso viewer.ComputedVerticalScrollBarVisibility = Visibility.Visible
+    End Function
+
+    Private Function FindVisualChild(Of T As DependencyObject)(parent As DependencyObject) As T
+        If parent Is Nothing Then Return Nothing
+        Dim count = VisualTreeHelper.GetChildrenCount(parent)
+        For i = 0 To count - 1
+            Dim child = VisualTreeHelper.GetChild(parent, i)
+            Dim match = TryCast(child, T)
+            If match IsNot Nothing Then Return match
+            match = FindVisualChild(Of T)(child)
+            If match IsNot Nothing Then Return match
+        Next
+        Return Nothing
     End Function
 
     Public Function SafePrefix(value As String, Optional length As Integer = 12) As String

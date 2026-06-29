@@ -332,11 +332,11 @@ Public NotInheritable Class RobloxCacheAssetExtractor
     End Function
 
     Private Shared Function GetDatabasePath() As String
-        Return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Roblox", "rbx-storage.db")
+        Return AppServices.DatabasePath
     End Function
 
     Private Shared Function FindExternalFile(hash As String) As String
-        Dim root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Roblox", "rbx-storage")
+        Dim root = AppServices.PayloadPath
         Dim primary = Path.Combine(root, hash.Substring(0, 2), hash)
         If File.Exists(primary) Then Return primary
         Dim fallback = Path.Combine(Path.GetTempPath(), "Roblox", "http", hash)

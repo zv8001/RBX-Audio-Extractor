@@ -780,7 +780,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "3.1.0",
+    "version": "3.1.1",
     "restore": {
       "projectUniqueName": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj",
       "projectName": "RBXAssetExtractor",

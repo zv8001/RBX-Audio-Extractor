@@ -1,13 +1,87 @@
 Imports System.Diagnostics
 Imports System.IO
+Imports Microsoft.Win32
 
 Namespace Views
     Public Class MaintenanceView
+        Private busy As Boolean
+
         Public Sub New()
             InitializeComponent()
-            CachePathText.Text = AppServices.DatabasePath
             ApplicationDataPathText.Text = AssetNameStore.DataDirectory
+            UpdateDatabaseDisplay()
             AddHandler Loaded, AddressOf MaintenanceView_Loaded
+        End Sub
+
+        Private Sub UpdateDatabaseDisplay()
+            CachePathText.Text = AppServices.DatabasePath
+            DatabasePathText.Text = "SQL Database: " & AppServices.DatabasePath
+            ResetDatabaseButton.IsEnabled = Not busy AndAlso AppServices.IsUsingCustomDatabase
+        End Sub
+
+        Private Async Sub ChangeDatabaseButton_Click(sender As Object, e As RoutedEventArgs)
+            If busy Then Return
+            Dim dialog As New OpenFileDialog With {
+                .Title = "Select an rbx-storage.db database",
+                .Filter = "Roblox cache database (*.db)|*.db|All files (*.*)|*.*",
+                .CheckFileExists = True}
+            If File.Exists(AppServices.DatabasePath) Then dialog.InitialDirectory = Path.GetDirectoryName(AppServices.DatabasePath)
+            If dialog.ShowDialog() <> True Then Return
+            AppServices.SetDatabasePathOverride(dialog.FileName)
+            UpdateDatabaseDisplay()
+            AppServices.Report($"SQL database set to {dialog.FileName}. Re-scan each workspace to load it.", 100)
+            Await RefreshStatsAsync()
+        End Sub
+
+        Private Async Sub ResetDatabaseButton_Click(sender As Object, e As RoutedEventArgs)
+            If busy Then Return
+            AppServices.ResetDatabasePathOverride()
+            UpdateDatabaseDisplay()
+            AppServices.Report("SQL database reset to the default Roblox cache.", 100)
+            Await RefreshStatsAsync()
+        End Sub
+
+        Private Async Sub ExtractAllButton_Click(sender As Object, e As RoutedEventArgs)
+            If busy Then Return
+            If Not File.Exists(AppServices.DatabasePath) Then
+                AppDialog.Show("The Roblox cache database was not found. Open Roblox once, or choose a database above, and try again.", "No cache database", MessageBoxButton.OK, MessageBoxImage.Warning)
+                Return
+            End If
+            Dim dialog As New OpenFolderDialog With {.Title = "Choose a folder for the full export"}
+            If dialog.ShowDialog() <> True Then Return
+            Dim folder = dialog.FolderName
+
+            SetBusy(True)
+            AppServices.Report("Starting full cache export...", 0, True)
+            Try
+                Dim progressAction As Action(Of String, Double) =
+                    Sub(stage, percent) AppServices.Report(stage, percent)
+                Dim summary = Await Task.Run(Function() BulkAssetExporter.ExportEverything(folder, progressAction))
+                AppServices.Report($"Full export complete: {summary.Exported:N0} exported, {summary.Reused:N0} reused, {summary.Failed:N0} failed.", 100)
+
+                Dim message As String
+                If summary.Exported = 0 AndAlso summary.Reused = 0 Then
+                    message = "No exportable assets were found in the cache."
+                Else
+                    message = String.Join(Environment.NewLine, summary.Lines)
+                    message &= Environment.NewLine & Environment.NewLine & $"Total: {summary.Exported:N0} exported, {summary.Reused:N0} reused, {summary.Failed:N0} failed."
+                    If summary.Skipped > 0 Then message &= $"{Environment.NewLine}{summary.Skipped:N0} unsupported meshes were skipped."
+                End If
+                Dim openNow = AppDialog.Show(message & Environment.NewLine & Environment.NewLine & "Open the export folder now?", "Extract all complete", MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes)
+                If openNow = MessageBoxResult.Yes AndAlso Directory.Exists(folder) Then AppServices.OpenPath(folder)
+            Catch ex As Exception
+                AppServices.Report($"Full export failed: {ex.Message}")
+                AppDialog.Show(ex.Message, "Extract all failed", MessageBoxButton.OK, MessageBoxImage.Error)
+            Finally
+                SetBusy(False)
+            End Try
+        End Sub
+
+        Private Sub SetBusy(value As Boolean)
+            busy = value
+            ExtractAllButton.IsEnabled = Not value
+            ChangeDatabaseButton.IsEnabled = Not value
+            ResetDatabaseButton.IsEnabled = Not value AndAlso AppServices.IsUsingCustomDatabase
         End Sub
 
         Private Async Sub MaintenanceView_Loaded(sender As Object, e As RoutedEventArgs)

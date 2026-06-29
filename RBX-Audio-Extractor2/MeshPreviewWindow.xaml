@@ -1,7 +1,71 @@
-<Window x:Class="MeshPreviewWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Mesh Preview" Width="900" Height="650" MinWidth="560" MinHeight="420" Background="{StaticResource CanvasBrush}" Foreground="{StaticResource TextBrush}" WindowStartupLocation="CenterOwner">
-    <Grid><Grid.RowDefinitions><RowDefinition Height="66"/><RowDefinition Height="*"/><RowDefinition Height="34"/></Grid.RowDefinitions>
-        <Border Background="{StaticResource SidebarBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1"><Grid Margin="18,0"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel VerticalAlignment="Center"><TextBlock x:Name="TitleText" FontSize="16" FontWeight="SemiBold"/><TextBlock x:Name="DetailsText" Style="{StaticResource MutedText}" Margin="0,4,0,0"/></StackPanel><Button Grid.Column="1" Content="Reset view" Style="{StaticResource SecondaryButton}" Click="ResetButton_Click"/></Grid></Border>
-        <Border Grid.Row="1" Margin="14" CornerRadius="12" Background="#0C0D12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" ClipToBounds="True"><Viewport3D x:Name="Viewport" MouseLeftButtonDown="Viewport_MouseLeftButtonDown" MouseLeftButtonUp="Viewport_MouseLeftButtonUp" MouseMove="Viewport_MouseMove" MouseWheel="Viewport_MouseWheel"><Viewport3D.Camera><PerspectiveCamera x:Name="Camera" Position="0,0,4" LookDirection="0,0,-4" UpDirection="0,1,0" FieldOfView="45"/></Viewport3D.Camera></Viewport3D></Border>
-        <Border Grid.Row="2" Background="{StaticResource SidebarBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0"><TextBlock Text="Drag to rotate  •  Mouse wheel to zoom  •  Double-click to reset" Style="{StaticResource MutedText}" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
-    </Grid>
+<Window x:Class="MeshPreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="Mesh Preview" Width="860" Height="620" MinWidth="620" MinHeight="460"
+        Background="{StaticResource CanvasBrush}" Foreground="{StaticResource TextBrush}"
+        WindowStyle="None" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
+        KeyDown="Window_KeyDown">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="44" ResizeBorderThickness="6" GlassFrameThickness="0" CornerRadius="0" UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
+    <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Background="{StaticResource CanvasBrush}">
+        <Grid>
+            <Grid.RowDefinitions><RowDefinition Height="44"/><RowDefinition Height="82"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+
+            <Grid Background="{StaticResource SidebarBrush}">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="46"/><ColumnDefinition Width="46"/><ColumnDefinition Width="46"/></Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0,0,0">
+                    <Border Width="25" Height="25" CornerRadius="7" Background="{StaticResource AccentBrush}">
+                        <TextBlock Text="&#xE7C3;" FontFamily="Segoe Fluent Icons" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock x:Name="WindowTitleText" Text="Mesh preview" Margin="10,0,0,0" FontWeight="SemiBold" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+                <Button Grid.Column="1" Style="{StaticResource IconButton}" Click="MinimizeButton_Click" ToolTip="Minimize" shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                    <Path Width="12" Height="12" Data="M 1,7 L 11,7" Stroke="{StaticResource TextBrush}" StrokeThickness="1.4" Stretch="Uniform" SnapsToDevicePixels="True"/>
+                </Button>
+                <Button Grid.Column="2" Style="{StaticResource IconButton}" Click="MaximizeButton_Click" ToolTip="Maximize or restore" shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                    <Path Width="11" Height="11" Data="M 1,1 L 10,1 L 10,10 L 1,10 Z" Stroke="{StaticResource TextBrush}" StrokeThickness="1.3" Fill="Transparent" Stretch="Uniform" SnapsToDevicePixels="True"/>
+                </Button>
+                <Button Grid.Column="3" Style="{StaticResource IconButton}" Click="CloseButton_Click" ToolTip="Close" shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                    <Path Width="11" Height="11" Data="M 1,1 L 10,10 M 10,1 L 1,10" Stroke="{StaticResource TextBrush}" StrokeThickness="1.4" Stretch="Uniform" SnapsToDevicePixels="True"/>
+                </Button>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="20,0">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock x:Name="TitleText" FontSize="18" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock x:Name="DetailsText" Style="{StaticResource MutedText}" Margin="0,5,0,0"/>
+                </StackPanel>
+                <Button Grid.Column="1" Content="Reset view" Style="{StaticResource SecondaryButton}" Height="38" VerticalAlignment="Center" Margin="18,0,0,0" Click="ResetButton_Click"/>
+            </Grid>
+
+            <Border Grid.Row="2" Margin="20,0,20,20" CornerRadius="14" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" ClipToBounds="True">
+                <Border.Background>
+                    <RadialGradientBrush Center="0.5,0.42" GradientOrigin="0.5,0.42" RadiusX="0.72" RadiusY="0.78">
+                        <GradientStop Color="#1B2340" Offset="0"/>
+                        <GradientStop Color="#0A0C12" Offset="1"/>
+                    </RadialGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <Viewport3D x:Name="Viewport" Cursor="SizeAll"
+                                MouseLeftButtonDown="Viewport_MouseLeftButtonDown"
+                                MouseLeftButtonUp="Viewport_MouseLeftButtonUp"
+                                MouseMove="Viewport_MouseMove"
+                                MouseWheel="Viewport_MouseWheel">
+                        <Viewport3D.Camera>
+                            <PerspectiveCamera x:Name="Camera" Position="0,0,3.4" LookDirection="0,0,-3.4" UpDirection="0,1,0" FieldOfView="45"/>
+                        </Viewport3D.Camera>
+                    </Viewport3D>
+                    <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="14" Padding="10,6" CornerRadius="8" Background="#CC171821" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" IsHitTestVisible="False">
+                        <TextBlock Text="INTERACTIVE 3D" Style="{StaticResource EyebrowText}"/>
+                    </Border>
+                    <Border HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="14" Padding="13,7" CornerRadius="9" Background="#E6171821" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" IsHitTestVisible="False">
+                        <TextBlock Text="Drag to rotate  &#x2022;  Mouse wheel to zoom  &#x2022;  Double-click to reset  &#x2022;  Esc to close" Style="{StaticResource MutedText}"/>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
 </Window>

@@ -5,8 +5,11 @@ Namespace Views
     Public Class CacheFilesView
         Private entries As New List(Of RobloxCacheAssetEntry)()
         Private busy As Boolean
+        Private Sub AssetList_SizeChanged(sender As Object, e As SizeChangedEventArgs)
+            AppServices.FitGridViewColumns(AssetList, (NameColumn, 0.25), (CacheKeyColumn, 0.32), (TypeColumn, 0.18), (BytesColumn, 0.15), (InlineColumn, 0.1))
+        End Sub
 
-        Public Async Sub StartScan()
+        Public Async Function StartScanAsync() As Task
             If busy Then Return
             SetBusy(True)
             AppServices.Report("Scanning RBXM and KTX cache files...", 0, True)
@@ -25,6 +28,7 @@ Namespace Views
                                          End Function)
                 ApplyFilter()
                 AppServices.SetCount("Cache", entries.Count)
+                SessionStateStore.SaveCacheAssets("cache", entries)
                 AppServices.Report($"Found {entries.Count:N0} RBXM and KTX files.", 100)
             Catch ex As Exception
                 AppDialog.Show(ex.Message, "Cache-file scan failed", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -32,10 +36,10 @@ Namespace Views
             Finally
                 SetBusy(False)
             End Try
-        End Sub
+        End Function
 
-        Private Sub ScanButton_Click(sender As Object, e As RoutedEventArgs)
-            StartScan()
+        Private Async Sub ScanButton_Click(sender As Object, e As RoutedEventArgs)
+            Await StartScanAsync()
         End Sub
 
         Private Sub Filter_Changed(sender As Object, e As EventArgs)
@@ -110,6 +114,15 @@ Namespace Views
             entries.Clear()
             ApplyFilter()
             AppServices.SetCount("Cache", 0)
+        End Sub
+
+        Public Sub RestoreState()
+            Dim restored = SessionStateStore.LoadCacheAssets("cache")
+            If restored.Count = 0 Then Return
+            entries = restored
+            ApplyFilter()
+            AppServices.SetCount("Cache", entries.Count)
+            SetBusy(False)
         End Sub
         Private Sub SetBusy(value As Boolean)
             busy = value

@@ -54,6 +54,7 @@ End Class
 
 Public NotInheritable Class MeshPreviewData
     Public Property Positions As Vector3()
+    Public Property Normals As Vector3()
     Public Property Indices As Integer()
 End Class
 Public NotInheritable Class MeshExportResult
@@ -67,6 +68,12 @@ Friend NotInheritable Class MeshGeometry
     Public ReadOnly Normals As New List(Of Vector3)()
     Public ReadOnly UVs As New List(Of Vector2)()
     Public ReadOnly Indices As New List(Of Integer)()
+End Class
+
+Friend NotInheritable Class MeshChunkData
+    Public Property Type As String
+    Public Property Version As UInteger
+    Public Property Data As Byte()
 End Class
 
 Public NotInheritable Class RobloxMeshExtractor
@@ -133,6 +140,7 @@ Public NotInheritable Class RobloxMeshExtractor
         Dim geometry = Decode(Unwrap(LoadContent(entry)), entry.Version)
         Return New MeshPreviewData With {
             .Positions = geometry.Positions.ToArray(),
+            .Normals = geometry.Normals.ToArray(),
             .Indices = geometry.Indices.ToArray()
         }
     End Function
@@ -151,11 +159,11 @@ Public NotInheritable Class RobloxMeshExtractor
     End Function
 
     Private Shared Function GetDatabasePath() As String
-        Return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Roblox", "rbx-storage.db")
+        Return AppServices.DatabasePath
     End Function
 
     Private Shared Function GetCacheRoot() As String
-        Return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Roblox", "rbx-storage")
+        Return AppServices.PayloadPath
     End Function
 
     Private Shared Function FindExternalFile(hash As String) As String
@@ -336,10 +344,13 @@ Public NotInheritable Class RobloxMeshExtractor
     End Function
 
     Private Shared Function DecodeDracoMesh(payload As Byte()) As MeshGeometry
-        Dim marker = FindAscii(payload, "DRACO")
-        If marker < 0 Then Throw New InvalidDataException("This version-7 mesh does not contain a Draco stream.")
-        Dim compressed(payload.Length - marker - 1) As Byte
-        Buffer.BlockCopy(payload, marker, compressed, 0, compressed.Length)
+        Dim chunks = ReadMeshChunks(payload)
+        Dim core = chunks.FirstOrDefault(Function(chunk) String.Equals(chunk.Type, "COREMESH", StringComparison.Ordinal))
+        If core Is Nothing OrElse core.Version <> 2UI OrElse core.Data.Length < 4 Then Throw New InvalidDataException("This version-7 mesh does not contain a supported COREMESH chunk.")
+        Dim compressedSize = BitConverter.ToUInt32(core.Data, 0)
+        If compressedSize = 0UI OrElse compressedSize > core.Data.Length - 4 Then Throw New InvalidDataException("The version-7 Draco stream length is invalid.")
+        Dim compressed(CInt(compressedSize) - 1) As Byte
+        Buffer.BlockCopy(core.Data, 4, compressed, 0, compressed.Length)
         Dim decoded = Draco.Decode(compressed)
         Dim mesh = TryCast(decoded, DracoMesh)
         If mesh Is Nothing Then Throw New InvalidDataException("The Draco stream could not be decoded.")
@@ -361,8 +372,82 @@ Public NotInheritable Class RobloxMeshExtractor
         For i = 0 To mesh.Indices.Count - 1
             result.Indices.Add(mesh.Indices(i))
         Next
+        Dim lods = chunks.FirstOrDefault(Function(chunk) String.Equals(chunk.Type, "LODS", StringComparison.Ordinal))
+        If lods IsNot Nothing Then ApplyHighestDetailLod(result, lods)
         Return result
     End Function
+
+    Private Shared Function ReadMeshChunks(payload As Byte()) As List(Of MeshChunkData)
+        Dim chunks As New List(Of MeshChunkData)()
+        Dim position = Array.IndexOf(payload, CByte(10)) + 1
+        If position <= 0 Then Throw New InvalidDataException("The version-7 mesh header is incomplete.")
+        While position < payload.Length
+            If payload.Length - position < 16 Then Throw New InvalidDataException("A version-7 mesh chunk header is incomplete.")
+            Dim chunkType = Encoding.ASCII.GetString(payload, position, 8).TrimEnd(ControlChars.NullChar)
+            Dim chunkVersion = BitConverter.ToUInt32(payload, position + 8)
+            Dim chunkSize = BitConverter.ToUInt32(payload, position + 12)
+            position += 16
+            If chunkSize > payload.Length - position Then Throw New InvalidDataException($"The {chunkType} mesh chunk is incomplete.")
+            Dim data = New Byte(CInt(chunkSize) - 1) {}
+            If data.Length > 0 Then Buffer.BlockCopy(payload, position, data, 0, data.Length)
+            chunks.Add(New MeshChunkData With {.Type = chunkType, .Version = chunkVersion, .Data = data})
+            position += data.Length
+        End While
+        Return chunks
+    End Function
+
+    Private Shared Sub ApplyHighestDetailLod(mesh As MeshGeometry, chunk As MeshChunkData)
+        If chunk.Version <> 1UI OrElse chunk.Data.Length < 11 Then Return
+        Using stream As New MemoryStream(chunk.Data, False)
+            Using reader As New BinaryReader(stream, Encoding.ASCII, True)
+                reader.ReadUInt16()
+                reader.ReadByte()
+                Dim offsetCount = reader.ReadUInt32()
+                If offsetCount < 2UI OrElse offsetCount > 1024UI OrElse stream.Length - stream.Position < CLng(offsetCount) * 4L Then Return
+                Dim offsets As New List(Of UInteger)(CInt(offsetCount))
+                For i As UInteger = 0UI To offsetCount - 1UI
+                    offsets.Add(reader.ReadUInt32())
+                Next
+                Dim totalFaces = mesh.Indices.Count \ 3
+                Dim firstFace = offsets(0)
+                Dim endFace = offsets(1)
+                If endFace <= firstFace OrElse endFace > totalFaces Then Return
+                RetainFaceRange(mesh, CInt(firstFace), CInt(endFace))
+            End Using
+        End Using
+    End Sub
+
+    Private Shared Sub RetainFaceRange(mesh As MeshGeometry, firstFace As Integer, endFace As Integer)
+        Dim selected = mesh.Indices.GetRange(firstFace * 3, (endFace - firstFace) * 3)
+        Dim originalPositionCount = mesh.Positions.Count
+        Dim hasNormals = mesh.Normals.Count = originalPositionCount
+        Dim hasUvs = mesh.UVs.Count = originalPositionCount
+        Dim remap As New Dictionary(Of Integer, Integer)()
+        Dim positions As New List(Of Vector3)()
+        Dim normals As New List(Of Vector3)()
+        Dim uvs As New List(Of Vector2)()
+        For i = 0 To selected.Count - 1
+            Dim sourceIndex = selected(i)
+            If sourceIndex < 0 OrElse sourceIndex >= originalPositionCount Then Throw New InvalidDataException("A mesh LOD references a missing vertex.")
+            Dim targetIndex As Integer
+            If Not remap.TryGetValue(sourceIndex, targetIndex) Then
+                targetIndex = positions.Count
+                remap.Add(sourceIndex, targetIndex)
+                positions.Add(mesh.Positions(sourceIndex))
+                If hasNormals Then normals.Add(mesh.Normals(sourceIndex))
+                If hasUvs Then uvs.Add(mesh.UVs(sourceIndex))
+            End If
+            selected(i) = targetIndex
+        Next
+        mesh.Positions.Clear()
+        mesh.Positions.AddRange(positions)
+        mesh.Normals.Clear()
+        If hasNormals Then mesh.Normals.AddRange(normals)
+        mesh.UVs.Clear()
+        If hasUvs Then mesh.UVs.AddRange(uvs)
+        mesh.Indices.Clear()
+        mesh.Indices.AddRange(selected)
+    End Sub
 
     Private Shared Function ReadVector3(attribute As PointAttribute, point As Integer) As Vector3
         Dim values(2) As Single
@@ -376,25 +461,14 @@ Public NotInheritable Class RobloxMeshExtractor
         Return New Vector2(values(0), values(1))
     End Function
 
-    Private Shared Function FindAscii(bytes As Byte(), value As String) As Integer
-        Dim needle = Encoding.ASCII.GetBytes(value)
-        For i = 0 To bytes.Length - needle.Length
-            Dim match = True
-            For n = 0 To needle.Length - 1
-                If bytes(i + n) <> needle(n) Then match = False : Exit For
-            Next
-            If match Then Return i
-        Next
-        Return -1
-    End Function
-
     Private Shared Sub WriteObj(path As String, entry As MeshCacheEntry, mesh As MeshGeometry)
         Dim directory = System.IO.Path.GetDirectoryName(path)
         If Not String.IsNullOrEmpty(directory) Then System.IO.Directory.CreateDirectory(directory)
         Using writer As New StreamWriter(path, False, New UTF8Encoding(False))
             writer.WriteLine("# Exported by RBX Asset Extractor")
             writer.WriteLine("# Created by zv8001 (Vex)")
-            writer.WriteLine("# Project: https://github.com/zv8001/RBX-Audio-Extractor")
+            writer.WriteLine("# Project: https://github.com/zv8001/RBX-Asset-Extractor")
+            writer.WriteLine("# Project website: https://rbx-asset-extractor.vexthatprotogen.com/")
             writer.WriteLine("# RBX Asset Extractor reads and exports assets from the local Roblox cache.")
             writer.WriteLine($"# Roblox cache key: {entry.Hash}")
             writer.WriteLine($"# Roblox mesh version: {entry.Version}")

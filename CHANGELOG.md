@@ -2,13 +2,65 @@
 
 All notable changes to RBX Asset Extractor are documented in this file.
 
+## [v3.1.1] - 2026-06-28
+
+### Compact and responsive layout
+
+- Reduced the default window footprint to 1066x647 and raised the enforced minimum to 1066x647 so the window opens at its smallest supported size.
+- Clamped the initial window to the monitor's DPI-aware working area so it remains clear of the taskbar and screen edges.
+- Compacted shared spacing and made the Audio, Images, Meshes, Cache Files, and More Assets toolbars wrap complete control groups cleanly at narrower widths.
+- Made result-table columns resize proportionally with their cards so Name, Cache Key, Type, Bytes, and status fields remain visible at the default and minimum window sizes.
+- Wrapped long metadata previews within their card and retained vertical scrolling instead of clipping content beyond the right edge.
+
+### Motion and preview polish
+
+- Added interruptible 220 ms page transitions and an animated, full-height sidebar selection card with a sliding accent marker.
+- Redesigned the mesh preview with matching dark window chrome, a compact information header, improved lighting using decoded vertex normals, and clear interaction hints.
+- Added double-click reset and Escape-to-close controls to the mesh preview.
+- Corrected the main title-bar version badge alignment.
+- Reorganized About & Logs as natural-height, full-width cards in a vertically scrollable page, with a dedicated update section for installed/published versions, live status, and update actions.
+- Wrapped activity-log entries within the log card instead of requiring horizontal scrolling for long messages.
+
+### Mesh reconstruction
+
+- Corrected version-7 previews and OBJ exports by reading the declared Draco stream from `COREMESH` and honoring the highest-detail face range in the `LODS` chunk.
+- Prevented multiple mesh LODs from being stacked into one malformed model while preserving positions, normals, and UVs.
+
+### Maintenance and bulk export
+
+- Added "Change SQL Database" and "Reset SQL Database" controls to Maintenance for pointing every scanner at a different `rbx-storage.db` (such as a backup or another account) and restoring the default, with the choice persisted across sessions.
+- Centralized the Roblox database location so the audio, images, meshes, RBXM/KTX, thumbnails, fonts, and metadata scanners share one configurable path and resolve external payloads relative to the active database.
+- Added an "Extract all" action that scans the entire cache and exports every recognized asset into one chosen folder, sorted into Audio, Images, Cache Files (with RBXM and KTX subfolders), Meshes, Thumbnails, Fonts, and Metadata.
+- Equalized Maintenance action-button heights so Refresh, Open folder, and Clear cache match the application-data button instead of stretching to fill their cards.
+
+### One-click scanning and session persistence
+
+- Added a "Scan all" title-bar button that scans every category and populates all tabs from a single click.
+- Persisted each workspace's scan results (asset metadata only, never payloads) so the tabs repopulate on the next launch without re-scanning, re-applying saved names on load.
+- Moved persisted scan state and application settings into the existing `RBXAssetExtractor.db` SQLite database through a shared connection, schema, and lock instead of separate JSON files.
+- Cleared persisted scan state automatically when the Roblox cache is cleared so the next launch starts clean.
+
+### Secure auto-updates
+
+- Verified downloaded updates against an embedded ECDSA P-256 public key before installing, so a compromised download host cannot deliver an unsigned or tampered executable; updates fail closed when no signing key is configured.
+- Staged updates in a freshly created, randomized temporary directory to close a predictable-path race during installation.
+- Added an offline signing tool (`tools/UpdateSigner`) with a one-click `tools/sign-release.cmd` that signs a published build, writes its detached `.sig`, and opens the output folder; documented the keypair workflow in `tools/README.md`.
+
+### Layout corrections
+
+- Fixed cramped action buttons on the About card and aligned the Cache Files toolbar buttons with the search field when the toolbar wraps.
+- Centered the More Assets toolbar buttons and removed the empty trailing column segment from result tables by reserving scrollbar width only when a scrollbar is actually shown.
+
+### Version
+
+- Bumped the application and updater-visible version to `3.1.1`.
+
 ## [v3.1.0] - 2026-06-28
 
 ### Persistent asset names
 
 - Added custom names for audio, images, meshes, RBXM/KTX files, thumbnails, fonts, and metadata.
-- Added a themed rename dialog and dedicated Name columns while retaining the original Roblox cache key for reference.
-- Fixed the rename-dialog heading foreground so it remains readable with the dark theme.
+- Added a readable dark-themed rename dialog and dedicated Name columns while retaining the original Roblox cache key for reference.
 - Fingerprints renamed payloads with SHA-256 and stores names in an app-owned SQLite database under `%LocalAppData%\RBXAssetExtractor`.
 - Restores saved names during later scans without hashing every cached payload, preserving scan performance.
 - Uses custom names as suggested export filenames and prevents same-name collisions during bulk export.
@@ -17,15 +69,8 @@ All notable changes to RBX Asset Extractor are documented in this file.
 ### UI and project information
 
 - Corrected vertically stretched hero and audio-player buttons so oversized actions use consistent centered dimensions.
-- Replaced square native search fields with rounded dark-theme text boxes and accent hover/focus states.
-- Matched toolbar search-field height to adjacent filters and action buttons so the control row remains compact.
-- Corrected compact text-field padding and vertical alignment so typed search text and the caret remain visible.
-- Enforced genuinely single-line search and rename fields, suppressing mouse-wheel and internal vertical-offset movement.
-- Replaced the custom single-line text renderer with rounded shells around WPF's native editor, eliminating clipped search and rename text.
-- Added true click-to-seek timeline behavior and a larger invisible slider hit target while preserving the thin visual track.
-- Corrected slider-track measurement so the timeline thumb remains vertically centered.
-- Added mouse capture for click-and-drag seeking from any point on the timeline, not only from the thumb.
-- Applied the same proportional click-and-drag behavior to volume, preventing track clicks from jumping directly to muted or full volume.
+- Rebuilt search and rename fields as compact rounded shells around WPF's native single-line editor, with readable text alignment, accent focus states, and no internal vertical scrolling.
+- Added proportional click-and-drag behavior across the full audio timeline and volume tracks while retaining thin, vertically centered visuals.
 - Guarded timeline seeking against disposed or internally invalid decoder states that could otherwise raise a null-reference crash.
 - Added polished official-project website actions to the Overview and About pages.
 - Added a homepage safety panel explaining the cache-only architecture, with no DLL injection, process attachment, or active-memory access.

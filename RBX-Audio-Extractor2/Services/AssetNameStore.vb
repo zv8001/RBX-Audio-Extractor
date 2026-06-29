@@ -11,8 +11,6 @@ Public Interface IRenamableAsset
 End Interface
 
 Public NotInheritable Class AssetNameStore
-    Private Shared ReadOnly SyncRoot As New Object()
-
     Private Sub New()
     End Sub
 
@@ -31,7 +29,7 @@ Public NotInheritable Class AssetNameStore
     Public Shared Sub ApplySavedNames(Of T As IRenamableAsset)(items As IEnumerable(Of T))
         If items Is Nothing OrElse Not File.Exists(DatabasePath) Then Return
         Dim saved As New Dictionary(Of String, (Name As String, Sha256 As String))(StringComparer.OrdinalIgnoreCase)
-        SyncLock SyncRoot
+        SyncLock AppDatabase.SyncRoot
             Using connection = OpenConnection()
                 Using command As New SQLiteCommand("SELECT cache_key, custom_name, sha256 FROM asset_names ORDER BY updated_utc", connection)
                     Using reader = command.ExecuteReader()
@@ -122,7 +120,7 @@ Public NotInheritable Class AssetNameStore
     End Function
 
     Public Shared Sub ClearAllApplicationData()
-        SyncLock SyncRoot
+        SyncLock AppDatabase.SyncRoot
             SQLiteConnection.ClearAllPools()
             If Directory.Exists(DataDirectory) Then Directory.Delete(DataDirectory, recursive:=True)
         End SyncLock
@@ -131,7 +129,7 @@ Public NotInheritable Class AssetNameStore
     Private Shared Sub SaveName(asset As IRenamableAsset, customName As String, payload As Byte())
         If payload Is Nothing Then Throw New InvalidDataException("The cached asset payload is unavailable.")
         Dim fingerprint = Convert.ToHexString(SHA256.HashData(payload)).ToLowerInvariant()
-        SyncLock SyncRoot
+        SyncLock AppDatabase.SyncRoot
             Using connection = OpenConnection()
                 Using transaction = connection.BeginTransaction()
                     Using deleteCommand As New SQLiteCommand("DELETE FROM asset_names WHERE sha256 = @sha256 OR cache_key = @cache_key", connection, transaction)
@@ -155,7 +153,7 @@ Public NotInheritable Class AssetNameStore
     End Sub
 
     Private Shared Sub DeleteName(asset As IRenamableAsset)
-        SyncLock SyncRoot
+        SyncLock AppDatabase.SyncRoot
             If File.Exists(DatabasePath) Then
                 Using connection = OpenConnection()
                     Using command As New SQLiteCommand("DELETE FROM asset_names WHERE cache_key = @cache_key OR sha256 = @sha256", connection)
@@ -171,13 +169,7 @@ Public NotInheritable Class AssetNameStore
     End Sub
 
     Private Shared Function OpenConnection() As SQLiteConnection
-        Directory.CreateDirectory(DataDirectory)
-        Dim connection As New SQLiteConnection($"Data Source={DatabasePath};Version=3;")
-        connection.Open()
-        Using command As New SQLiteCommand("CREATE TABLE IF NOT EXISTS asset_names (sha256 TEXT PRIMARY KEY NOT NULL, cache_key TEXT NOT NULL, custom_name TEXT NOT NULL, updated_utc TEXT NOT NULL); CREATE INDEX IF NOT EXISTS idx_asset_names_cache_key ON asset_names(cache_key);", connection)
-            command.ExecuteNonQuery()
-        End Using
-        Return connection
+        Return AppDatabase.OpenConnection()
     End Function
 
     Private Shared Function NormalizeName(value As String) As String

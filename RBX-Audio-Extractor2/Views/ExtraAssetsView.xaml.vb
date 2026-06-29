@@ -11,6 +11,15 @@ Namespace Views
         Private busy As Boolean
         Private previewVersion As Integer
         Private metadataPreviewVersion As Integer
+        Private Sub SupplementalList_SizeChanged(sender As Object, e As SizeChangedEventArgs)
+            If ReferenceEquals(sender, ThumbnailList) Then
+                AppServices.FitGridViewColumns(ThumbnailList, (ThumbnailNameColumn, 0.55), (ThumbnailTypeColumn, 0.27), (ThumbnailBytesColumn, 0.18))
+            ElseIf ReferenceEquals(sender, FontList) Then
+                AppServices.FitGridViewColumns(FontList, (FontNameColumn, 0.62), (FontTypeColumn, 0.22), (FontBytesColumn, 0.16))
+            ElseIf ReferenceEquals(sender, MetadataList) Then
+                AppServices.FitGridViewColumns(MetadataList, (MetadataNameColumn, 0.76), (MetadataTypeColumn, 0.24))
+            End If
+        End Sub
 
         Private Async Function ScanAsync(label As String, scanner As Func(Of Action(Of SupplementalScanProgress), List(Of SupplementalCacheEntry))) As Task(Of List(Of SupplementalCacheEntry))
             If busy Then Return New List(Of SupplementalCacheEntry)()
@@ -41,20 +50,54 @@ Namespace Views
         End Function
 
         Private Async Sub ScanThumbnailsButton_Click(sender As Object, e As RoutedEventArgs)
-            thumbnails = Await ScanAsync("thumbnails", AddressOf RobloxSupplementalCacheExtractor.ScanThumbnails)
-            ThumbnailList.ItemsSource = thumbnails
-            ExportAllThumbnailsButton.IsEnabled = thumbnails.Count > 0
+            Await ScanThumbnailsAsync()
         End Sub
 
         Private Async Sub ScanFontsButton_Click(sender As Object, e As RoutedEventArgs)
-            fonts = Await ScanAsync("fonts", AddressOf RobloxSupplementalCacheExtractor.ScanFonts)
-            FontList.ItemsSource = fonts
-            ExportAllFontsButton.IsEnabled = fonts.Count > 0
+            Await ScanFontsAsync()
         End Sub
 
         Private Async Sub ScanMetadataButton_Click(sender As Object, e As RoutedEventArgs)
+            Await ScanMetadataAsync()
+        End Sub
+
+        ''' <summary>Scan thumbnails, fonts, and metadata in sequence (used by the title bar "Scan all").</summary>
+        Public Async Function ScanAllAsync() As Task
+            Await ScanThumbnailsAsync()
+            Await ScanFontsAsync()
+            Await ScanMetadataAsync()
+        End Function
+
+        Private Async Function ScanThumbnailsAsync() As Task
+            thumbnails = Await ScanAsync("thumbnails", AddressOf RobloxSupplementalCacheExtractor.ScanThumbnails)
+            ThumbnailList.ItemsSource = thumbnails
+            ExportAllThumbnailsButton.IsEnabled = thumbnails.Count > 0
+            SessionStateStore.SaveSupplemental("thumbnails", thumbnails)
+        End Function
+
+        Private Async Function ScanFontsAsync() As Task
+            fonts = Await ScanAsync("fonts", AddressOf RobloxSupplementalCacheExtractor.ScanFonts)
+            FontList.ItemsSource = fonts
+            ExportAllFontsButton.IsEnabled = fonts.Count > 0
+            SessionStateStore.SaveSupplemental("fonts", fonts)
+        End Function
+
+        Private Async Function ScanMetadataAsync() As Task
             metadata = Await ScanAsync("metadata files", AddressOf RobloxSupplementalCacheExtractor.ScanMetadata)
             MetadataList.ItemsSource = metadata
+            ExportAllMetadataButton.IsEnabled = metadata.Count > 0
+            SessionStateStore.SaveSupplemental("metadata", metadata)
+        End Function
+
+        Public Sub RestoreState()
+            thumbnails = SessionStateStore.LoadSupplemental("thumbnails")
+            fonts = SessionStateStore.LoadSupplemental("fonts")
+            metadata = SessionStateStore.LoadSupplemental("metadata")
+            ThumbnailList.ItemsSource = thumbnails
+            FontList.ItemsSource = fonts
+            MetadataList.ItemsSource = metadata
+            ExportAllThumbnailsButton.IsEnabled = thumbnails.Count > 0
+            ExportAllFontsButton.IsEnabled = fonts.Count > 0
             ExportAllMetadataButton.IsEnabled = metadata.Count > 0
         End Sub
 

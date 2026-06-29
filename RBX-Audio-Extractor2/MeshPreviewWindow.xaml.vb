@@ -6,13 +6,16 @@ Public Class MeshPreviewWindow
     Private ReadOnly pitchRotation As New AxisAngleRotation3D(New Vector3D(1, 0, 0), 20)
     Private dragging As Boolean
     Private previousMouse As Point
-    Private cameraDistance As Double = 4
+    Private cameraDistance As Double = 3.4
 
     Public Sub New(entry As MeshCacheEntry, data As MeshPreviewData)
         InitializeComponent()
-        Title = $"Mesh Preview · {AppServices.SafePrefix(entry.Hash)}"
-        TitleText.Text = $"{entry.Hash}  ·  mesh v{entry.Version}"
-        DetailsText.Text = $"{data.Positions.Length:N0} vertices  •  {data.Indices.Length \ 3:N0} triangles"
+        Dim separator = ChrW(&HB7)
+        Dim displayName = entry.FriendlyName
+        Title = $"Mesh Preview {separator} {AppServices.SafePrefix(displayName)}"
+        WindowTitleText.Text = $"Mesh preview {separator} {AppServices.SafePrefix(displayName, 24)}"
+        TitleText.Text = $"{displayName}  {separator}  mesh v{entry.Version}"
+        DetailsText.Text = $"{data.Positions.Length:N0} vertices  {ChrW(&H2022)}  {data.Indices.Length \ 3:N0} triangles"
         BuildScene(data)
     End Sub
 
@@ -22,12 +25,23 @@ Public Class MeshPreviewWindow
         For Each vertex In normalized
             geometry.Positions.Add(New Point3D(vertex.X, vertex.Y, vertex.Z))
         Next
+        If data.Normals IsNot Nothing AndAlso data.Normals.Length = normalized.Length Then
+            For Each sourceNormal In data.Normals
+                Dim normal = sourceNormal
+                If normal.LengthSquared() > 0.000001F Then normal = Vector3.Normalize(normal)
+                geometry.Normals.Add(New Vector3D(normal.X, normal.Y, normal.Z))
+            Next
+        End If
         For Each index In data.Indices
             If index >= 0 AndAlso index < normalized.Length Then geometry.TriangleIndices.Add(index)
         Next
         geometry.Freeze()
 
-        Dim material As New DiffuseMaterial(New SolidColorBrush(Color.FromRgb(&H72, &H8B, &HFF)))
+        Dim material As New MaterialGroup()
+        material.Children.Add(New DiffuseMaterial(New SolidColorBrush(Color.FromRgb(&H72, &H8B, &HFF))))
+        material.Children.Add(New SpecularMaterial(New SolidColorBrush(Color.FromArgb(&H66, &HE5, &HE7, &HFF)), 28))
+        material.Freeze()
+
         Dim model As New GeometryModel3D(geometry, material) With {.BackMaterial = material}
         Dim transforms As New Transform3DGroup()
         transforms.Children.Add(New RotateTransform3D(yawRotation))
@@ -35,7 +49,7 @@ Public Class MeshPreviewWindow
         model.Transform = transforms
 
         Dim group As New Model3DGroup()
-        group.Children.Add(New AmbientLight(Color.FromRgb(&H45, &H48, &H58)))
+        group.Children.Add(New AmbientLight(Color.FromRgb(&H3D, &H41, &H52)))
         group.Children.Add(New DirectionalLight(Colors.White, New Vector3D(-0.35, -0.5, -1)))
         group.Children.Add(New DirectionalLight(Color.FromRgb(&H79, &H62, &HFF), New Vector3D(0.8, 0.2, 1)))
         group.Children.Add(model)
@@ -58,6 +72,11 @@ Public Class MeshPreviewWindow
     End Function
 
     Private Sub Viewport_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs)
+        If e.ClickCount = 2 Then
+            ResetView()
+            e.Handled = True
+            Return
+        End If
         dragging = True
         previousMouse = e.GetPosition(Viewport)
         Viewport.CaptureMouse()
@@ -82,6 +101,21 @@ Public Class MeshPreviewWindow
         UpdateCamera()
     End Sub
 
+    Private Sub MinimizeButton_Click(sender As Object, e As RoutedEventArgs)
+        WindowState = WindowState.Minimized
+    End Sub
+
+    Private Sub MaximizeButton_Click(sender As Object, e As RoutedEventArgs)
+        WindowState = If(WindowState = WindowState.Maximized, WindowState.Normal, WindowState.Maximized)
+    End Sub
+
+    Private Sub CloseButton_Click(sender As Object, e As RoutedEventArgs)
+        Close()
+    End Sub
+
+    Private Sub Window_KeyDown(sender As Object, e As KeyEventArgs)
+        If e.Key = Key.Escape Then Close()
+    End Sub
 
     Private Sub ResetButton_Click(sender As Object, e As RoutedEventArgs)
         ResetView()
@@ -90,7 +124,7 @@ Public Class MeshPreviewWindow
     Private Sub ResetView()
         yawRotation.Angle = -32
         pitchRotation.Angle = 20
-        cameraDistance = 4
+        cameraDistance = 3.4
         UpdateCamera()
     End Sub
 

@@ -1,0 +1,6 @@
+# The update signing private key must never be committed or shared.
+update-private-key.txt
+
+# Build output for the signing helper.
+UpdateSigner/bin/
+UpdateSigner/obj/

@@ -14,6 +14,9 @@ Namespace Views
         Private updatingSlider As Boolean
         Private userSeeking As Boolean
         Private busy As Boolean
+        Private Sub AssetList_SizeChanged(sender As Object, e As SizeChangedEventArgs)
+            AppServices.FitGridViewColumns(AssetList, (NameColumn, 0.2), (CacheKeyColumn, 0.27), (FormatColumn, 0.15), (DurationColumn, 0.12), (BytesColumn, 0.16), (InlineColumn, 0.1))
+        End Sub
 
         Public Sub New()
             InitializeComponent()
@@ -21,7 +24,7 @@ Namespace Views
             AddHandler timer.Tick, AddressOf PlaybackTimer_Tick
         End Sub
 
-        Public Async Sub StartScan()
+        Public Async Function StartScanAsync() As Task
             If busy Then Return
             SetBusy(True)
             AppServices.Report("Scanning cached audio...", 0, True)
@@ -48,6 +51,7 @@ Namespace Views
                                          End Function)
                 ApplyFilter()
                 AppServices.SetCount("Audio", entries.Count)
+                SessionStateStore.SaveCacheAssets("audio", entries)
                 AppServices.Report($"Found {entries.Count:N0} cached audio files.", 100)
             Catch ex As Exception
                 AppServices.Report("Audio scan failed.")
@@ -55,10 +59,10 @@ Namespace Views
             Finally
                 SetBusy(False)
             End Try
-        End Sub
+        End Function
 
-        Private Sub ScanButton_Click(sender As Object, e As RoutedEventArgs)
-            StartScan()
+        Private Async Sub ScanButton_Click(sender As Object, e As RoutedEventArgs)
+            Await StartScanAsync()
         End Sub
 
         Private Sub SearchBox_TextChanged(sender As Object, e As TextChangedEventArgs)
@@ -326,6 +330,15 @@ Namespace Views
             ApplyFilter()
             AppServices.SetCount("Audio", 0)
             AppServices.Report("Audio results cleared. Scan the cache again.")
+        End Sub
+
+        Public Sub RestoreState()
+            Dim restored = SessionStateStore.LoadCacheAssets("audio")
+            If restored.Count = 0 Then Return
+            entries = restored
+            ApplyFilter()
+            AppServices.SetCount("Audio", entries.Count)
+            SetBusy(False)
         End Sub
         Private Sub SetBusy(value As Boolean, Optional keepListEnabled As Boolean = False)
             busy = value

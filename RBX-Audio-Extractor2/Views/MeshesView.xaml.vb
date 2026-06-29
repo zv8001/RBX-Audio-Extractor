@@ -5,8 +5,11 @@ Namespace Views
     Public Class MeshesView
         Private entries As New List(Of MeshCacheEntry)()
         Private busy As Boolean
+        Private Sub AssetList_SizeChanged(sender As Object, e As SizeChangedEventArgs)
+            AppServices.FitGridViewColumns(AssetList, (NameColumn, 0.22), (CacheKeyColumn, 0.28), (VersionColumn, 0.13), (BytesColumn, 0.15), (InlineColumn, 0.1), (ReadyColumn, 0.12))
+        End Sub
 
-        Public Async Sub StartScan()
+        Public Async Function StartScanAsync() As Task
             If busy Then Return
             SetBusy(True)
             AppServices.Report("Scanning cached meshes...", 0, True)
@@ -23,6 +26,7 @@ Namespace Views
                                          End Function)
                 AssetList.ItemsSource = entries
                 AppServices.SetCount("Meshes", entries.Count)
+                SessionStateStore.SaveMeshes(entries)
                 Dim ready = entries.Where(Function(item) item.CanExport).Count()
                 AppServices.Report($"Found {entries.Count:N0} meshes; {ready:N0} can be exported.", 100)
             Catch ex As Exception
@@ -31,10 +35,10 @@ Namespace Views
             Finally
                 SetBusy(False)
             End Try
-        End Sub
+        End Function
 
-        Private Sub ScanButton_Click(sender As Object, e As RoutedEventArgs)
-            StartScan()
+        Private Async Sub ScanButton_Click(sender As Object, e As RoutedEventArgs)
+            Await StartScanAsync()
         End Sub
 
         Private Sub AssetList_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
@@ -133,6 +137,15 @@ Namespace Views
             entries.Clear()
             AssetList.ItemsSource = Nothing
             AppServices.SetCount("Meshes", 0)
+        End Sub
+
+        Public Sub RestoreState()
+            Dim restored = SessionStateStore.LoadMeshes()
+            If restored.Count = 0 Then Return
+            entries = restored
+            AssetList.ItemsSource = entries
+            AppServices.SetCount("Meshes", entries.Count)
+            SetBusy(False)
         End Sub
         Private Sub SetBusy(value As Boolean)
             busy = value

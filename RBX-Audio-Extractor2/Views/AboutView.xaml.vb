@@ -1,6 +1,7 @@
 Imports System.Diagnostics
 Imports System.IO
 Imports System.Net.Http
+Imports System.Security
 Imports System.Text.RegularExpressions
 
 Namespace Views
@@ -11,22 +12,28 @@ Namespace Views
 
         Public Sub New()
             InitializeComponent()
-            VersionText.Text = $"Version {AppServices.CurrentVersion}"
+            VersionText.Text = AppServices.CurrentVersion
             ActivityList.DataContext = AppServices.Activity
         End Sub
 
         Private Async Sub CheckUpdatesButton_Click(sender As Object, e As RoutedEventArgs)
-            Await CheckForUpdatesAsync(promptToInstall:=False)
+            Await CheckForUpdatesAsync(promptToInstall:=False, owner:=Window.GetWindow(Me))
         End Sub
 
         Public Async Function CheckForUpdatesAsync(promptToInstall As Boolean, Optional owner As Window = Nothing) As Task(Of Boolean)
+            CheckUpdatesButton.IsEnabled = False
+            DownloadUpdateButton.Visibility = Visibility.Collapsed
+            LatestVersionText.Text = "Checking..."
+            UpdateStatusText.Text = "Contacting the update service..."
             AppServices.Report("Checking for updates...", 0, True)
             Try
                 Dim latestText = (Await client.GetStringAsync(BaseUrl & "v.txt")).Trim()
                 Dim current = ParseVersion(AppServices.CurrentVersion)
                 Dim latest = ParseVersion(latestText)
+                LatestVersionText.Text = latestText
                 If latest > current Then
                     DownloadUpdateButton.Visibility = Visibility.Visible
+                    UpdateStatusText.Text = "A newer version is available and ready to download."
                     AppServices.Report($"Update available: {latestText} (installed {AppServices.CurrentVersion}).", 100)
                     If promptToInstall Then
                         Dim result = AppDialog.Show($"Version {latestText} is available. You are using {AppServices.CurrentVersion}.{vbCrLf}{vbCrLf}Download and install it now?",
@@ -36,17 +43,22 @@ Namespace Views
                         AppDialog.Show($"Version {latestText} is available.", "Update available", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, owner)
                     End If
                 ElseIf latest < current Then
+                    UpdateStatusText.Text = "This development build is newer than the published release."
                     AppServices.Report($"This development build ({AppServices.CurrentVersion}) is newer than the published version ({latestText}).", 100)
                 Else
+                    UpdateStatusText.Text = "You are using the latest published version."
                     AppServices.Report($"You are using the latest version ({AppServices.CurrentVersion}).", 100)
                 End If
             Catch ex As Exception
+                LatestVersionText.Text = "Unavailable"
+                UpdateStatusText.Text = "The update service could not be reached."
                 AppServices.Report($"Update check failed: {ex.Message}")
                 If Not promptToInstall Then AppDialog.Show(ex.Message, "Update check failed", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, owner)
+            Finally
+                CheckUpdatesButton.IsEnabled = True
             End Try
             Return False
         End Function
-
         Public Sub SetCreatorMessage(message As String)
             CreatorMessageText.Text = If(String.IsNullOrWhiteSpace(message), "No message from the creator right now.", message)
         End Sub
@@ -62,26 +74,48 @@ Namespace Views
         End Sub
 
         Private Async Sub DownloadUpdateButton_Click(sender As Object, e As RoutedEventArgs)
-            Await DownloadUpdateAsync(confirmFirst:=True)
+            Await DownloadUpdateAsync(confirmFirst:=True, owner:=Window.GetWindow(Me))
         End Sub
 
         Private Async Function DownloadUpdateAsync(confirmFirst As Boolean, Optional owner As Window = Nothing) As Task(Of Boolean)
             If confirmFirst AndAlso AppDialog.Show("Download the published executable and replace this application after it closes?", "Install update", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No, owner) <> MessageBoxResult.Yes Then Return False
+            UpdateStatusText.Text = "Downloading and preparing the update..."
             AppServices.Report("Downloading update...", 0, True)
             Try
                 Dim payload = Await client.GetByteArrayAsync(BaseUrl & "RBXAssetExtractor.exe")
+                Dim signature = (Await client.GetStringAsync(BaseUrl & "RBXAssetExtractor.exe.sig")).Trim()
+
+                ' Authenticity gate: only install a binary signed by our offline key. A compromised
+                ' server can serve arbitrary bytes but cannot forge a signature we will accept.
+                If Not UpdateVerifier.Verify(payload, signature) Then
+                    Throw New SecurityException("The downloaded update failed signature verification and was not installed.")
+                End If
 
                 Dim currentPath = Environment.ProcessPath
                 If String.IsNullOrWhiteSpace(currentPath) Then Throw New InvalidOperationException("The current executable path is unavailable.")
-                Dim tempPath = Path.Combine(Path.GetTempPath(), "RBXAssetExtractor.update.exe")
+
+                ' Stage into a freshly created, unpredictable directory so another local process can't
+                ' pre-place or swap the staged executable before it is applied (TOCTOU).
+                Dim token = Guid.NewGuid().ToString("N")
+                Dim stagingDir = Path.Combine(Path.GetTempPath(), "RBXAssetExtractor-update-" & token)
+                Directory.CreateDirectory(stagingDir)
+                Dim tempPath = Path.Combine(stagingDir, "RBXAssetExtractor.exe")
                 Await File.WriteAllBytesAsync(tempPath, payload)
-                Dim batchPath = Path.Combine(Path.GetTempPath(), "RBXAssetExtractor.update.cmd")
-                Dim script = $"@echo off{vbCrLf}timeout /t 2 /nobreak >nul{vbCrLf}move /y ""{tempPath}"" ""{currentPath}"" >nul{vbCrLf}start """" ""{currentPath}""{vbCrLf}del ""%~f0"""
+
+                Dim batchPath = Path.Combine(Path.GetTempPath(), "RBXAssetExtractor-update-" & token & ".cmd")
+                Dim script = String.Join(vbCrLf, {
+                    "@echo off",
+                    ">nul timeout /t 1 /nobreak",
+                    $"move /y ""{tempPath}"" ""{currentPath}"" >nul",
+                    $"rmdir /s /q ""{stagingDir}"" >nul 2>&1",
+                    $"start """" ""{currentPath}""",
+                    "del ""%~f0"""})
                 Await File.WriteAllTextAsync(batchPath, script)
                 Process.Start(New ProcessStartInfo(batchPath) With {.UseShellExecute = True, .WindowStyle = ProcessWindowStyle.Hidden})
                 Application.Current.Shutdown()
                 Return True
             Catch ex As Exception
+                UpdateStatusText.Text = "The update could not be installed."
                 AppServices.Report($"Update failed: {ex.Message}")
                 AppDialog.Show(ex.Message, "Update failed", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, owner)
                 Return False
