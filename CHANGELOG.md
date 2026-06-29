@@ -2,9 +2,9 @@
 
 All notable changes to RBX Asset Extractor are documented in this file.
 
-## [v3.1.2] - 2026-06-28
+## [v3.1.2] - 2026-06-29
 
-### Fixed auto update system
+### Fixed auto update-system
 
 - Fixed a race condition that caused v3.1.1 to be unable to update.
 - Replaced the way the system detects new versions to even further harden the auto update system.
