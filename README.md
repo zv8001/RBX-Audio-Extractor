@@ -98,4 +98,4 @@ Include the newest crash log when reporting a problem.
 - [GitHub repository](https://github.com/zv8001/RBX-Audio-Extractor)
 - [Changelog](CHANGELOG.md)
 
-Made by **zv800 / Vex**.
+Made by **Vex**.
