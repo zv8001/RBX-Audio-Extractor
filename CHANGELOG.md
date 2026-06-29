@@ -2,6 +2,24 @@
 
 All notable changes to RBX Asset Extractor are documented in this file.
 
+## [v3.1.2] - 2026-06-28
+
+- Fixed a race condition that caused v3.1.1 to be unable to update.
+- Replaced the way the system detects new versions to even further harden the auto update system.
+
+### Secure auto-updates
+
+- Authenticated updates with a signed manifest (`update.json`) that binds the release version and the executable's SHA-256 under one ECDSA P-256 signature, verified against an embedded public key before anything is installed; updates fail closed when no signing key is configured.
+- Added anti-rollback enforcement that refuses any offered version not strictly newer than the installed one, preventing replay of an older, legitimately signed build.
+- Verified the downloaded executable against the hash in the signed manifest, so a compromised download host cannot substitute different bytes.
+- Verified update authenticity entirely in memory and staged the approved build in a freshly created, randomized temporary directory, so a rejected update never touches disk and a predictable-path race is closed.
+- Extended the offline signing tool (`tools/UpdateSigner`) and one-click `tools/sign-release.cmd` to read the version from the build and emit the signed manifest, signature, and legacy version/signature files in one step; documented the keypair and release workflow in `tools/README.md`.
+
+### Version
+
+- Bumped the application and updater-visible version to `3.1.2`.
+
+
 ## [v3.1.1] - 2026-06-28
 
 ### Compact and responsive layout
@@ -39,14 +57,6 @@ All notable changes to RBX Asset Extractor are documented in this file.
 - Persisted each workspace's scan results (asset metadata only, never payloads) so the tabs repopulate on the next launch without re-scanning, re-applying saved names on load.
 - Moved persisted scan state and application settings into the existing `RBXAssetExtractor.db` SQLite database through a shared connection, schema, and lock instead of separate JSON files.
 - Cleared persisted scan state automatically when the Roblox cache is cleared so the next launch starts clean.
-
-### Secure auto-updates
-
-- Authenticated updates with a signed manifest (`update.json`) that binds the release version and the executable's SHA-256 under one ECDSA P-256 signature, verified against an embedded public key before anything is installed; updates fail closed when no signing key is configured.
-- Added anti-rollback enforcement that refuses any offered version not strictly newer than the installed one, preventing replay of an older, legitimately signed build.
-- Verified the downloaded executable against the hash in the signed manifest, so a compromised download host cannot substitute different bytes.
-- Verified update authenticity entirely in memory and staged the approved build in a freshly created, randomized temporary directory, so a rejected update never touches disk and a predictable-path race is closed.
-- Extended the offline signing tool (`tools/UpdateSigner`) and one-click `tools/sign-release.cmd` to read the version from the build and emit the signed manifest, signature, and legacy version/signature files in one step; documented the keypair and release workflow in `tools/README.md`.
 
 ### Layout corrections
 
