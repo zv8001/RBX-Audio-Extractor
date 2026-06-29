@@ -16,7 +16,11 @@ Namespace Views
                         Dim percent = If(value.Total = 0, 0, value.Current * 100.0 / value.Total)
                         AppServices.Report($"Scanning meshes · {value.Found:N0} found", percent)
                     End Sub)
-                entries = Await Task.Run(Function() RobloxMeshExtractor.Scan(progress))
+                entries = Await Task.Run(Function()
+                                             Dim scanned = RobloxMeshExtractor.Scan(progress)
+                                             AssetNameStore.ApplySavedNames(scanned)
+                                             Return scanned
+                                         End Function)
                 AssetList.ItemsSource = entries
                 AppServices.SetCount("Meshes", entries.Count)
                 Dim ready = entries.Where(Function(item) item.CanExport).Count()
@@ -35,12 +39,19 @@ Namespace Views
 
         Private Sub AssetList_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Dim entry = TryCast(AssetList.SelectedItem, MeshCacheEntry)
+            RenameButton.IsEnabled = Not busy AndAlso entry IsNot Nothing
             PreviewButton.IsEnabled = Not busy AndAlso entry IsNot Nothing AndAlso entry.CanExport
             ExportButton.IsEnabled = PreviewButton.IsEnabled
         End Sub
 
         Private Async Sub AssetList_MouseDoubleClick(sender As Object, e As MouseButtonEventArgs)
             Await PreviewSelectedAsync()
+        End Sub
+
+        Private Async Sub RenameButton_Click(sender As Object, e As RoutedEventArgs)
+            Dim entry = TryCast(AssetList.SelectedItem, MeshCacheEntry)
+            If entry Is Nothing Then Return
+            If Await AssetNameStore.PromptAndSaveAsync(Window.GetWindow(Me), entry, Function() RobloxMeshExtractor.ReadPayload(entry)) Then AssetList.Items.Refresh()
         End Sub
 
         Private Async Sub PreviewButton_Click(sender As Object, e As RoutedEventArgs)
@@ -68,7 +79,7 @@ Namespace Views
         Private Async Sub ExportButton_Click(sender As Object, e As RoutedEventArgs)
             Dim entry = TryCast(AssetList.SelectedItem, MeshCacheEntry)
             If entry Is Nothing OrElse Not entry.CanExport Then Return
-            Dim dialog As New SaveFileDialog With {.Title = "Export Roblox mesh as OBJ", .Filter = "Wavefront OBJ (*.obj)|*.obj", .FileName = entry.Hash & ".obj", .DefaultExt = "obj"}
+            Dim dialog As New SaveFileDialog With {.Title = "Export Roblox mesh as OBJ", .Filter = "Wavefront OBJ (*.obj)|*.obj", .FileName = entry.ExportBaseName & ".obj", .DefaultExt = "obj"}
             If dialog.ShowDialog() <> True Then Return
             SetBusy(True)
             AppServices.Report($"Exporting mesh {AppServices.SafePrefix(entry.Hash)}...", 0, True)
@@ -92,10 +103,11 @@ Namespace Views
             Try
                 Dim exported = 0
                 Dim failed = 0
+                Dim usedNames As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
                 Await Task.Run(Sub()
                                    For index = 0 To exportable.Count - 1
                                        Try
-                                           RobloxMeshExtractor.Export(exportable(index), Path.Combine(folder, exportable(index).Hash & ".obj"))
+                                           RobloxMeshExtractor.Export(exportable(index), Path.Combine(folder, AssetNameStore.GetBatchBaseName(exportable(index), usedNames) & ".obj"))
                                            exported += 1
                                        Catch
                                            failed += 1
@@ -112,6 +124,11 @@ Namespace Views
             End Try
         End Sub
 
+        Public Sub ClearSavedNames()
+            AssetNameStore.ClearLoadedNames(entries)
+            AssetList.Items.Refresh()
+        End Sub
+
         Public Sub ResetData()
             entries.Clear()
             AssetList.ItemsSource = Nothing
@@ -120,6 +137,7 @@ Namespace Views
         Private Sub SetBusy(value As Boolean)
             busy = value
             ScanButton.IsEnabled = Not value
+            RenameButton.IsEnabled = Not value AndAlso AssetList.SelectedItem IsNot Nothing
             AssetList.IsHitTestVisible = Not value
             Dim selected = TryCast(AssetList.SelectedItem, MeshCacheEntry)
             PreviewButton.IsEnabled = Not value AndAlso selected IsNot Nothing AndAlso selected.CanExport

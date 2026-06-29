@@ -24,7 +24,11 @@ Namespace Views
                                                    AppServices.Report($"Scanning {label} · {value.Found:N0} found", percent)
                                                End Sub)
                     End Sub
-                Dim result = Await Task.Run(Function() scanner(progressAction))
+                Dim result = Await Task.Run(Function()
+                                                Dim scanned = scanner(progressAction)
+                                                AssetNameStore.ApplySavedNames(scanned)
+                                                Return scanned
+                                            End Function)
                 AppServices.Report($"Found {result.Count:N0} cached {label}.", 100)
                 Return result
             Catch ex As Exception
@@ -56,6 +60,7 @@ Namespace Views
 
         Private Async Sub ThumbnailList_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Dim entry = TryCast(ThumbnailList.SelectedItem, SupplementalCacheEntry)
+            RenameThumbnailButton.IsEnabled = Not busy AndAlso entry IsNot Nothing
             ExportThumbnailButton.IsEnabled = Not busy AndAlso entry IsNot Nothing
             previewVersion += 1
             Dim version = previewVersion
@@ -73,11 +78,40 @@ Namespace Views
         End Sub
 
         Private Sub FontList_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+            PreviewFontButton.IsEnabled = Not busy AndAlso FontList.SelectedItem IsNot Nothing
+            RenameFontButton.IsEnabled = Not busy AndAlso FontList.SelectedItem IsNot Nothing
             ExportFontButton.IsEnabled = Not busy AndAlso FontList.SelectedItem IsNot Nothing
         End Sub
 
+        Private Async Sub FontList_MouseDoubleClick(sender As Object, e As MouseButtonEventArgs)
+            Await PreviewSelectedFontAsync()
+        End Sub
+
+        Private Async Sub PreviewFontButton_Click(sender As Object, e As RoutedEventArgs)
+            Await PreviewSelectedFontAsync()
+        End Sub
+
+        Private Async Function PreviewSelectedFontAsync() As Task
+            Dim entry = TryCast(FontList.SelectedItem, SupplementalCacheEntry)
+            If entry Is Nothing Then Return
+            SetBusy(True)
+            AppServices.Report("Loading font preview...", 0, True)
+            Try
+                Dim payload = Await Task.Run(Function() RobloxSupplementalCacheExtractor.ReadPayload(entry))
+                Dim preview As New FontPreviewWindow(entry, payload) With {.Owner = Window.GetWindow(Me)}
+                preview.Show()
+                AppServices.Report($"Previewing {entry.FriendlyName}.", 100)
+            Catch ex As Exception
+                AppServices.Report($"Font preview failed: {ex.Message}")
+                AppDialog.Show(ex.Message, "Font preview failed", MessageBoxButton.OK, MessageBoxImage.Error)
+            Finally
+                SetBusy(False)
+            End Try
+        End Function
+
         Private Async Sub MetadataList_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Dim entry = TryCast(MetadataList.SelectedItem, SupplementalCacheEntry)
+            RenameMetadataButton.IsEnabled = Not busy AndAlso entry IsNot Nothing
             ExportMetadataButton.IsEnabled = Not busy AndAlso entry IsNot Nothing
             metadataPreviewVersion += 1
             Dim version = metadataPreviewVersion
@@ -94,6 +128,23 @@ Namespace Views
                 AppServices.Report($"Metadata preview failed: {ex.Message}")
             End Try
         End Sub
+
+        Private Async Sub RenameThumbnailButton_Click(sender As Object, e As RoutedEventArgs)
+            Await RenameSupplementalAsync(ThumbnailList, TryCast(ThumbnailList.SelectedItem, SupplementalCacheEntry))
+        End Sub
+
+        Private Async Sub RenameFontButton_Click(sender As Object, e As RoutedEventArgs)
+            Await RenameSupplementalAsync(FontList, TryCast(FontList.SelectedItem, SupplementalCacheEntry))
+        End Sub
+
+        Private Async Sub RenameMetadataButton_Click(sender As Object, e As RoutedEventArgs)
+            Await RenameSupplementalAsync(MetadataList, TryCast(MetadataList.SelectedItem, SupplementalCacheEntry))
+        End Sub
+
+        Private Async Function RenameSupplementalAsync(list As ListView, entry As SupplementalCacheEntry) As Task
+            If entry Is Nothing Then Return
+            If Await AssetNameStore.PromptAndSaveAsync(Window.GetWindow(Me), entry, Function() RobloxSupplementalCacheExtractor.ReadPayload(entry)) Then list.Items.Refresh()
+        End Function
 
         Private Async Sub ExportThumbnailButton_Click(sender As Object, e As RoutedEventArgs)
             Await ExportSelectedAsync(TryCast(ThumbnailList.SelectedItem, SupplementalCacheEntry))
@@ -171,6 +222,15 @@ Namespace Views
             End Using
         End Function
 
+        Public Sub ClearSavedNames()
+            AssetNameStore.ClearLoadedNames(thumbnails)
+            AssetNameStore.ClearLoadedNames(fonts)
+            AssetNameStore.ClearLoadedNames(metadata)
+            ThumbnailList.Items.Refresh()
+            FontList.Items.Refresh()
+            MetadataList.Items.Refresh()
+        End Sub
+
         Public Sub ResetData()
             previewVersion += 1
             thumbnails.Clear()
@@ -187,7 +247,11 @@ Namespace Views
             busy = value
             ScanThumbnailsButton.IsEnabled = Not value
             ScanFontsButton.IsEnabled = Not value
+            PreviewFontButton.IsEnabled = Not value AndAlso FontList.SelectedItem IsNot Nothing
             ScanMetadataButton.IsEnabled = Not value
+            RenameThumbnailButton.IsEnabled = Not value AndAlso ThumbnailList.SelectedItem IsNot Nothing
+            RenameFontButton.IsEnabled = Not value AndAlso FontList.SelectedItem IsNot Nothing
+            RenameMetadataButton.IsEnabled = Not value AndAlso MetadataList.SelectedItem IsNot Nothing
             ThumbnailList.IsHitTestVisible = Not value
             FontList.IsHitTestVisible = Not value
             MetadataList.IsHitTestVisible = Not value

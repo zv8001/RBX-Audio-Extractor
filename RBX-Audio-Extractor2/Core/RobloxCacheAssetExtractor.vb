@@ -18,11 +18,32 @@ Public Enum RobloxCacheFileType
 End Enum
 
 Public NotInheritable Class RobloxCacheAssetEntry
+    Implements IRenamableAsset
     Public Property Hash As String
     Public Property FileType As RobloxCacheFileType
     Public Property Size As Long
     Public Property IsInline As Boolean
     Public Property DurationSeconds As Double?
+    Public Property CustomName As String Implements IRenamableAsset.CustomName
+    Public Property ContentSha256 As String Implements IRenamableAsset.ContentSha256
+
+    Public ReadOnly Property CacheKey As String Implements IRenamableAsset.CacheKey
+        Get
+            Return Hash
+        End Get
+    End Property
+
+    Public ReadOnly Property FriendlyName As String Implements IRenamableAsset.FriendlyName
+        Get
+            Return If(String.IsNullOrWhiteSpace(CustomName), Hash, CustomName)
+        End Get
+    End Property
+
+    Public ReadOnly Property ExportBaseName As String Implements IRenamableAsset.ExportBaseName
+        Get
+            Return AssetNameStore.MakeSafeFileName(CustomName, Hash)
+        End Get
+    End Property
 
     Public ReadOnly Property DurationText As String
         Get
@@ -214,6 +235,7 @@ Public NotInheritable Class RobloxCacheAssetExtractor
                                       progress As Action(Of Integer, Integer), Optional separateTypeFolders As Boolean = False) As CacheExportSummary
         Dim items = entries.ToList()
         Dim summary As New CacheExportSummary()
+        Dim usedNames As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
         Directory.CreateDirectory(outputDirectory)
         Using connection As New SQLiteConnection($"Data Source={GetDatabasePath()};Read Only=True;")
             connection.Open()
@@ -225,7 +247,7 @@ Public NotInheritable Class RobloxCacheAssetExtractor
                         folder = Path.Combine(outputDirectory, If(entry.FileType = RobloxCacheFileType.Ktx1 OrElse entry.FileType = RobloxCacheFileType.Ktx2, "KTX", "RBXM"))
                         Directory.CreateDirectory(folder)
                     End If
-                    Dim outputPath = Path.Combine(folder, entry.Hash & entry.Extension)
+                    Dim outputPath = Path.Combine(folder, AssetNameStore.GetBatchBaseName(entry, usedNames) & entry.Extension)
                     If File.Exists(outputPath) AndAlso New FileInfo(outputPath).Length > 0 Then
                         summary.Reused += 1
                     Else

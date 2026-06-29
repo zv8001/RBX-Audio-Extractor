@@ -43,6 +43,7 @@ Namespace Views
                 entries = Await Task.Run(Function()
                                              Dim scanned = RobloxCacheAssetExtractor.Scan(progressAction, RobloxCacheFileType.Ogg, RobloxCacheFileType.Mp3)
                                              RobloxCacheAssetExtractor.PopulateAudioDurations(scanned, durationProgress)
+                                             AssetNameStore.ApplySavedNames(scanned)
                                              Return scanned.OrderByDescending(Function(item) item.DurationSeconds.GetValueOrDefault()).ThenBy(Function(item) item.Hash).ToList()
                                          End Function)
                 ApplyFilter()
@@ -67,10 +68,11 @@ Namespace Views
         Private Sub ApplyFilter()
             If AssetList Is Nothing Then Return
             Dim query = If(SearchBox?.Text, String.Empty).Trim()
-            AssetList.ItemsSource = If(query.Length = 0, entries, entries.Where(Function(item) item.Hash.Contains(query, StringComparison.OrdinalIgnoreCase) OrElse item.TypeLabel.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList())
+            AssetList.ItemsSource = If(query.Length = 0, entries, entries.Where(Function(item) item.Hash.Contains(query, StringComparison.OrdinalIgnoreCase) OrElse item.FriendlyName.Contains(query, StringComparison.OrdinalIgnoreCase) OrElse item.TypeLabel.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList())
         End Sub
 
         Private Sub AssetList_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+            RenameButton.IsEnabled = Not busy AndAlso AssetList.SelectedItem IsNot Nothing
             ExportButton.IsEnabled = Not busy AndAlso AssetList.SelectedItem IsNot Nothing
             Dim entry = TryCast(AssetList.SelectedItem, RobloxCacheAssetEntry)
             If entry IsNot Nothing Then NowPlayingText.Text = $"{AppServices.SafePrefix(entry.Hash, 20)} · {entry.TypeLabel} · {AppServices.FormatBytes(entry.Size)}"
@@ -171,36 +173,119 @@ Namespace Views
 
         Private Sub PositionSlider_PreviewMouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs)
             userSeeking = True
+            If IsThumbInteraction(TryCast(e.OriginalSource, DependencyObject)) Then Return
+
+            Dim slider = TryCast(sender, Slider)
+            If slider Is Nothing Then Return
+            slider.CaptureMouse()
+            UpdateSliderFromPointer(slider, e)
+            SeekToSliderValue()
+            e.Handled = True
+        End Sub
+
+        Private Sub PositionSlider_PreviewMouseMove(sender As Object, e As MouseEventArgs)
+            Dim slider = TryCast(sender, Slider)
+            If Not userSeeking OrElse slider Is Nothing OrElse Not slider.IsMouseCaptured OrElse e.LeftButton <> MouseButtonState.Pressed Then Return
+            UpdateSliderFromPointer(slider, e)
+            SeekToSliderValue()
+            e.Handled = True
         End Sub
 
         Private Sub PositionSlider_PreviewMouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs)
+            Dim slider = TryCast(sender, Slider)
+            Dim trackDrag = slider IsNot Nothing AndAlso slider.IsMouseCaptured
             Try
-                Dim activeReader = reader
-                If activeReader Is Nothing OrElse updatingSlider Then Return
+                If trackDrag Then UpdateSliderFromPointer(slider, e)
+                SeekToSliderValue()
+            Finally
+                If trackDrag Then slider.ReleaseMouseCapture()
+                userSeeking = False
+            End Try
+            e.Handled = trackDrag
+        End Sub
+
+        Private Shared Sub UpdateSliderFromPointer(slider As Slider, e As MouseEventArgs)
+            If slider.ActualWidth <= 0 OrElse slider.Maximum <= slider.Minimum Then Return
+            Dim ratio = Math.Max(0, Math.Min(1, e.GetPosition(slider).X / slider.ActualWidth))
+            slider.Value = slider.Minimum + ratio * (slider.Maximum - slider.Minimum)
+        End Sub
+
+        Private Sub SeekToSliderValue()
+            Dim activeReader = reader
+            If activeReader Is Nothing OrElse activeReader IsNot reader OrElse output Is Nothing OrElse updatingSlider Then Return
+            Try
+                If Not activeReader.CanSeek Then Return
                 Dim totalSeconds = activeReader.TotalTime.TotalSeconds
                 If totalSeconds <= 0 OrElse Double.IsNaN(totalSeconds) OrElse Double.IsInfinity(totalSeconds) Then Return
-                Dim blockSeconds = activeReader.WaveFormat.BlockAlign / CDbl(Math.Max(1, activeReader.WaveFormat.AverageBytesPerSecond))
+                Dim waveFormat = activeReader.WaveFormat
+                If waveFormat Is Nothing Then Return
+                Dim blockSeconds = waveFormat.BlockAlign / CDbl(Math.Max(1, waveFormat.AverageBytesPerSecond))
                 Dim maximumSeek = Math.Max(0, totalSeconds - Math.Max(0.001, blockSeconds))
                 Dim requested = PositionSlider.Value
                 If Double.IsNaN(requested) OrElse Double.IsInfinity(requested) Then Return
-                Try
-                    activeReader.CurrentTime = TimeSpan.FromSeconds(Math.Max(0, Math.Min(maximumSeek, requested)))
-                Catch ex As ArgumentOutOfRangeException
-                    AppServices.AddLog($"Seek ignored because the decoder rejected position {requested:N3}s.")
-                End Try
-            Finally
-                userSeeking = False
+                If activeReader IsNot reader OrElse output Is Nothing Then Return
+                activeReader.CurrentTime = TimeSpan.FromSeconds(Math.Max(0, Math.Min(maximumSeek, requested)))
+            Catch ex As Exception When TypeOf ex Is ArgumentOutOfRangeException OrElse
+                                            TypeOf ex Is ObjectDisposedException OrElse
+                                            TypeOf ex Is NullReferenceException
+                AppServices.AddLog($"Seek ignored because the decoder was no longer in a valid seek state: {ex.GetType().Name}.")
             End Try
+        End Sub
+
+        Private Shared Function IsThumbInteraction(source As DependencyObject) As Boolean
+            Dim current = source
+            While current IsNot Nothing
+                If TypeOf current Is System.Windows.Controls.Primitives.Thumb Then Return True
+                current = VisualTreeHelper.GetParent(current)
+            End While
+            Return False
+        End Function
+
+        Private Sub VolumeSlider_PreviewMouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs)
+            If IsThumbInteraction(TryCast(e.OriginalSource, DependencyObject)) Then Return
+            Dim slider = TryCast(sender, Slider)
+            If slider Is Nothing Then Return
+            slider.CaptureMouse()
+            UpdateSliderFromPointer(slider, e)
+            e.Handled = True
+        End Sub
+
+        Private Sub VolumeSlider_PreviewMouseMove(sender As Object, e As MouseEventArgs)
+            Dim slider = TryCast(sender, Slider)
+            If slider Is Nothing OrElse Not slider.IsMouseCaptured OrElse e.LeftButton <> MouseButtonState.Pressed Then Return
+            UpdateSliderFromPointer(slider, e)
+            e.Handled = True
+        End Sub
+
+        Private Sub VolumeSlider_PreviewMouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs)
+            Dim slider = TryCast(sender, Slider)
+            Dim trackDrag = slider IsNot Nothing AndAlso slider.IsMouseCaptured
+            If Not trackDrag Then Return
+            Try
+                UpdateSliderFromPointer(slider, e)
+            Finally
+                slider.ReleaseMouseCapture()
+            End Try
+            e.Handled = True
         End Sub
 
         Private Sub VolumeSlider_ValueChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of Double))
             If output IsNot Nothing Then output.Volume = CSng(e.NewValue)
         End Sub
 
+        Private Async Sub RenameButton_Click(sender As Object, e As RoutedEventArgs)
+            Dim entry = TryCast(AssetList.SelectedItem, RobloxCacheAssetEntry)
+            If entry Is Nothing Then Return
+            If Await AssetNameStore.PromptAndSaveAsync(Window.GetWindow(Me), entry, Function() RobloxCacheAssetExtractor.ReadPayload(entry)) Then
+                AssetList.Items.Refresh()
+                ApplyFilter()
+            End If
+        End Sub
+
         Private Async Sub ExportButton_Click(sender As Object, e As RoutedEventArgs)
             Dim entry = TryCast(AssetList.SelectedItem, RobloxCacheAssetEntry)
             If entry Is Nothing Then Return
-            Dim dialog As New SaveFileDialog With {.Title = "Export cached audio", .FileName = entry.Hash & entry.Extension, .DefaultExt = entry.Extension.TrimStart("."c), .Filter = $"{entry.TypeLabel} (*{entry.Extension})|*{entry.Extension}|All files|*.*"}
+            Dim dialog As New SaveFileDialog With {.Title = "Export cached audio", .FileName = entry.ExportBaseName & entry.Extension, .DefaultExt = entry.Extension.TrimStart("."c), .Filter = $"{entry.TypeLabel} (*{entry.Extension})|*{entry.Extension}|All files|*.*"}
             If dialog.ShowDialog() <> True Then Return
             SetBusy(True)
             Try
@@ -230,6 +315,11 @@ Namespace Views
             End Try
         End Sub
 
+        Public Sub ClearSavedNames()
+            AssetNameStore.ClearLoadedNames(entries)
+            ApplyFilter()
+        End Sub
+
         Public Sub ResetData()
             StopPlayback()
             entries.Clear()
@@ -240,6 +330,7 @@ Namespace Views
         Private Sub SetBusy(value As Boolean, Optional keepListEnabled As Boolean = False)
             busy = value
             ScanButton.IsEnabled = Not value
+            RenameButton.IsEnabled = Not value AndAlso AssetList.SelectedItem IsNot Nothing
             AssetList.IsHitTestVisible = Not value OrElse keepListEnabled
             ExportButton.IsEnabled = Not value AndAlso AssetList.SelectedItem IsNot Nothing
             ExportAllButton.IsEnabled = Not value AndAlso entries.Count > 0

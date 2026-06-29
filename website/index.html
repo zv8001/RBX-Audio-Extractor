@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RBX Asset Extractor</title>
+<link rel="stylesheet" href="style.css">
+<script src="changelog.js" defer></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand">RBX <span>Asset Extractor</span></div>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#download">Download</a>
+      <a href="#changelog">Changelog</a>
+      <a href="https://github.com/zv8001/RBX-Audio-Extractor" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Recover assets from Roblox's local cache.</h1>
+    <p>Audio, images, meshes, models, textures, fonts, thumbnails, and metadata &mdash; previewed and exported without dumping your entire cache to disk.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://github.com/zv8001/RBX-Audio-Extractor/releases/latest" target="_blank" rel="noopener">
+        Download for Windows
+      </a>
+      <a class="btn btn-secondary" href="https://github.com/zv8001/RBX-Audio-Extractor" target="_blank" rel="noopener">
+        View on GitHub
+      </a>
+    </div>
+    <p class="hero-note">Free &middot; Open source &middot; 64-bit Windows</p>
+  </div>
+  <div class="hero-image">
+    <img src="images/rbx-asset-extractor.png" alt="RBX Asset Extractor application screenshot">
+  </div>
+</section>
+
+<section id="features" class="features">
+  <h2>What it can extract</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Audio</h3>
+      <p>OGG and MP3 discovery, duration sorting, in-app playback and seeking, plus selected or bulk export.</p>
+    </div>
+    <div class="card">
+      <h3>Images</h3>
+      <p>PNG, JPEG, BMP, and WebP preview and export, with optional PNG conversion.</p>
+    </div>
+    <div class="card">
+      <h3>Meshes</h3>
+      <p>Roblox mesh detection with an interactive 3D preview and Wavefront OBJ export.</p>
+    </div>
+    <div class="card">
+      <h3>Cache files</h3>
+      <p>RBXM models plus KTX and KTX2 textures, filterable and exportable.</p>
+    </div>
+    <div class="card">
+      <h3>More assets</h3>
+      <p>Cached thumbnails, TrueType/OpenType fonts, and JSON/XML/HLS playlist metadata.</p>
+    </div>
+    <div class="card">
+      <h3>Bulk export</h3>
+      <p>Export a single result or an entire category at once, with background scanning and progress reporting.</p>
+    </div>
+  </div>
+</section>
+
+<section class="privacy">
+  <h2>Fast, local, and private</h2>
+  <p>Scans open Roblox's SQLite cache in read-only mode. Assets are only read when needed for identification, preview, playback, or export &mdash; nothing is copied into a temporary extraction folder, and your cached assets are never uploaded. Internet access is used only for version checks, creator messages, project links, and downloading an update when you approve it.</p>
+</section>
+
+<section id="download" class="download">
+  <h2>Get RBX Asset Extractor</h2>
+  <p>Download the latest release and run <code>RBXAssetExtractor.exe</code>. Releases bundle the required native SQLite and image libraries, but you need the <a href="https://dotnet.microsoft.com/download/dotnet/10.0/runtime" target="_blank" rel="noopener">.NET 10 Desktop Runtime (x64)</a> installed &mdash; Windows will prompt you to install it automatically if it's missing.</p>
+  <a class="btn btn-primary btn-large" href="https://github.com/zv8001/RBX-Audio-Extractor/releases/latest" target="_blank" rel="noopener">
+    Download latest release
+  </a>
+  <div class="links-row">
+    <a href="https://github.com/zv8001/RBX-Audio-Extractor" target="_blank" rel="noopener">Repository</a>
+    <a href="https://github.com/zv8001/RBX-Audio-Extractor/releases" target="_blank" rel="noopener">All releases</a>
+    <a href="https://github.com/zv8001/RBX-Audio-Extractor/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a>
+    <a href="https://github.com/zv8001/RBX-Audio-Extractor/issues" target="_blank" rel="noopener">Report an issue</a>
+  </div>
+</section>
+
+<section id="changelog" class="changelog">
+  <h2 id="changelog-heading">Latest release</h2>
+  <div id="changelog-content">
+    <p class="changelog-loading">Loading latest changelog&hellip;</p>
+  </div>
+  <p><a href="https://github.com/zv8001/RBX-Audio-Extractor/blob/main/CHANGELOG.md" target="_blank" rel="noopener">See the full changelog &rarr;</a></p>
+</section>
+
+<footer class="footer">
+  <p>Made by <strong>zv800 / Vex</strong> &middot; <a href="https://github.com/zv8001/RBX-Audio-Extractor" target="_blank" rel="noopener">GitHub</a> &middot; <a href="http://vexthatprotogen.com/" target="_blank" rel="noopener">vexthatprotogen.com</a></p>
+</footer>
+
+</body>
+</html>

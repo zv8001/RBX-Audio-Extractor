@@ -8,7 +8,7 @@ RBX Asset Extractor is a Windows desktop application for finding, previewing, an
 
 [Download the latest release from GitHub](https://github.com/zv8001/RBX-Audio-Extractor/releases/latest).
 
-Download and run `RBXAssetExtractor.exe`. Official self-contained releases include .NET and the required native SQLite and image libraries, so no separate dependency installation is needed.
+Download and run `RBXAssetExtractor.exe`. The compact release bundles its native SQLite and image libraries but requires the 64-bit .NET 10 Desktop Runtime.
 
 RBX Asset Extractor currently supports 64-bit Windows.
 
@@ -31,9 +31,23 @@ The cache location is detected automatically. Most assets use their Roblox cache
 - **More assets:** Thumbnails, TrueType/OpenType fonts, JSON, XML, and HLS playlist metadata.
 - **Bulk export:** Export an individual result or an entire supported category.
 
+## Saved asset names
+
+Select any scanned asset and choose **Rename** to replace its randomized cache key with a recognizable local name. Renaming is supported for audio, images, meshes, RBXM/KTX files, thumbnails, fonts, and metadata.
+
+The application fingerprints renamed payloads with SHA-256 and stores the name in its own SQLite database:
+
+```text
+%LocalAppData%\RBXAssetExtractor\RBXAssetExtractor.db
+```
+
+These names remain available if the executable is moved, replaced, or deleted. Custom names are also used as suggested export filenames. The **Maintenance** page can permanently clear every saved name and other RBX Asset Extractor application data.
+
 ## Fast, local cache access
 
 Normal scans open Roblox's SQLite cache in read-only mode. Assets are read only when needed for identification, preview, playback, or export. The application does not copy the entire cache into a temporary extraction folder.
+
+RBX Asset Extractor is not an exploit or DLL injector. It does not attach to Roblox, inject code, or read or write the running game's memory; it operates only on local cache files already stored on the computer.
 
 Your cached assets are not uploaded. Internet access is used for version checks, creator messages, project links, and downloading an update when you approve it.
 
@@ -65,9 +79,20 @@ Only download releases from this GitHub repository or the official project updat
 
 The application checks the hosted version when it starts. Accepting the custom update prompt downloads the current release over HTTPS and restarts the application.
 
+### The application reports a crash
+
+Unexpected application errors are shown in an error dialog and written to:
+
+```text
+%LocalAppData%\RBXAssetExtractor\Logs
+```
+
+Include the newest crash log when reporting a problem.
+
 ## Links
 
-- [Project website](http://vexthatprotogen.com/)
+- [Official project website](https://rbx-asset-extractor.vexthatprotogen.com/)
+- [Creator website](http://vexthatprotogen.com/)
 - [GitHub repository](https://github.com/zv8001/RBX-Audio-Extractor)
 - [Changelog](CHANGELOG.md)
 

@@ -10,11 +10,11 @@ none
 false
 ;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\Application.xaml
-11-157430814
+13150293454
 1-831544028
-18-1402971202
+21-525636714
 226-1988513100
-DialogWindow.xaml;MainWindow.xaml;MeshPreviewWindow.xaml;Views\AboutView.xaml;Views\AudioView.xaml;Views\CacheFilesView.xaml;Views\ExtraAssetsView.xaml;Views\ImagesView.xaml;Views\MaintenanceView.xaml;Views\MeshesView.xaml;Views\OverviewView.xaml;
+AssetRenameDialog.xaml;DialogWindow.xaml;FontPreviewWindow.xaml;MainWindow.xaml;MeshPreviewWindow.xaml;Views\AboutView.xaml;Views\AudioView.xaml;Views\CacheFilesView.xaml;Views\ExtraAssetsView.xaml;Views\ImagesView.xaml;Views\MaintenanceView.xaml;Views\MeshesView.xaml;Views\OverviewView.xaml;
 
 False
 

@@ -5,7 +5,7 @@
                 <Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#342757" Offset="0"/><GradientStop Color="#1D2945" Offset="1"/></LinearGradientBrush></Border.Background>
                 <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
                     <StackPanel><TextBlock Text="CACHE WORKBENCH" Style="{StaticResource EyebrowText}"/><TextBlock Text="Your Roblox assets, organized." FontSize="28" FontWeight="SemiBold" Margin="0,9,0,5"/><TextBlock Text="Scan the current cache in place, preview what matters, and export only what you choose—without dumping thousands of temporary files." Style="{StaticResource MutedText}" MaxWidth="650" TextWrapping="Wrap"/></StackPanel>
-                    <Button Grid.Column="1" Content="Browse audio" Style="{StaticResource PrimaryButton}" Margin="24,0,0,0" Click="BrowseAudio_Click"/>
+                    <Button Grid.Column="1" Content="Browse audio" Style="{StaticResource PrimaryButton}" Margin="24,0,0,0" MinWidth="132" Height="44" VerticalAlignment="Center" Click="BrowseAudio_Click"/>
                 </Grid>
             </Border>
             <UniformGrid Columns="4" Margin="0,0,0,18">
@@ -14,10 +14,30 @@
                 <Border Style="{StaticResource Card}" Margin="6,0,4,0"><StackPanel><TextBlock Text="MESHES" Style="{StaticResource EyebrowText}"/><TextBlock x:Name="MeshCountText" Text="—" FontSize="27" FontWeight="SemiBold" Margin="0,9,0,2"/><TextBlock Text="OBJ candidates" Style="{StaticResource MutedText}"/></StackPanel></Border>
                 <Border Style="{StaticResource Card}" Margin="10,0,0,0"><StackPanel><TextBlock Text="CACHE FILES" Style="{StaticResource EyebrowText}"/><TextBlock x:Name="CacheCountText" Text="—" FontSize="27" FontWeight="SemiBold" Margin="0,9,0,2"/><TextBlock Text="RBXM and KTX" Style="{StaticResource MutedText}"/></StackPanel></Border>
             </UniformGrid>
+            <Border Margin="0,0,0,18" Padding="20" CornerRadius="12" BorderBrush="#345E59" BorderThickness="1">
+                <Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,0"><GradientStop Color="#19312F" Offset="0"/><GradientStop Color="#1A2538" Offset="1"/></LinearGradientBrush></Border.Background>
+                <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="CACHE-ONLY DESIGN" Foreground="{StaticResource SuccessBrush}" FontSize="11" FontWeight="Bold"/>
+                        <TextBlock Text="Not an exploit or DLL injector." FontSize="18" FontWeight="SemiBold" Margin="0,7,0,5"/>
+                        <TextBlock Text="RBX Asset Extractor does not inject code, attach to Roblox, or read or write the game's active memory. It only reads asset-cache files already stored on your computer, keeping its work separate from the running Roblox client and Byfron anti-cheat." Style="{StaticResource MutedText}" TextWrapping="Wrap" MaxWidth="820"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Margin="24,0,0,0" Padding="14,9" CornerRadius="8" Background="#203C38" BorderBrush="#3D756C" BorderThickness="1" VerticalAlignment="Center">
+                        <StackPanel><TextBlock Text="NO INJECTION" Foreground="{StaticResource SuccessBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/><TextBlock Text="NO MEMORY ACCESS" Foreground="{StaticResource TextBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,3,0,0" HorizontalAlignment="Center"/></StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
             <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                 <Border Style="{StaticResource Card}" Margin="0,0,9,0"><StackPanel><TextBlock Text="Start with a collection" Style="{StaticResource SectionTitle}"/><TextBlock Text="Each scanner reads the SQLite index directly and loads complete payloads only for preview or export." Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,5,0,16"/><WrapPanel><Button Content="Browse audio" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Tag="Audio" Click="Navigate_Click"/><Button Content="Browse images" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Tag="Images" Click="Navigate_Click"/><Button Content="Browse meshes" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Tag="Meshes" Click="Navigate_Click"/></WrapPanel></StackPanel></Border>
                 <Border Grid.Column="1" Style="{StaticResource Card}" Margin="9,0,0,0"><StackPanel><TextBlock Text="Read-only by default" Style="{StaticResource SectionTitle}"/><TextBlock Text="Scanning and exporting never modify Roblox's database. Cache deletion is isolated under Maintenance and always requires confirmation." Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,5,0,16"/><Button Content="Open maintenance" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Tag="Maintenance" Click="Navigate_Click"/></StackPanel></Border>
             </Grid>
+            <Border Margin="0,18,0,0" Padding="20" CornerRadius="12" BorderBrush="{StaticResource AccentBrush}" BorderThickness="1">
+                <Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,0"><GradientStop Color="#28213D" Offset="0"/><GradientStop Color="#18243A" Offset="1"/></LinearGradientBrush></Border.Background>
+                <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                    <StackPanel><TextBlock Text="OFFICIAL PROJECT WEBSITE" Style="{StaticResource EyebrowText}"/><TextBlock Text="Guides, downloads, updates, and project information." FontSize="16" FontWeight="SemiBold" Margin="0,6,0,3"/><TextBlock Text="rbx-asset-extractor.vexthatprotogen.com" Style="{StaticResource MutedText}"/></StackPanel>
+                    <Button Grid.Column="1" Content="Visit website" Style="{StaticResource PrimaryButton}" MinWidth="124" Height="42" Margin="24,0,0,0" VerticalAlignment="Center" Click="OpenProjectWebsite_Click"/>
+                </Grid>
+            </Border>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

@@ -63,7 +63,6 @@ C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Rele
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\RBXAssetExtractor.deps.json
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\RBXAssetExtractor.runtimeconfig.json
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\RBXAssetExtractor.dll
-C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\RBXAssetExtractor.pdb
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\Magick.NET-Q8-x64.dll
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\Magick.NET.Core.dll
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\NAudio.dll
@@ -111,10 +110,15 @@ C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Rele
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\RBX-Audio-Extractor2.AssemblyInfoInputs.cache
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\RBX-Audio-Extractor2.AssemblyInfo.vb
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\RBX-Audio-Extractor2.vbproj.CoreCompileInputs.cache
-C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\RBX-Audio-Extractor2.sourcelink.json
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\RBX-Audi.5271590D.Up2Date
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\RBXAssetExtractor.dll
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\refint\RBXAssetExtractor.dll
-C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\RBXAssetExtractor.pdb
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\RBX-Audio-Extractor2.genruntimeconfig.cache
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\ref\RBXAssetExtractor.dll
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\AssetRenameDialog.baml
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\AssetRenameDialog.g.vb
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\RBXAssetExtractor.pdb
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\RBX-Audio-Extractor2.sourcelink.json
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\RBXAssetExtractor.pdb
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\FontPreviewWindow.baml
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\FontPreviewWindow.g.vb

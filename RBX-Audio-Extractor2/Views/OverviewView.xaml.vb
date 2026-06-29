@@ -20,6 +20,10 @@ Namespace Views
             RaiseEvent NavigationRequested("Audio")
         End Sub
 
+        Private Sub OpenProjectWebsite_Click(sender As Object, e As RoutedEventArgs)
+            AppServices.OpenPath(AppServices.ProjectWebsiteUrl)
+        End Sub
+
         Private Sub Navigate_Click(sender As Object, e As RoutedEventArgs)
             Dim button = TryCast(sender, Button)
             If button IsNot Nothing Then RaiseEvent NavigationRequested(CStr(button.Tag))

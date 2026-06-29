@@ -2,6 +2,53 @@
 
 All notable changes to RBX Asset Extractor are documented in this file.
 
+## [v3.1.0] - 2026-06-28
+
+### Persistent asset names
+
+- Added custom names for audio, images, meshes, RBXM/KTX files, thumbnails, fonts, and metadata.
+- Added a themed rename dialog and dedicated Name columns while retaining the original Roblox cache key for reference.
+- Fixed the rename-dialog heading foreground so it remains readable with the dark theme.
+- Fingerprints renamed payloads with SHA-256 and stores names in an app-owned SQLite database under `%LocalAppData%\RBXAssetExtractor`.
+- Restores saved names during later scans without hashing every cached payload, preserving scan performance.
+- Uses custom names as suggested export filenames and prevents same-name collisions during bulk export.
+- Added a private TTF/OTF preview window with editable sample text, multiple display sizes, character sets, and double-click support without installing fonts system-wide.
+
+### UI and project information
+
+- Corrected vertically stretched hero and audio-player buttons so oversized actions use consistent centered dimensions.
+- Replaced square native search fields with rounded dark-theme text boxes and accent hover/focus states.
+- Matched toolbar search-field height to adjacent filters and action buttons so the control row remains compact.
+- Corrected compact text-field padding and vertical alignment so typed search text and the caret remain visible.
+- Enforced genuinely single-line search and rename fields, suppressing mouse-wheel and internal vertical-offset movement.
+- Replaced the custom single-line text renderer with rounded shells around WPF's native editor, eliminating clipped search and rename text.
+- Added true click-to-seek timeline behavior and a larger invisible slider hit target while preserving the thin visual track.
+- Corrected slider-track measurement so the timeline thumb remains vertically centered.
+- Added mouse capture for click-and-drag seeking from any point on the timeline, not only from the thumb.
+- Applied the same proportional click-and-drag behavior to volume, preventing track clicks from jumping directly to muted or full volume.
+- Guarded timeline seeking against disposed or internally invalid decoder states that could otherwise raise a null-reference crash.
+- Added polished official-project website actions to the Overview and About pages.
+- Added a homepage safety panel explaining the cache-only architecture, with no DLL injection, process attachment, or active-memory access.
+- Raised and natively enforced the DPI-aware minimum window size before sidebar, toolbar, and table layouts begin clipping.
+
+### Reliability and diagnostics
+
+- Added application-wide handling for unexpected WPF dispatcher, application-domain, and background-task failures.
+- Added a native fatal-error dialog and timestamped crash reports under `%LocalAppData%\RBXAssetExtractor\Logs`.
+- Added Windows sound-scheme playback to custom error, warning, question, information, and standard dialogs.
+- Documented where users can find crash reports when requesting support.
+
+### Maintenance
+
+- Added application-data path and size reporting to Maintenance.
+- Added a double-confirmed action that clears saved names, crash logs, and all other RBX Asset Extractor application data without touching Roblox's cache.
+- Clears saved names from currently loaded workspace results immediately after application data is removed.
+
+### Packaging and documentation
+
+- Bumped the application and updater-visible version to `3.1.0`.
+- Documented persistent asset names and corrected the README to describe the compact framework-dependent release accurately.
+
 ## [v3.0.2 OVERHAUL MP2] - 2026-06-28
 
 ### Fixed
@@ -59,7 +106,7 @@ All notable changes to RBX Asset Extractor are documented in this file.
 
 ### Packaging and security
 
-- Configured self-contained `win-x64` single-file publishing with native-library self-extraction.
+- Configured framework-dependent `win-x64` single-file publishing with native dependency extraction, keeping the release compact while bundling SQLite and Magick.NET libraries.
 - Added a repository-level .NET 10 SDK selection for the canonical WPF solution.
 - Replaced the `System.Data.SQLite` meta-package with `System.Data.SQLite.Core`, removing vulnerable transitive `System.Data.SqlClient` packages.
 - Added repository exclusions for Visual Studio state and generated `bin`/`obj` output.

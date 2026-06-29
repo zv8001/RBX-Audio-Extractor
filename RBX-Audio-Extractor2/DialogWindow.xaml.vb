@@ -1,7 +1,10 @@
+Imports System.Media
+
 Public Class DialogWindow
     Private dialogResultValue As MessageBoxResult = MessageBoxResult.None
     Private ReadOnly buttonsValue As MessageBoxButton
     Private ReadOnly defaultValue As MessageBoxResult
+    Private ReadOnly iconValue As MessageBoxImage
     Private closingFromButton As Boolean
 
     Public Sub New(title As String, message As String, buttons As MessageBoxButton, icon As MessageBoxImage, defaultResult As MessageBoxResult)
@@ -11,10 +14,30 @@ Public Class DialogWindow
         MessageText.Text = message
         buttonsValue = buttons
         defaultValue = defaultResult
+        iconValue = icon
         ConfigureIcon(icon)
         ConfigureButtons(buttons)
     End Sub
 
+    Protected Overrides Sub OnContentRendered(e As EventArgs)
+        MyBase.OnContentRendered(e)
+        PlayDialogSound()
+    End Sub
+
+    Private Sub PlayDialogSound()
+        Select Case iconValue
+            Case MessageBoxImage.Error
+                SystemSounds.Hand.Play()
+            Case MessageBoxImage.Warning
+                SystemSounds.Exclamation.Play()
+            Case MessageBoxImage.Question
+                SystemSounds.Question.Play()
+            Case MessageBoxImage.Information
+                SystemSounds.Asterisk.Play()
+            Case Else
+                SystemSounds.Beep.Play()
+        End Select
+    End Sub
     Public ReadOnly Property SelectedResult As MessageBoxResult
         Get
             Return dialogResultValue

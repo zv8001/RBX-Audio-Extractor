@@ -7,10 +7,31 @@ Imports System.Text.RegularExpressions
 Imports Openize.Drako
 
 Public NotInheritable Class MeshCacheEntry
+    Implements IRenamableAsset
     Public Property Hash As String
     Public Property Version As String
     Public Property Size As Long
     Public Property IsInline As Boolean
+    Public Property CustomName As String Implements IRenamableAsset.CustomName
+    Public Property ContentSha256 As String Implements IRenamableAsset.ContentSha256
+
+    Public ReadOnly Property CacheKey As String Implements IRenamableAsset.CacheKey
+        Get
+            Return Hash
+        End Get
+    End Property
+
+    Public ReadOnly Property FriendlyName As String Implements IRenamableAsset.FriendlyName
+        Get
+            Return If(String.IsNullOrWhiteSpace(CustomName), Hash, CustomName)
+        End Get
+    End Property
+
+    Public ReadOnly Property ExportBaseName As String Implements IRenamableAsset.ExportBaseName
+        Get
+            Return AssetNameStore.MakeSafeFileName(CustomName, Hash)
+        End Get
+    End Property
 
     Public ReadOnly Property CanExport As Boolean
         Get
@@ -99,6 +120,11 @@ Public NotInheritable Class RobloxMeshExtractor
             End Using
         End Using
         Return results.OrderByDescending(Function(item) ParseMajor(item.Version)).ThenBy(Function(item) item.Hash).ToList()
+    End Function
+
+    Public Shared Function ReadPayload(entry As MeshCacheEntry) As Byte()
+        If entry Is Nothing Then Throw New ArgumentNullException(NameOf(entry))
+        Return Unwrap(LoadContent(entry))
     End Function
 
     Public Shared Function LoadPreview(entry As MeshCacheEntry) As MeshPreviewData

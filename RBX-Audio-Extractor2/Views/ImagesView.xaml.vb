@@ -20,7 +20,11 @@ Namespace Views
                                                    AppServices.Report($"Scanning images · {value.Found:N0} found", percent)
                                                End Sub)
                     End Sub
-                entries = Await Task.Run(Function() RobloxCacheAssetExtractor.Scan(progressAction, RobloxCacheFileType.Png, RobloxCacheFileType.Jpeg, RobloxCacheFileType.Bmp, RobloxCacheFileType.WebP))
+                entries = Await Task.Run(Function()
+                                             Dim scanned = RobloxCacheAssetExtractor.Scan(progressAction, RobloxCacheFileType.Png, RobloxCacheFileType.Jpeg, RobloxCacheFileType.Bmp, RobloxCacheFileType.WebP)
+                                             AssetNameStore.ApplySavedNames(scanned)
+                                             Return scanned
+                                         End Function)
                 ApplyFilter()
                 AppServices.SetCount("Images", entries.Count)
                 AppServices.Report($"Found {entries.Count:N0} cached images.", 100)
@@ -43,11 +47,12 @@ Namespace Views
         Private Sub ApplyFilter()
             If AssetList Is Nothing Then Return
             Dim query = If(SearchBox?.Text, String.Empty).Trim()
-            AssetList.ItemsSource = If(query.Length = 0, entries, entries.Where(Function(item) item.Hash.Contains(query, StringComparison.OrdinalIgnoreCase) OrElse item.TypeLabel.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList())
+            AssetList.ItemsSource = If(query.Length = 0, entries, entries.Where(Function(item) item.Hash.Contains(query, StringComparison.OrdinalIgnoreCase) OrElse item.FriendlyName.Contains(query, StringComparison.OrdinalIgnoreCase) OrElse item.TypeLabel.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList())
         End Sub
 
         Private Async Sub AssetList_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Dim entry = TryCast(AssetList.SelectedItem, RobloxCacheAssetEntry)
+            RenameButton.IsEnabled = Not busy AndAlso entry IsNot Nothing
             ExportButton.IsEnabled = Not busy AndAlso entry IsNot Nothing
             previewVersion += 1
             Dim version = previewVersion
@@ -91,10 +96,19 @@ Namespace Views
             End Using
         End Function
 
+        Private Async Sub RenameButton_Click(sender As Object, e As RoutedEventArgs)
+            Dim entry = TryCast(AssetList.SelectedItem, RobloxCacheAssetEntry)
+            If entry Is Nothing Then Return
+            If Await AssetNameStore.PromptAndSaveAsync(Window.GetWindow(Me), entry, Function() RobloxCacheAssetExtractor.ReadPayload(entry)) Then
+                AssetList.Items.Refresh()
+                ApplyFilter()
+            End If
+        End Sub
+
         Private Async Sub ExportButton_Click(sender As Object, e As RoutedEventArgs)
             Dim entry = TryCast(AssetList.SelectedItem, RobloxCacheAssetEntry)
             If entry Is Nothing Then Return
-            Dim dialog As New SaveFileDialog With {.Title = "Export cached image", .FileName = entry.Hash & entry.Extension, .DefaultExt = entry.Extension.TrimStart("."c), .Filter = $"{entry.TypeLabel} (*{entry.Extension})|*{entry.Extension}|All files|*.*"}
+            Dim dialog As New SaveFileDialog With {.Title = "Export cached image", .FileName = entry.ExportBaseName & entry.Extension, .DefaultExt = entry.Extension.TrimStart("."c), .Filter = $"{entry.TypeLabel} (*{entry.Extension})|*{entry.Extension}|All files|*.*"}
             If dialog.ShowDialog() <> True Then Return
             SetBusy(True)
             Try
@@ -124,6 +138,11 @@ Namespace Views
             End Try
         End Sub
 
+        Public Sub ClearSavedNames()
+            AssetNameStore.ClearLoadedNames(entries)
+            ApplyFilter()
+        End Sub
+
         Public Sub ResetData()
             previewVersion += 1
             entries.Clear()
@@ -136,6 +155,7 @@ Namespace Views
         Private Sub SetBusy(value As Boolean)
             busy = value
             ScanButton.IsEnabled = Not value
+            RenameButton.IsEnabled = Not value AndAlso AssetList.SelectedItem IsNot Nothing
             AssetList.IsHitTestVisible = Not value
             ExportButton.IsEnabled = Not value AndAlso AssetList.SelectedItem IsNot Nothing
             ExportAllButton.IsEnabled = Not value AndAlso entries.Count > 0

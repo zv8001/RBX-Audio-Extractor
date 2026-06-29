@@ -88,6 +88,10 @@ Namespace Views
             End Try
         End Function
 
+        Private Sub OpenProjectWebsiteButton_Click(sender As Object, e As RoutedEventArgs)
+            AppServices.OpenPath(AppServices.ProjectWebsiteUrl)
+        End Sub
+
         Private Sub OpenGithubButton_Click(sender As Object, e As RoutedEventArgs)
             AppServices.OpenPath("https://github.com/zv8001/RBX-Audio-Extractor")
         End Sub

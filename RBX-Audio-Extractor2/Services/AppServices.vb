@@ -5,10 +5,12 @@ Imports System.Reflection
 Imports System.Windows.Threading
 
 Public Module AppServices
+    Public Const ProjectWebsiteUrl As String = "https://rbx-asset-extractor.vexthatprotogen.com/"
     Public Event StatusChanged(message As String, progress As Double, indeterminate As Boolean)
     Public Event AssetCountChanged(category As String, count As Integer)
     Public Event LogAdded(message As String)
     Public Event CacheCleared()
+    Public Event ApplicationDataCleared()
 
     Public ReadOnly Property Activity As New ObservableCollection(Of String)()
 
@@ -61,6 +63,10 @@ Public Module AppServices
                      End While
                      RaiseEvent LogAdded(line)
                  End Sub)
+    End Sub
+
+    Public Sub NotifyApplicationDataCleared()
+        RaiseEvent ApplicationDataCleared()
     End Sub
 
     Public Sub NotifyCacheCleared()

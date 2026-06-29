@@ -18,7 +18,11 @@ Namespace Views
                                                    AppServices.Report($"Scanning cache files · {value.Found:N0} found", percent)
                                                End Sub)
                     End Sub
-                entries = Await Task.Run(Function() RobloxCacheAssetExtractor.Scan(progressAction, RobloxCacheFileType.RbxmBinary, RobloxCacheFileType.RbxmXml, RobloxCacheFileType.Ktx1, RobloxCacheFileType.Ktx2))
+                entries = Await Task.Run(Function()
+                                             Dim scanned = RobloxCacheAssetExtractor.Scan(progressAction, RobloxCacheFileType.RbxmBinary, RobloxCacheFileType.RbxmXml, RobloxCacheFileType.Ktx1, RobloxCacheFileType.Ktx2)
+                                             AssetNameStore.ApplySavedNames(scanned)
+                                             Return scanned
+                                         End Function)
                 ApplyFilter()
                 AppServices.SetCount("Cache", entries.Count)
                 AppServices.Report($"Found {entries.Count:N0} RBXM and KTX files.", 100)
@@ -44,7 +48,7 @@ Namespace Views
             Dim mode = TypeFilter.SelectedIndex
             AssetList.ItemsSource = entries.Where(
                 Function(item)
-                    If query.Length > 0 AndAlso Not item.Hash.Contains(query, StringComparison.OrdinalIgnoreCase) AndAlso Not item.TypeLabel.Contains(query, StringComparison.OrdinalIgnoreCase) Then Return False
+                    If query.Length > 0 AndAlso Not item.Hash.Contains(query, StringComparison.OrdinalIgnoreCase) AndAlso Not item.FriendlyName.Contains(query, StringComparison.OrdinalIgnoreCase) AndAlso Not item.TypeLabel.Contains(query, StringComparison.OrdinalIgnoreCase) Then Return False
                     If mode = 1 Then Return item.FileType = RobloxCacheFileType.RbxmBinary OrElse item.FileType = RobloxCacheFileType.RbxmXml
                     If mode = 2 Then Return item.FileType = RobloxCacheFileType.Ktx1 OrElse item.FileType = RobloxCacheFileType.Ktx2
                     Return True
@@ -52,13 +56,23 @@ Namespace Views
         End Sub
 
         Private Sub AssetList_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+            RenameButton.IsEnabled = Not busy AndAlso AssetList.SelectedItem IsNot Nothing
             ExportButton.IsEnabled = Not busy AndAlso AssetList.SelectedItem IsNot Nothing
+        End Sub
+
+        Private Async Sub RenameButton_Click(sender As Object, e As RoutedEventArgs)
+            Dim entry = TryCast(AssetList.SelectedItem, RobloxCacheAssetEntry)
+            If entry Is Nothing Then Return
+            If Await AssetNameStore.PromptAndSaveAsync(Window.GetWindow(Me), entry, Function() RobloxCacheAssetExtractor.ReadPayload(entry)) Then
+                AssetList.Items.Refresh()
+                ApplyFilter()
+            End If
         End Sub
 
         Private Async Sub ExportButton_Click(sender As Object, e As RoutedEventArgs)
             Dim entry = TryCast(AssetList.SelectedItem, RobloxCacheAssetEntry)
             If entry Is Nothing Then Return
-            Dim dialog As New SaveFileDialog With {.Title = "Export cached asset", .FileName = entry.Hash & entry.Extension, .DefaultExt = entry.Extension.TrimStart("."c), .Filter = $"{entry.TypeLabel} (*{entry.Extension})|*{entry.Extension}|All files|*.*"}
+            Dim dialog As New SaveFileDialog With {.Title = "Export cached asset", .FileName = entry.ExportBaseName & entry.Extension, .DefaultExt = entry.Extension.TrimStart("."c), .Filter = $"{entry.TypeLabel} (*{entry.Extension})|*{entry.Extension}|All files|*.*"}
             If dialog.ShowDialog() <> True Then Return
             SetBusy(True)
             Try
@@ -87,6 +101,11 @@ Namespace Views
             End Try
         End Sub
 
+        Public Sub ClearSavedNames()
+            AssetNameStore.ClearLoadedNames(entries)
+            ApplyFilter()
+        End Sub
+
         Public Sub ResetData()
             entries.Clear()
             ApplyFilter()
@@ -95,6 +114,7 @@ Namespace Views
         Private Sub SetBusy(value As Boolean)
             busy = value
             ScanButton.IsEnabled = Not value
+            RenameButton.IsEnabled = Not value AndAlso AssetList.SelectedItem IsNot Nothing
             AssetList.IsHitTestVisible = Not value
             ExportButton.IsEnabled = Not value AndAlso AssetList.SelectedItem IsNot Nothing
             ExportAllButton.IsEnabled = Not value AndAlso entries.Count > 0

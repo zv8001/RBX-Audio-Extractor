@@ -39,6 +39,13 @@ Class MainWindow
         minMaxInfo.MaxSize.X = monitorInfo.WorkArea.Right - monitorInfo.WorkArea.Left
         minMaxInfo.MaxSize.Y = monitorInfo.WorkArea.Bottom - monitorInfo.WorkArea.Top
         minMaxInfo.MaxTrackSize = minMaxInfo.MaxSize
+
+        Dim dpi = VisualTreeHelper.GetDpi(Me)
+        Dim requestedMinWidth = CInt(Math.Ceiling(MinWidth * dpi.DpiScaleX))
+        Dim requestedMinHeight = CInt(Math.Ceiling(MinHeight * dpi.DpiScaleY))
+        minMaxInfo.MinTrackSize.X = Math.Min(requestedMinWidth, minMaxInfo.MaxTrackSize.X)
+        minMaxInfo.MinTrackSize.Y = Math.Min(requestedMinHeight, minMaxInfo.MaxTrackSize.Y)
+
         Marshal.StructureToPtr(minMaxInfo, lParam, fDeleteOld:=True)
         handled = True
         Return IntPtr.Zero
@@ -96,6 +103,7 @@ Class MainWindow
         AddHandler overview.NavigationRequested, AddressOf NavigateTo
         AddHandler AppServices.StatusChanged, AddressOf StatusChanged
         AddHandler AppServices.CacheCleared, AddressOf CacheCleared
+        AddHandler AppServices.ApplicationDataCleared, AddressOf ApplicationDataCleared
         SidebarCachePath.Text = AppServices.DatabasePath
         SidebarCacheState.Text = If(File.Exists(AppServices.DatabasePath), "Cache detected", "Cache not found")
         PageHost.Content = overview
@@ -143,6 +151,14 @@ Class MainWindow
         WorkProgress.IsIndeterminate = indeterminate
         If Not indeterminate Then WorkProgress.Value = progress
         SidebarCacheState.Text = If(File.Exists(AppServices.DatabasePath), "Cache detected", "Cache not found")
+    End Sub
+
+    Private Sub ApplicationDataCleared()
+        audio.ClearSavedNames()
+        images.ClearSavedNames()
+        meshes.ClearSavedNames()
+        cacheFiles.ClearSavedNames()
+        extras.ClearSavedNames()
     End Sub
 
     Private Sub CacheCleared()

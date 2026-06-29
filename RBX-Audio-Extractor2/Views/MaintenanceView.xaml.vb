@@ -6,6 +6,7 @@ Namespace Views
         Public Sub New()
             InitializeComponent()
             CachePathText.Text = AppServices.DatabasePath
+            ApplicationDataPathText.Text = AssetNameStore.DataDirectory
             AddHandler Loaded, AddressOf MaintenanceView_Loaded
         End Sub
 
@@ -39,6 +40,8 @@ Namespace Views
                     Return (Size:=size, Files:=files)
                 End Function)
             CacheSizeText.Text = $"{AppServices.FormatBytes(result.Size)} across {result.Files:N0} files"
+            Dim applicationData = Await Task.Run(Function() AssetNameStore.GetDataSize())
+            ApplicationDataSizeText.Text = $"{AppServices.FormatBytes(applicationData.Size)} across {applicationData.Files:N0} files"
         End Function
 
         Private Sub OpenFolderButton_Click(sender As Object, e As RoutedEventArgs)
@@ -67,6 +70,21 @@ Namespace Views
             Catch ex As Exception
                 AppServices.Report($"Cache clear failed: {ex.Message}")
                 AppDialog.Show("The cache could not be completely cleared. Roblox may still be using one of its files." & Environment.NewLine & Environment.NewLine & ex.Message, "Cache clear failed", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
+        End Sub
+
+        Private Async Sub ClearApplicationDataButton_Click(sender As Object, e As RoutedEventArgs)
+            Dim first = AppDialog.Show("This permanently removes every saved asset name and all RBX Asset Extractor crash logs on this computer. Roblox's cache will not be touched. Continue?", "Clear all application data?", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No)
+            If first <> MessageBoxResult.Yes Then Return
+            Dim final = AppDialog.Show("This cannot be undone. Delete all RBX Asset Extractor application data now?", "Final confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No)
+            If final <> MessageBoxResult.Yes Then Return
+            Try
+                Await Task.Run(AddressOf AssetNameStore.ClearAllApplicationData)
+                ApplicationDataSizeText.Text = "0 bytes across 0 files"
+                AppServices.NotifyApplicationDataCleared()
+                AppServices.Report("All RBX Asset Extractor application data and saved names were cleared.", 100)
+            Catch ex As Exception
+                AppDialog.Show(ex.Message, "Application data could not be cleared", MessageBoxButton.OK, MessageBoxImage.Error)
             End Try
         End Sub
 

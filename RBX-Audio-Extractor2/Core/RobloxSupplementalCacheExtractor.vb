@@ -15,6 +15,7 @@ Public Enum SupplementalCacheType
 End Enum
 
 Public NotInheritable Class SupplementalCacheEntry
+    Implements IRenamableAsset
     Public Property Hash As String
     Public Property FileType As SupplementalCacheType
     Public Property Size As Long
@@ -23,6 +24,22 @@ Public NotInheritable Class SupplementalCacheEntry
     Public Property PayloadOffset As Integer
     Public Property PayloadLength As Integer = -1
     Public Property DisplayName As String
+    Public Property CustomName As String Implements IRenamableAsset.CustomName
+    Public Property ContentSha256 As String Implements IRenamableAsset.ContentSha256
+
+    Public ReadOnly Property CacheKey As String Implements IRenamableAsset.CacheKey
+        Get
+            Return Hash
+        End Get
+    End Property
+
+    Public ReadOnly Property FriendlyName As String Implements IRenamableAsset.FriendlyName
+        Get
+            If Not String.IsNullOrWhiteSpace(CustomName) Then Return CustomName
+            If Not String.IsNullOrWhiteSpace(DisplayName) Then Return DisplayName
+            Return Hash
+        End Get
+    End Property
 
     Public ReadOnly Property Extension As String
         Get
@@ -54,27 +71,18 @@ Public NotInheritable Class SupplementalCacheEntry
         End Get
     End Property
 
-    Public ReadOnly Property ExportBaseName As String
+    Public ReadOnly Property ExportBaseName As String Implements IRenamableAsset.ExportBaseName
         Get
-            If String.IsNullOrWhiteSpace(DisplayName) Then Return Hash
-            Dim invalid = Path.GetInvalidFileNameChars()
-            Dim builder As New StringBuilder()
-            For Each character In DisplayName
-                If Array.IndexOf(invalid, character) >= 0 OrElse Char.IsControl(character) Then
-                    builder.Append("_"c)
-                Else
-                    builder.Append(character)
-                End If
-                If builder.Length >= 90 Then Exit For
-            Next
-            Dim value = builder.ToString().Trim(" "c, "."c, "_"c)
-            If String.IsNullOrWhiteSpace(value) Then value = TypeLabel.Replace(" "c, "_"c)
-            Return value & "_" & Hash.Substring(0, 10)
+            If Not String.IsNullOrWhiteSpace(CustomName) Then Return AssetNameStore.MakeSafeFileName(CustomName, Hash)
+            Dim sourceName = If(String.IsNullOrWhiteSpace(DisplayName), Hash, DisplayName)
+            Dim safeName = AssetNameStore.MakeSafeFileName(sourceName, Hash)
+            If String.Equals(safeName, Hash, StringComparison.OrdinalIgnoreCase) Then Return Hash
+            Return safeName & "_" & Hash.Substring(0, 10)
         End Get
     End Property
 
     Public Overrides Function ToString() As String
-        Dim label = If(String.IsNullOrWhiteSpace(DisplayName), Hash.Substring(0, 12) & "...", DisplayName)
+        Dim label = If(String.IsNullOrWhiteSpace(FriendlyName), Hash.Substring(0, 12) & "...", FriendlyName)
         label = label.Replace(vbCr, " ").Replace(vbLf, " ")
         If label.Length > 62 Then label = label.Substring(0, 59) & "..."
         Return $"[{TypeLabel}]  {label}   {Size:N0} bytes"
@@ -125,11 +133,12 @@ Public NotInheritable Class RobloxSupplementalCacheExtractor
     Public Shared Function ExportMany(entries As IEnumerable(Of SupplementalCacheEntry), directory As String, progress As Action(Of Integer, Integer)) As CacheExportSummary
         Dim items = entries.ToList()
         Dim result As New CacheExportSummary()
+        Dim usedNames As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
         System.IO.Directory.CreateDirectory(directory)
         For index = 0 To items.Count - 1
             Dim entry = items(index)
             Try
-                Dim outputPath = Path.Combine(directory, entry.ExportBaseName & entry.Extension)
+                Dim outputPath = Path.Combine(directory, AssetNameStore.GetBatchBaseName(entry, usedNames) & entry.Extension)
                 If File.Exists(outputPath) AndAlso New FileInfo(outputPath).Length > 0 Then
                     result.Reused += 1
                 Else
