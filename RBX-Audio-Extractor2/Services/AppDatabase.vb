@@ -18,6 +18,9 @@ Public NotInheritable Class AppDatabase
         "CREATE TABLE IF NOT EXISTS scan_cache_assets (workspace TEXT NOT NULL, ord INTEGER NOT NULL, hash TEXT NOT NULL, file_type INTEGER NOT NULL, size INTEGER NOT NULL, is_inline INTEGER NOT NULL, duration REAL);" &
         "CREATE INDEX IF NOT EXISTS idx_scan_cache_assets_workspace ON scan_cache_assets(workspace);" &
         "CREATE TABLE IF NOT EXISTS scan_meshes (ord INTEGER NOT NULL, hash TEXT NOT NULL, version TEXT, size INTEGER NOT NULL, is_inline INTEGER NOT NULL);" &
+        "CREATE TABLE IF NOT EXISTS scan_videos (ord INTEGER NOT NULL, playlist_hash TEXT NOT NULL, source_path TEXT NOT NULL, resolution TEXT NOT NULL, duration REAL NOT NULL, size INTEGER NOT NULL, expected_segments INTEGER NOT NULL);" &
+        "CREATE TABLE IF NOT EXISTS scan_video_segments (video_ord INTEGER NOT NULL, ord INTEGER NOT NULL, hash TEXT NOT NULL, size INTEGER NOT NULL, is_inline INTEGER NOT NULL, payload_offset INTEGER NOT NULL, payload_length INTEGER NOT NULL, file_name TEXT NOT NULL, duration REAL NOT NULL, source_key TEXT NOT NULL);" &
+        "CREATE INDEX IF NOT EXISTS idx_scan_video_segments_video ON scan_video_segments(video_ord);" &
         "CREATE TABLE IF NOT EXISTS scan_supplemental (workspace TEXT NOT NULL, ord INTEGER NOT NULL, hash TEXT NOT NULL, file_type INTEGER NOT NULL, size INTEGER NOT NULL, is_inline INTEGER NOT NULL, sub_category INTEGER NOT NULL, payload_offset INTEGER NOT NULL, payload_length INTEGER NOT NULL, display_name TEXT);" &
         "CREATE INDEX IF NOT EXISTS idx_scan_supplemental_workspace ON scan_supplemental(workspace);"
 

@@ -11,5 +11,6 @@
 Option Strict Off
 Option Explicit On
 
-<Assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/robloxrippper.ico")> 
+<Assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/robloxrippper.ico"),  _
+ Assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("webview2loader.dll")> 
 

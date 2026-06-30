@@ -133,6 +133,105 @@ Public NotInheritable Class SessionStateStore
         Return result
     End Function
 
+    ' --- Videos ---------------------------------------------------------------------------------
+    Public Shared Sub SaveVideos(entries As IEnumerable(Of RobloxVideoEntry))
+        Dim list = entries.ToList()
+        Try
+            SyncLock AppDatabase.SyncRoot
+                Using connection = AppDatabase.OpenConnection()
+                    Using transaction = connection.BeginTransaction()
+                        Using deleteSegments As New SQLiteCommand("DELETE FROM scan_video_segments", connection, transaction)
+                            deleteSegments.ExecuteNonQuery()
+                        End Using
+                        Using deleteVideos As New SQLiteCommand("DELETE FROM scan_videos", connection, transaction)
+                            deleteVideos.ExecuteNonQuery()
+                        End Using
+                        Using videoCommand As New SQLiteCommand("INSERT INTO scan_videos (ord, playlist_hash, source_path, resolution, duration, size, expected_segments) VALUES (@ord, @hash, @source, @resolution, @duration, @size, @expected)", connection, transaction),
+                              segmentCommand As New SQLiteCommand("INSERT INTO scan_video_segments (video_ord, ord, hash, size, is_inline, payload_offset, payload_length, file_name, duration, source_key) VALUES (@video_ord, @ord, @hash, @size, @inline, @offset, @length, @file, @duration, @source)", connection, transaction)
+                            For videoOrd = 0 To list.Count - 1
+                                Dim entry = list(videoOrd)
+                                videoCommand.Parameters.Clear()
+                                videoCommand.Parameters.AddWithValue("@ord", videoOrd)
+                                videoCommand.Parameters.AddWithValue("@hash", entry.PlaylistHash)
+                                videoCommand.Parameters.AddWithValue("@source", entry.SourcePath)
+                                videoCommand.Parameters.AddWithValue("@resolution", entry.Resolution)
+                                videoCommand.Parameters.AddWithValue("@duration", entry.DurationSeconds)
+                                videoCommand.Parameters.AddWithValue("@size", entry.Size)
+                                videoCommand.Parameters.AddWithValue("@expected", entry.ExpectedSegments)
+                                videoCommand.ExecuteNonQuery()
+
+                                For segmentOrd = 0 To entry.Segments.Count - 1
+                                    Dim segment = entry.Segments(segmentOrd)
+                                    segmentCommand.Parameters.Clear()
+                                    segmentCommand.Parameters.AddWithValue("@video_ord", videoOrd)
+                                    segmentCommand.Parameters.AddWithValue("@ord", segmentOrd)
+                                    segmentCommand.Parameters.AddWithValue("@hash", segment.Hash)
+                                    segmentCommand.Parameters.AddWithValue("@size", segment.Size)
+                                    segmentCommand.Parameters.AddWithValue("@inline", If(segment.IsInline, 1, 0))
+                                    segmentCommand.Parameters.AddWithValue("@offset", segment.PayloadOffset)
+                                    segmentCommand.Parameters.AddWithValue("@length", segment.PayloadLength)
+                                    segmentCommand.Parameters.AddWithValue("@file", segment.FileName)
+                                    segmentCommand.Parameters.AddWithValue("@duration", segment.DurationSeconds)
+                                    segmentCommand.Parameters.AddWithValue("@source", segment.SourceKey)
+                                    segmentCommand.ExecuteNonQuery()
+                                Next
+                            Next
+                        End Using
+                        transaction.Commit()
+                    End Using
+                End Using
+            End SyncLock
+        Catch
+        End Try
+    End Sub
+
+    Public Shared Function LoadVideos() As List(Of RobloxVideoEntry)
+        Dim result As New List(Of RobloxVideoEntry)()
+        Try
+            SyncLock AppDatabase.SyncRoot
+                Using connection = AppDatabase.OpenConnection()
+                    Dim byOrder As New Dictionary(Of Integer, RobloxVideoEntry)()
+                    Using command As New SQLiteCommand("SELECT ord, playlist_hash, source_path, resolution, duration, size, expected_segments FROM scan_videos ORDER BY ord", connection)
+                        Using reader = command.ExecuteReader()
+                            While reader.Read()
+                                Dim order = reader.GetInt32(0)
+                                Dim entry As New RobloxVideoEntry With {
+                                    .PlaylistHash = reader.GetString(1),
+                                    .SourcePath = reader.GetString(2),
+                                    .Resolution = reader.GetString(3),
+                                    .DurationSeconds = reader.GetDouble(4),
+                                    .Size = reader.GetInt64(5),
+                                    .ExpectedSegments = reader.GetInt32(6)}
+                                byOrder(order) = entry
+                                result.Add(entry)
+                            End While
+                        End Using
+                    End Using
+                    Using command As New SQLiteCommand("SELECT video_ord, hash, size, is_inline, payload_offset, payload_length, file_name, duration, source_key FROM scan_video_segments ORDER BY video_ord, ord", connection)
+                        Using reader = command.ExecuteReader()
+                            While reader.Read()
+                                Dim entry As RobloxVideoEntry = Nothing
+                                If Not byOrder.TryGetValue(reader.GetInt32(0), entry) Then Continue While
+                                entry.Segments.Add(New VideoSegmentEntry With {
+                                    .Hash = reader.GetString(1),
+                                    .Size = reader.GetInt64(2),
+                                    .IsInline = reader.GetInt32(3) <> 0,
+                                    .PayloadOffset = reader.GetInt32(4),
+                                    .PayloadLength = reader.GetInt32(5),
+                                    .FileName = reader.GetString(6),
+                                    .DurationSeconds = reader.GetDouble(7),
+                                    .SourceKey = reader.GetString(8)})
+                            End While
+                        End Using
+                    End Using
+                End Using
+            End SyncLock
+        Catch
+            Return New List(Of RobloxVideoEntry)()
+        End Try
+        AssetNameStore.ApplySavedNames(result)
+        Return result
+    End Function
     ' --- Supplemental: thumbnails, fonts, metadata -----------------------------------------------
     Public Shared Sub SaveSupplemental(workspace As String, entries As IEnumerable(Of SupplementalCacheEntry))
         Dim list = entries.ToList()
@@ -210,7 +309,7 @@ Public NotInheritable Class SessionStateStore
         Try
             SyncLock AppDatabase.SyncRoot
                 Using connection = AppDatabase.OpenConnection()
-                    Using command As New SQLiteCommand("DELETE FROM scan_cache_assets; DELETE FROM scan_meshes; DELETE FROM scan_supplemental;", connection)
+                    Using command As New SQLiteCommand("DELETE FROM scan_cache_assets; DELETE FROM scan_meshes; DELETE FROM scan_videos; DELETE FROM scan_video_segments; DELETE FROM scan_supplemental;", connection)
                         command.ExecuteNonQuery()
                     End Using
                 End Using

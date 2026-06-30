@@ -42,9 +42,9 @@
                             <TextBlock Text="WORKSPACE" Style="{StaticResource EyebrowText}" Margin="12,0,0,9"/>
                             <RadioButton x:Name="OverviewNav" GroupName="Navigation" Content="Overview" Tag="&#xE80F;" Style="{StaticResource NavButton}" IsChecked="True" Checked="Navigation_Checked"/>
                             <RadioButton x:Name="AudioNav" GroupName="Navigation" Content="Audio" Tag="&#xE8D6;" Style="{StaticResource NavButton}" Checked="Navigation_Checked"/>
+                            <RadioButton x:Name="VideosNav" GroupName="Navigation" Content="Videos" Tag="&#xE714;" Style="{StaticResource NavButton}" Checked="Navigation_Checked"/>
                             <RadioButton x:Name="ImagesNav" GroupName="Navigation" Content="Images" Tag="&#xEB9F;" Style="{StaticResource NavButton}" Checked="Navigation_Checked"/>
                             <RadioButton x:Name="MeshesNav" GroupName="Navigation" Content="Meshes" Tag="&#xE7C3;" Style="{StaticResource NavButton}" Checked="Navigation_Checked"/>
-                            <RadioButton x:Name="CacheNav" GroupName="Navigation" Content="Cache files" Tag="&#xE8F1;" Style="{StaticResource NavButton}" Checked="Navigation_Checked"/>
                             <RadioButton x:Name="ExtrasNav" GroupName="Navigation" Content="More assets" Tag="&#xF133;" Style="{StaticResource NavButton}" Checked="Navigation_Checked"/>
                             <TextBlock Text="SYSTEM" Style="{StaticResource EyebrowText}" Margin="12,22,0,9"/>
                             <RadioButton x:Name="MaintenanceNav" GroupName="Navigation" Content="Maintenance" Tag="&#xE90F;" Style="{StaticResource NavButton}" Checked="Navigation_Checked"/>

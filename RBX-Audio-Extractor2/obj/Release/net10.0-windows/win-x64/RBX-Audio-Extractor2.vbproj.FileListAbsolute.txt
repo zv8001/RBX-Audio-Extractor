@@ -122,3 +122,17 @@ C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Rele
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\RBXAssetExtractor.pdb
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\FontPreviewWindow.baml
 C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\FontPreviewWindow.g.vb
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\VideoPreviewWindow.baml
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\Views\VideosView.baml
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\VideoPreviewWindow.g.vb
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\Views\VideosView.g.vb
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\runtimes\win-x64\native\WebView2Loader.dll
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\WebView2Loader.dll
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\Microsoft.Web.WebView2.Core.dll
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\Microsoft.Web.WebView2.WinForms.dll
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\Microsoft.Web.WebView2.Wpf.dll
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\Microsoft.Web.WebView2.Core.xml
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\Microsoft.Web.WebView2.WinForms.xml
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\bin\Release\net10.0-windows\win-x64\Microsoft.Web.WebView2.Wpf.xml
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\GeneratedInternalTypeHelper.g.vb
+C:\Users\Zack\Documents\GitHub\RBX-Audio-Extractor\RBX-Audio-Extractor2\obj\Release\net10.0-windows\win-x64\RBXAssetExtractor_MarkupCompile.lref

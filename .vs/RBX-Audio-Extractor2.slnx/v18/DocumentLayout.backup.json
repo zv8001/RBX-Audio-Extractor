@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\rbx-audio-extractor2\\core\\robloxvideoextractor.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\core\\robloxvideoextractor.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|c:\\users\\zack\\documents\\github\\rbx-audio-extractor\\rbx-audio-extractor2\\application.xaml.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
       "RelativeMoniker": "D:0:0:{5D317D63-C7C8-A3BD-9408-06C39A165B88}|RBX-Audio-Extractor2\\RBX-Audio-Extractor2.vbproj|solutionrelative:rbx-audio-extractor2\\application.xaml.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
     },
@@ -106,19 +110,31 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "RobloxVideoExtractor.vb",
+              "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Core\\RobloxVideoExtractor.vb",
+              "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Core\\RobloxVideoExtractor.vb",
+              "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Core\\RobloxVideoExtractor.vb",
+              "RelativeToolTip": "RBX-Audio-Extractor2\\Core\\RobloxVideoExtractor.vb",
+              "ViewState": "AgIAADcBAAAAAAAAAAAIwGABAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2026-06-30T12:42:23.874Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Application.xaml.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Application.xaml.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Application.xaml.vb",
               "ToolTip": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Application.xaml.vb",
               "RelativeToolTip": "RBX-Audio-Extractor2\\Application.xaml.vb",
-              "ViewState": "AgIAACoAAAAAAAAAAAAowA4AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAG0AAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
-              "WhenOpened": "2026-06-29T05:27:43.947Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-29T05:27:43.947Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "UpdateManifest.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Services\\UpdateManifest.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Services\\UpdateManifest.vb",
@@ -130,7 +146,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "UpdateVerifier.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Services\\UpdateVerifier.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Services\\UpdateVerifier.vb",
@@ -142,7 +158,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "SessionStateStore.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Services\\SessionStateStore.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Services\\SessionStateStore.vb",
@@ -154,7 +170,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "AppSettings.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Services\\AppSettings.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Services\\AppSettings.vb",
@@ -166,7 +182,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "AppDatabase.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Services\\AppDatabase.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Services\\AppDatabase.vb",
@@ -178,7 +194,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "AssetRenameDialog.xaml.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\AssetRenameDialog.xaml.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\AssetRenameDialog.xaml.vb",
@@ -190,7 +206,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "AssemblyInfo.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\AssemblyInfo.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\AssemblyInfo.vb",
@@ -202,7 +218,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "MeshPreviewWindow.xaml.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\MeshPreviewWindow.xaml.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\MeshPreviewWindow.xaml.vb",
@@ -214,7 +230,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "README.md",
               "DocumentMoniker": "C:\\Users\\Zack\\.nuget\\packages\\naudio.vorbis\\1.5.0\\contentFiles\\any\\netstandard2.0\\README.md",
               "RelativeDocumentMoniker": "..\\..\\..\\.nuget\\packages\\naudio.vorbis\\1.5.0\\contentFiles\\any\\netstandard2.0\\README.md",
@@ -227,7 +243,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "DialogWindow.xaml.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\DialogWindow.xaml.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\DialogWindow.xaml.vb",
@@ -239,7 +255,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "OverviewView.xaml.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Views\\OverviewView.xaml.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Views\\OverviewView.xaml.vb",
@@ -251,7 +267,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "MaintenanceView.xaml.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Views\\MaintenanceView.xaml.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Views\\MaintenanceView.xaml.vb",
@@ -263,7 +279,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "AboutView.xaml.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Views\\AboutView.xaml.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Views\\AboutView.xaml.vb",
@@ -275,7 +291,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "AudioView.xaml",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Views\\AudioView.xaml",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Views\\AudioView.xaml",
@@ -286,7 +302,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "RobloxSupplementalCacheExtractor.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Core\\RobloxSupplementalCacheExtractor.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Core\\RobloxSupplementalCacheExtractor.vb",
@@ -298,7 +314,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "RobloxCacheAssetExtractor.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Core\\RobloxCacheAssetExtractor.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Core\\RobloxCacheAssetExtractor.vb",
@@ -310,7 +326,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "AppServices.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Services\\AppServices.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Services\\AppServices.vb",
@@ -322,7 +338,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "RemoteContentService.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Services\\RemoteContentService.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Services\\RemoteContentService.vb",
@@ -334,7 +350,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 23,
               "Title": "MaintenanceView.xaml",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Views\\MaintenanceView.xaml",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Views\\MaintenanceView.xaml",
@@ -345,7 +361,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "RobloxMeshExtractor.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\Core\\RobloxMeshExtractor.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\Core\\RobloxMeshExtractor.vb",
@@ -357,7 +373,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\MainWindow.xaml",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\MainWindow.xaml",
@@ -368,7 +384,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "MainWindow.xaml.vb",
               "DocumentMoniker": "C:\\Users\\Zack\\Documents\\GitHub\\RBX-Audio-Extractor\\RBX-Audio-Extractor2\\MainWindow.xaml.vb",
               "RelativeDocumentMoniker": "RBX-Audio-Extractor2\\MainWindow.xaml.vb",

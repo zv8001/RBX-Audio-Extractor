@@ -9,9 +9,9 @@ Imports RBXAssetExtractor.Views
 Class MainWindow
     Private overview As OverviewView
     Private audio As AudioView
+    Private videos As VideosView
     Private images As ImagesView
     Private meshes As MeshesView
-    Private cacheFiles As CacheFilesView
     Private extras As ExtraAssetsView
     Private maintenance As MaintenanceView
     Private about As AboutView
@@ -99,9 +99,9 @@ Class MainWindow
         VersionBadgeText.Text = AppServices.CurrentVersion
         overview = New OverviewView()
         audio = New AudioView()
+        videos = New VideosView()
         images = New ImagesView()
         meshes = New MeshesView()
-        cacheFiles = New CacheFilesView()
         extras = New ExtraAssetsView()
         maintenance = New MaintenanceView()
         about = New AboutView()
@@ -120,9 +120,9 @@ Class MainWindow
     Private Sub RestoreSession()
         Try
             audio.RestoreState()
+            videos.RestoreState()
             images.RestoreState()
             meshes.RestoreState()
-            cacheFiles.RestoreState()
             extras.RestoreState()
         Catch ex As Exception
             AppServices.AddLog($"Could not restore previous session: {ex.Message}")
@@ -136,10 +136,10 @@ Class MainWindow
         Select Case selected.Name
             Case NameOf(OverviewNav) : ShowPage(overview, "Overview", "Explore and export assets directly from Roblox's local cache.")
             Case NameOf(AudioNav) : ShowPage(audio, "Audio", "Play and export OGG and MP3 assets without temporary cache dumps.")
+            Case NameOf(VideosNav) : ShowPage(videos, "Videos", "Preview and export cached HLS video playlists with VP9/Opus WebM segments.")
             Case NameOf(ImagesNav) : ShowPage(images, "Images", "Preview and export cached PNG, JPEG, BMP, and WebP images.")
             Case NameOf(MeshesNav) : ShowPage(meshes, "Meshes", "Inspect Roblox mesh versions, preview geometry, and export OBJ files.")
-            Case NameOf(CacheNav) : ShowPage(cacheFiles, "Cache files", "Extract RBXM models and KTX textures directly from the cache.")
-            Case NameOf(ExtrasNav) : ShowPage(extras, "More assets", "Browse thumbnails, fonts, JSON, XML, and playlist metadata.")
+            Case NameOf(ExtrasNav) : ShowPage(extras, "More assets", "Browse RBXM/KTX cache files, thumbnails, fonts, JSON, XML, and playlist metadata.")
             Case NameOf(MaintenanceNav) : ShowPage(maintenance, "Maintenance", "Inspect or deliberately clear Roblox's local asset cache.")
             Case NameOf(AboutNav) : ShowPage(about, "About & logs", "Updates, creator messages, project details, and activity history.")
         End Select
@@ -148,9 +148,12 @@ Class MainWindow
     Private Sub NavigateTo(target As String)
         Select Case target
             Case "Audio" : AudioNav.IsChecked = True
+            Case "Videos" : VideosNav.IsChecked = True
             Case "Images" : ImagesNav.IsChecked = True
             Case "Meshes" : MeshesNav.IsChecked = True
-            Case "Cache" : CacheNav.IsChecked = True
+            Case "Cache"
+                ExtrasNav.IsChecked = True
+                extras.SelectCacheFiles()
             Case "Extras" : ExtrasNav.IsChecked = True
             Case "Maintenance" : MaintenanceNav.IsChecked = True
             Case "About" : AboutNav.IsChecked = True
@@ -197,9 +200,9 @@ Class MainWindow
 
     Private Sub ApplicationDataCleared()
         audio.ClearSavedNames()
+        videos.ClearSavedNames()
         images.ClearSavedNames()
         meshes.ClearSavedNames()
-        cacheFiles.ClearSavedNames()
         extras.ClearSavedNames()
     End Sub
 
@@ -324,9 +327,9 @@ Class MainWindow
         Try
             AppServices.Report("Scanning every workspace...", 0, True)
             Await audio.StartScanAsync()
+            Await videos.StartScanAsync()
             Await images.StartScanAsync()
             Await meshes.StartScanAsync()
-            Await cacheFiles.StartScanAsync()
             Await extras.ScanAllAsync()
             AppServices.Report("Scan all complete. Every workspace is populated.", 100)
         Catch ex As Exception

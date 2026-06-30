@@ -2,7 +2,7 @@
 
 [Official website](https://rbx-asset-extractor.vexthatprotogen.com/)
 
-RBX Asset Extractor is a Windows desktop application for finding, previewing, and exporting assets stored in Roblox's local cache. It can recover audio, images, meshes, models, textures, fonts, thumbnails, and metadata without dumping the entire cache into temporary folders.
+RBX Asset Extractor is a Windows desktop application for finding, previewing, and exporting assets stored in Roblox's local cache. It can recover audio, videos, images, meshes, models, textures, fonts, thumbnails, and metadata without dumping the entire cache into temporary folders.
 
 ![RBX Asset Extractor](docs/images/rbx-asset-extractor.png)
 
@@ -10,7 +10,7 @@ RBX Asset Extractor is a Windows desktop application for finding, previewing, an
 
 [Download the latest release from GitHub](https://github.com/zv8001/RBX-Audio-Extractor/releases/latest).
 
-Download and run `RBXAssetExtractor.exe`. The compact release bundles its native SQLite and image libraries but requires the 64-bit .NET 10 Desktop Runtime.
+Download and run `RBXAssetExtractor.exe`. The compact release bundles its native SQLite, image, and WebView2 loader libraries but requires the 64-bit .NET 10 Desktop Runtime. Video preview also requires the Microsoft Edge WebView2 Runtime, which is normally already installed on supported Windows systems.
 
 RBX Asset Extractor currently supports 64-bit Windows.
 
@@ -18,7 +18,7 @@ RBX Asset Extractor currently supports 64-bit Windows.
 
 1. Run Roblox or Roblox Studio at least once so a local asset cache exists.
 2. Open RBX Asset Extractor.
-3. Choose **Audio**, **Images**, **Meshes**, **Cache files**, or **More assets**.
+3. Choose **Audio**, **Videos**, **Images**, **Meshes**, or **More assets**. Cache files are available as a tab inside **More assets**.
 4. Select **Scan cache**.
 5. Preview an item or export the selected results.
 
@@ -27,15 +27,15 @@ The cache location is detected automatically. Most assets use their Roblox cache
 ## Supported assets
 
 - **Audio:** OGG and MP3 discovery, duration sorting, playback, seeking, and export.
+- **Videos:** Cached HLS/WebM discovery, quality and duration details, playback, seeking, playlist-package export, and lossless single-file WebM export.
 - **Images:** PNG, JPEG, BMP, and WebP preview and export.
 - **Meshes:** Roblox mesh detection, interactive 3D preview, and OBJ conversion.
-- **Cache files:** RBXM models plus KTX and KTX2 textures.
-- **More assets:** Thumbnails, TrueType/OpenType fonts, JSON, XML, and HLS playlist metadata.
+- **More assets:** RBXM models, KTX/KTX2 textures, thumbnails, TrueType/OpenType fonts, JSON, XML, and playlist metadata.
 - **Bulk export:** Export an individual result or an entire supported category.
 
 ## Saved asset names
 
-Select any scanned asset and choose **Rename** to replace its randomized cache key with a recognizable local name. Renaming is supported for audio, images, meshes, RBXM/KTX files, thumbnails, fonts, and metadata.
+Select any scanned asset and choose **Rename** to replace its randomized cache key with a recognizable local name. Renaming is supported for audio, videos, images, meshes, RBXM/KTX files, thumbnails, fonts, and metadata.
 
 The application fingerprints renamed payloads with SHA-256 and stores the name in its own SQLite database:
 
@@ -80,6 +80,10 @@ Only download releases from this GitHub repository or the official project updat
 ### An update is available
 
 The application checks the hosted version when it starts. Accepting the custom update prompt downloads the current release over HTTPS and restarts the application.
+
+### Video preview is unavailable
+
+Install or repair the [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) and reopen RBX Asset Extractor. Exporting a video package does not require the preview window.
 
 ### The application reports a crash
 

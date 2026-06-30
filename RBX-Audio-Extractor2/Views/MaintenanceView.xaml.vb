@@ -56,7 +56,8 @@ Namespace Views
             Try
                 Dim progressAction As Action(Of String, Double) =
                     Sub(stage, percent) AppServices.Report(stage, percent)
-                Dim summary = Await Task.Run(Function() BulkAssetExporter.ExportEverything(folder, progressAction))
+                Dim combineVideos = ExtractVideosSingleFileCheckBox.IsChecked.GetValueOrDefault()
+                Dim summary = Await Task.Run(Function() BulkAssetExporter.ExportEverything(folder, progressAction, combineVideos))
                 AppServices.Report($"Full export complete: {summary.Exported:N0} exported, {summary.Reused:N0} reused, {summary.Failed:N0} failed.", 100)
 
                 Dim message As String
@@ -80,6 +81,7 @@ Namespace Views
         Private Sub SetBusy(value As Boolean)
             busy = value
             ExtractAllButton.IsEnabled = Not value
+            ExtractVideosSingleFileCheckBox.IsEnabled = Not value
             ChangeDatabaseButton.IsEnabled = Not value
             ResetDatabaseButton.IsEnabled = Not value AndAlso AppServices.IsUsingCustomDatabase
         End Sub

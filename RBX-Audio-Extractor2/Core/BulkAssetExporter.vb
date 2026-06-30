@@ -17,7 +17,7 @@ Public NotInheritable Class BulkAssetExporter
     Private Sub New()
     End Sub
 
-    Public Shared Function ExportEverything(rootDirectory As String, progress As Action(Of String, Double)) As BulkExportSummary
+    Public Shared Function ExportEverything(rootDirectory As String, progress As Action(Of String, Double), Optional combineVideosToSingleFile As Boolean = False) As BulkExportSummary
         If String.IsNullOrWhiteSpace(rootDirectory) Then Throw New ArgumentException("A destination folder is required.", NameOf(rootDirectory))
         Directory.CreateDirectory(rootDirectory)
 
@@ -29,11 +29,15 @@ Public NotInheritable Class BulkAssetExporter
             Sub(p) Report(progress, "Scanning cache...", Scale(p.Current, p.Total, 1, 15)))
         AssetNameStore.ApplySavedNames(cacheAssets)
 
-        Report(progress, "Scanning meshes...", 15)
+        Report(progress, "Scanning cached videos...", 15)
+        Dim videos = RobloxVideoExtractor.Scan(New Progress(Of VideoScanProgress)())
+        AssetNameStore.ApplySavedNames(videos)
+
+        Report(progress, "Scanning meshes...", 18)
         Dim meshes = RobloxMeshExtractor.Scan(New Progress(Of MeshScanProgress)())
         AssetNameStore.ApplySavedNames(meshes)
 
-        Report(progress, "Scanning thumbnails, fonts, and metadata...", 22)
+        Report(progress, "Scanning thumbnails, fonts, and metadata...", 24)
         Dim thumbnails = RobloxSupplementalCacheExtractor.ScanThumbnails(Nothing)
         Dim fonts = RobloxSupplementalCacheExtractor.ScanFonts(Nothing)
         Dim metadata = RobloxSupplementalCacheExtractor.ScanMetadata(Nothing)
@@ -47,7 +51,7 @@ Public NotInheritable Class BulkAssetExporter
         Dim exportableMeshes = meshes.Where(Function(m) m.CanExport).ToList()
         summary.Skipped = meshes.Count - exportableMeshes.Count
 
-        Dim grandTotal = audio.Count + images.Count + cacheFiles.Count + exportableMeshes.Count +
+        Dim grandTotal = audio.Count + videos.Count + images.Count + cacheFiles.Count + exportableMeshes.Count +
                          thumbnails.Count + fonts.Count + metadata.Count
         If grandTotal = 0 Then
             Report(progress, "No exportable assets were found in the cache.", 100)
@@ -64,6 +68,7 @@ Public NotInheritable Class BulkAssetExporter
                         End Function
 
         ExportCacheGroup(summary, audio, Path.Combine(rootDirectory, "Audio"), "Audio", mapExport, done)
+        ExportVideoGroup(summary, videos, Path.Combine(rootDirectory, "Videos"), progress, grandTotal, done, combineVideosToSingleFile)
         ExportCacheGroup(summary, images, Path.Combine(rootDirectory, "Images"), "Images", mapExport, done)
         ExportCacheGroup(summary, cacheFiles, Path.Combine(rootDirectory, "Cache Files"), "Cache Files", mapExport, done, separateTypeFolders:=True)
         ExportMeshGroup(summary, exportableMeshes, Path.Combine(rootDirectory, "Meshes"), progress, grandTotal, done)
@@ -83,6 +88,41 @@ Public NotInheritable Class BulkAssetExporter
         done += entries.Count
     End Sub
 
+    Private Shared Sub ExportVideoGroup(summary As BulkExportSummary, videos As List(Of RobloxVideoEntry), folder As String,
+                                       progress As Action(Of String, Double), grandTotal As Integer, ByRef done As Integer, singleFile As Boolean)
+        If videos.Count = 0 Then Return
+        Directory.CreateDirectory(folder)
+        Dim usedNames As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+        Dim exported As Integer
+        Dim reused As Integer
+        Dim failed As Integer
+        Dim baseDone = done
+        For index = 0 To videos.Count - 1
+            Dim entry = videos(index)
+            Try
+                If Not entry.IsComplete Then
+                    failed += 1
+                ElseIf singleFile Then
+                    Dim outputPath = Path.Combine(folder, AssetNameStore.GetBatchBaseName(entry, usedNames) & ".webm")
+                    If File.Exists(outputPath) AndAlso New FileInfo(outputPath).Length > 0 Then
+                        reused += 1
+                    Else
+                        RobloxVideoExtractor.ExportSingleFile(entry, outputPath)
+                        exported += 1
+                    End If
+                Else
+                    Dim result = RobloxVideoExtractor.Export(entry, folder, AssetNameStore.GetBatchBaseName(entry, usedNames))
+                    If result.WasReused Then reused += 1 Else exported += 1
+                End If
+            Catch
+                failed += 1
+            Finally
+                Report(progress, "Exporting videos...", Scale(baseDone + index + 1, grandTotal, 30, 100))
+            End Try
+        Next
+        Accumulate(summary, "Videos", exported, reused, failed)
+        done += videos.Count
+    End Sub
     Private Shared Sub ExportSupplementalGroup(summary As BulkExportSummary, entries As List(Of SupplementalCacheEntry), folder As String, label As String,
                                                mapExport As Func(Of String, Action(Of Integer, Integer)), ByRef done As Integer)
         If entries.Count = 0 Then Return

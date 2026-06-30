@@ -63,6 +63,7 @@ Namespace Views
 
         ''' <summary>Scan thumbnails, fonts, and metadata in sequence (used by the title bar "Scan all").</summary>
         Public Async Function ScanAllAsync() As Task
+            Await CacheFilesPanel.StartScanAsync()
             Await ScanThumbnailsAsync()
             Await ScanFontsAsync()
             Await ScanMetadataAsync()
@@ -90,6 +91,7 @@ Namespace Views
         End Function
 
         Public Sub RestoreState()
+            CacheFilesPanel.RestoreState()
             thumbnails = SessionStateStore.LoadSupplemental("thumbnails")
             fonts = SessionStateStore.LoadSupplemental("fonts")
             metadata = SessionStateStore.LoadSupplemental("metadata")
@@ -266,6 +268,7 @@ Namespace Views
         End Function
 
         Public Sub ClearSavedNames()
+            CacheFilesPanel.ClearSavedNames()
             AssetNameStore.ClearLoadedNames(thumbnails)
             AssetNameStore.ClearLoadedNames(fonts)
             AssetNameStore.ClearLoadedNames(metadata)
@@ -275,6 +278,7 @@ Namespace Views
         End Sub
 
         Public Sub ResetData()
+            CacheFilesPanel.ResetData()
             previewVersion += 1
             thumbnails.Clear()
             fonts.Clear()
@@ -286,6 +290,10 @@ Namespace Views
             MetadataPreview.Clear()
             SetBusy(False)
         End Sub
+        Public Sub SelectCacheFiles()
+            AssetTabs.SelectedItem = CacheFilesTab
+        End Sub
+
         Private Sub SetBusy(value As Boolean)
             busy = value
             ScanThumbnailsButton.IsEnabled = Not value

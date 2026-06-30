@@ -2,6 +2,23 @@
 
 All notable changes to RBX Asset Extractor are documented in this file.
 
+## [v3.1.4] - 2026-06-30
+
+### Cached video support
+
+- Added read-only discovery of Roblox HLS playlists and their cached WebM segments, grouping related records into complete video entries instead of exposing disconnected playlist metadata and segment files.
+- Added a design-time **Videos** workspace with quality, duration, segment-completeness, byte-size, rename, preview, selected export, and bulk export controls.
+- Moved the RBXM/KTX **Cache files** workspace into a design-time tab under **More assets**, shortening the sidebar so its local-cache status card remains visible at the default window size.
+- Added secured local video preview using the Microsoft WebView2 runtime, including VP9/Opus playback, continuous timestamps across timestamped WebM segments, multi-segment sequencing, seeking, volume control, and automatic cleanup of staged preview files.
+- Added portable video-package export with a rewritten local HLS playlist and ordered WebM segments, including collision-safe names for bulk exports.
+- Added dependency-free, lossless single-file WebM export. Selected videos can be exported directly as one file, while **Export all** has a **One file each** checkbox for choosing between merged WebMs and playlist packages.
+- Integrated videos with saved SHA-256 asset names, session restoration, **Scan All**, **Extract All**, and application-data cleanup.
+- Added clear handling for incomplete cached videos and unavailable WebView2 runtimes instead of silently failing.
+
+### Version
+
+- Bumped the application and updater-visible version to `3.1.4`.
+
 ## [v3.1.3] - 2026-06-29
 
 ### Window restoration
