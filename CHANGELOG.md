@@ -12,6 +12,7 @@ All notable changes to RBX Asset Extractor are documented in this file.
 - Added secured local video preview using the Microsoft WebView2 runtime, including VP9/Opus playback, continuous timestamps across timestamped WebM segments, multi-segment sequencing, seeking, volume control, and automatic cleanup of staged preview files.
 - Added portable video-package export with a rewritten local HLS playlist and ordered WebM segments, including collision-safe names for bulk exports.
 - Added dependency-free, lossless single-file WebM export. Selected videos can be exported directly as one file, while **Export all** has a **One file each** checkbox for choosing between merged WebMs and playlist packages.
+- Extended that single-file option to Maintenance's whole-cache **Extract all** with an **Each video as one file** checkbox, so a full export can merge each cached video into one WebM instead of a playlist folder of segments.
 - Integrated videos with saved SHA-256 asset names, session restoration, **Scan All**, **Extract All**, and application-data cleanup.
 - Added clear handling for incomplete cached videos and unavailable WebView2 runtimes instead of silently failing.
 
