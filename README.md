@@ -8,7 +8,7 @@ RBX Asset Extractor is a Windows desktop application for finding, previewing, an
 
 ## Download
 
-[Download the latest release from GitHub](https://github.com/zv8001/RBX-Audio-Extractor/releases/latest).
+[Download the latest release from GitHub](https://github.com/zv8001/RBX-Audio-Extractor/releases/latest)..
 
 Download and run `RBXAssetExtractor.exe`. The compact release bundles its native SQLite, image, and WebView2 loader libraries but requires the 64-bit .NET 10 Desktop Runtime. Video preview also requires the Microsoft Edge WebView2 Runtime, which is normally already installed on supported Windows systems.
 
